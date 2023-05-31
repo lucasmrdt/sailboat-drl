@@ -32,7 +32,7 @@ jobs:
       - name: Cache Docker image
         uses: actions/cache@v2
         with:
-          path: /usr/local/bin/docker
+          path: /var/lib/docker
           key: ${{ runner.os }}-docker
           restore-keys: |
             ${{ runner.os }}-docker
@@ -49,4 +49,4 @@ jobs:
 
       - name: Run tests
         run: |
-          DEBUG=1 python test.py
+          python test.py
