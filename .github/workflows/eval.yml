@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  test:
+  evaluation:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,6 +20,22 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v2
+
+      - name: Cache Python dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
+      - name: Cache Docker image
+        uses: actions/cache@v2
+        with:
+          path: /usr/local/bin/docker
+          key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile') }}
+          restore-keys: |
+            ${{ runner.os }}-docker-
 
       - name: Set up Docker
         uses: addnab/docker-run-action@v3
