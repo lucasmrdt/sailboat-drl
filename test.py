@@ -10,6 +10,7 @@ env = RecordVideo(env, video_folder='./output/videos/')
 
 env.reset(seed=10)
 
+print('Running random agent...')
 while True:
     act = env.action_space.sample()
     obs, reward, terminated, truncated, info = env.step(act)
@@ -18,6 +19,8 @@ while True:
     env.render()
 
 env.close()
+print('Done!')
 
 wandb.init(project='sailboat-gym', entity='lucasmrdt')
 wandb.log({'video': wandb.Video('./output/videos/rl-video-episode-0.mp4')})
+wandb.finish()
