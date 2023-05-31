@@ -29,10 +29,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Cache Docker images.
-        uses: ScribeMD/docker-cache@0.3.3
-        with:
-          key: docker-${{ runner.os }}
+      # - name: Cache Docker images.
+      #   uses: ScribeMD/docker-cache@0.3.3
+      #   with:
+      #     key: docker-${{ runner.os }}
 
       - name: Set up Docker
         uses: addnab/docker-run-action@v3
