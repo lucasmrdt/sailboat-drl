@@ -1,6 +1,7 @@
 import gymnasium as gym
 from gymnasium.wrappers.record_video import RecordVideo
 import sailboat_gym
+import wandb
 
 env = gym.make('SailboatLSAEnv-v0',
                renderer=sailboat_gym.CV2DRenderer(),
@@ -17,3 +18,6 @@ while True:
     env.render()
 
 env.close()
+
+wandb.init(project='sailboat-gym', entity='lucasmrdt')
+wandb.log({'video': wandb.Video('./output/videos/rl-video-episode-0.mp4')})
