@@ -33,9 +33,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: /usr/local/bin/docker
-          key: ${{ runner.os }}-docker-${{ hashFiles('Dockerfile') }}
+          key: ${{ runner.os }}-docker
           restore-keys: |
-            ${{ runner.os }}-docker-
+            ${{ runner.os }}-docker
 
       - name: Set up Docker
         uses: addnab/docker-run-action@v3
@@ -49,4 +49,4 @@ jobs:
 
       - name: Run tests
         run: |
-          python test.py
+          python DEBUG=1 test.py
