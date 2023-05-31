@@ -1,2 +1,2 @@
 gymnasium==0.28.1
-sailboat_gym==1.0.6
+sailboat_gym==1.0.7
