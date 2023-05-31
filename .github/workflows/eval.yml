@@ -1,4 +1,4 @@
-name: Test Model with Sailboat Gym
+name: Evaluate Model with Sailboat Gym
 
 on:
   push:
