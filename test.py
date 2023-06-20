@@ -1,26 +1,13 @@
-import gymnasium as gym
-from gymnasium.wrappers.record_video import RecordVideo
-import sailboat_gym
-import wandb
+from sailboat_drl import prepare_env
+import time
 
-env = gym.make('SailboatLSAEnv-v0',
-               renderer=sailboat_gym.CV2DRenderer(),
-               container_tag='realtime')
-env = RecordVideo(env, video_folder='./output/videos/')
+env = prepare_env('0', record=True)()
+obs, _ = env.reset(seed=0)
 
-env.reset(seed=10)
+time.sleep(20)
 
-print('Running random agent...')
-while True:
+for _ in range(100):
     act = env.action_space.sample()
     obs, reward, terminated, truncated, info = env.step(act)
-    if truncated:
-        break
-    env.render()
 
 env.close()
-print('Done!')
-
-wandb.init(project='sailboat-gym', entity='lucasmrdt')
-wandb.log({'video': wandb.Video('./output/videos/rl-video-episode-0.mp4')})
-wandb.finish()

@@ -49,6 +49,6 @@ jobs:
           pip install wandb
           wandb login ${{ secrets.WANDB_API_KEY }}
 
-      - name: Run tests
+      - name: Run evaluation
         run: |
           python test.py

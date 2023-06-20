@@ -46,3 +46,8 @@ env/
 *.mp4
 *.pkl
 output
+
+wandb/
+videos/
+runs/
+models/
