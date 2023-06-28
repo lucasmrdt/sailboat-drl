@@ -1,15 +1,18 @@
-import numpy as np
-from typing import Dict
+import gymnasium as gym
+from typing import Dict, Any
+from gymnasium import spaces, ObservationWrapper
 from sailboat_gym import Observation, Action
 from abc import ABC, abstractmethod
 
 
-class AbcReward(ABC):
-    nb_extra_obs: int = 0
-
+class AbcReward(ABC, ObservationWrapper):
     @abstractmethod
-    def __call__(self, obs: Observation, act: Action) -> float:
+    def __call__(self, obs: Observation, act: Action, next_obs: Observation) -> float:
         raise NotImplementedError
 
-    def transform_obs(self, obs: Observation) -> Dict[str, np.ndarray]:
+    @property
+    def observation_space(self):
+        return spaces.Dict({})
+
+    def observation(self, obs: Observation) -> Dict[str, Any]:
         return obs

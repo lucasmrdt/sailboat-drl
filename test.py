@@ -1,13 +1,14 @@
 from sailboat_drl import prepare_env
+from sailboat_gym import EPISODE_LENGTH
 import time
+import numpy as np
 
-env = prepare_env('0', record=True)()
+env = prepare_env('0', eval=True)()
 obs, _ = env.reset(seed=0)
 
-time.sleep(20)
-
-for _ in range(100):
-    act = env.action_space.sample()
+for _ in range(EPISODE_LENGTH):
+    # act = env.action_space.sample()
+    act = 0
     obs, reward, terminated, truncated, info = env.step(act)
 
 env.close()

@@ -3,6 +3,7 @@ from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from functools import cache
 
 from .rewards import available_rewards
+from .wrappers import available_obs_wrappers, available_act_wrappers
 
 
 def extended_eval(s):
@@ -20,13 +21,26 @@ def parse_args():
                         default=list(available_rewards.keys())[0], help='reward function')
     parser.add_argument('--reward-args', type=extended_eval,
                         default={'target': [1, .5], 'radius': 10}, help='reward function arguments')
-    parser.add_argument('--selected-obs', type=extended_eval,
-                        default=['p_boat'], help='selected observations')
+    parser.add_argument('--obs', choices=available_obs_wrappers.keys(),
+                        default=list(available_obs_wrappers.keys())[0], help='observation used by the agent')
+    parser.add_argument('--act', choices=available_act_wrappers.keys(),
+                        default=list(available_act_wrappers.keys())[0], help='action used by the agent')
+
+    # stable-baselines3 arguments
+    parser.add_argument('--n-train-envs', type=int, default=1,
+                        help='number of training environments')
+    parser.add_argument('--n-eval-envs', type=int, default=1,
+                        help='number of evaluation environments')
+    parser.add_argument('--n-steps-per-rollout', type=int, default=2048,
+                        help='number of steps per rollout')
+    parser.add_argument('--batch-size', type=int, default=64,
+                        help='batch size')
+    parser.add_argument('--eval-every-n-rollout', type=int, default=1,
+                        help='eval every n rollout')
+    parser.add_argument('--total-steps', type=int, default=1e6,
+                        help='total steps')
     args = parser.parse_args()
 
-    print('Arguments:')
-    for k, v in vars(args).items():
-        print(f'{k} = {v}')
     return args
 
 
