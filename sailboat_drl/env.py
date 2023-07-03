@@ -18,16 +18,20 @@ from .cli import args
 class WandBRecordVideo(RecordVideo):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        print(self.env.metadata)
         print(
-            f'[WandBRecordVideo] fps={self.env.metadata.get("video.frames_per_second")}')
+            f'[WandBRecordVideo] fps={self.env.metadata.get("render_fps")}')
 
     def close_video_recorder(self):
         was_recording = self.recording
         super().close_video_recorder()
         if was_recording and wandb.run is not None:
-            fps = self.env.metadata.get('video.frames_per_second', 30)
-            wandb.log({'video': wandb.Video(
-                self.video_recorder.path, fps=fps, format='mp4')})
+            print('saving video...')
+            fps = self.env.metadata.get('render_fps', 30)
+            wandb.log({
+                'video': wandb.Video(self.video_recorder.path, fps=fps, format='mp4'),
+                'step': self.step_id,
+            })
 
 
 class CbWrapper(gym.Wrapper):
@@ -80,6 +84,8 @@ def prepare_env(name='default', eval=False, wandb_args=None):
                        keep_sim_alive=True,
                        video_speed=6,
                        name=name)
+        env = TimeLimit(env, max_episode_steps=EPISODE_LENGTH*3)
+
         if eval:
             # env = CbWrapper(env,
             #                 reset_cb=lambda: print(f'[{name}] Resetting...'),
@@ -92,8 +98,6 @@ def prepare_env(name='default', eval=False, wandb_args=None):
         env = ActWrapper(env, theta_sail=0)
         env = FlattenObservation(env)
         env = NormalizeObservation(env)
-        env = TimeLimit(env, max_episode_steps=EPISODE_LENGTH*3)
-
         if not eval:
             env = NormalizeReward(env)
 

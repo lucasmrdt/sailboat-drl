@@ -45,7 +45,7 @@ def train():
     eval_cb = EvalCallback(eval_env,
                            best_model_save_path=f'models/{run.id}',
                            log_path=f'runs/{run.id}',
-                           eval_freq=args.n_steps_per_rollout * args.eval_every_n_rollout,
+                           eval_freq=args.n_steps_per_rollout * args.eval_every_n_rollout // args.n_train_envs,
                            verbose=1,
                            n_eval_episodes=1)
     wandb_cb = WandbCallback(model_save_path=f'models/{run.id}')
