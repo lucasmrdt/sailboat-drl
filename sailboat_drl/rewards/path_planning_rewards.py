@@ -1,11 +1,10 @@
-from typing import Any, Dict
 import numpy as np
 import cv2
 from gymnasium import spaces
-from sailboat_gym import CV2DRenderer, Observation
+from sailboat_gym import CV2DRenderer
 
 from .abc_reward import AbcReward
-from ..utils import norm, normalize
+from ..utils import norm
 
 
 def smallest_signed_angle(angle):
@@ -43,7 +42,7 @@ class PPRenderer(CV2DRenderer):
         super().__init__(*args, **kwargs)
         self.reward = reward
 
-    def __draw_reward(self, img, obs):
+    def _draw_reward(self, img, obs):
         target = self.reward.target * \
             (self.size - 2*self.padding) + self.padding
         cv2.circle(img,
@@ -53,7 +52,7 @@ class PPRenderer(CV2DRenderer):
                    -1)
 
     def render(self, obs, draw_extra_fct=None):
-        return super().render(obs, draw_extra_fct=self.__draw_reward)
+        return super().render(obs, draw_extra_fct=self._draw_reward)  # type: ignore
 
 
 class PPSparseReward(AbcPPReward):

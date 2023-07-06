@@ -3,7 +3,6 @@ from .obs_wrappers import *
 
 
 available_obs_wrappers = {
-    'only_reward_obs': OnlyRewardObs,
     'basic_2d_obs': Basic2DObs,
 }
 

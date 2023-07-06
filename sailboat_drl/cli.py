@@ -25,14 +25,16 @@ def parse_args():
                         default=list(available_obs_wrappers.keys())[0], help='observation used by the agent')
     parser.add_argument('--act', choices=available_act_wrappers.keys(),
                         default=list(available_act_wrappers.keys())[0], help='action used by the agent')
+    parser.add_argument('--episode-duration', type=int,
+                        default=180, help='episode duration (in seconds)')
 
     # stable-baselines3 arguments
     parser.add_argument('--n-train-envs', type=int, default=1,
                         help='number of training environments')
     parser.add_argument('--n-eval-envs', type=int, default=1,
                         help='number of evaluation environments')
-    parser.add_argument('--n-steps-per-rollout', type=int, default=2048,
-                        help='number of steps per rollout')
+    parser.add_argument('--n-episode-per-rollout', type=int, default=3,
+                        help='number of episodes per rollout')
     parser.add_argument('--batch-size', type=int, default=64,
                         help='batch size')
     parser.add_argument('--eval-every-n-rollout', type=int, default=1,

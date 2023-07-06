@@ -1,6 +1,5 @@
-from typing import Any, Dict
-import numpy as np
 import cv2
+import numpy as np
 from gymnasium import spaces
 from sailboat_gym import CV2DRenderer, Observation
 
@@ -61,7 +60,7 @@ class PFRenderer(CV2DRenderer):
         super().__init__(*args, **kwargs)
         self.reward = reward
 
-    def __draw_reward(self, img, obs):
+    def _draw_reward(self, img, obs):
         path = self.reward.path * (self.size - 2*self.padding) + self.padding
         cv2.line(img,
                  tuple(path[0].astype(int)),
@@ -70,7 +69,7 @@ class PFRenderer(CV2DRenderer):
                  2)
 
     def render(self, obs, draw_extra_fct=None):
-        return super().render(obs, draw_extra_fct=self.__draw_reward)
+        return super().render(obs, draw_extra_fct=self._draw_reward)  # type: ignore
 
 
 class PFSparseReward(AbcPFReward):

@@ -1,4 +1,3 @@
-import gymnasium as gym
 from typing import Dict, Any
 from gymnasium import spaces, ObservationWrapper
 from sailboat_gym import Observation, Action
@@ -15,4 +14,4 @@ class AbcReward(ABC, ObservationWrapper):
         return spaces.Dict({})
 
     def observation(self, obs: Observation) -> Dict[str, Any]:
-        return obs
+        return obs  # type: ignore

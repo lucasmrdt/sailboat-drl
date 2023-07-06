@@ -1,7 +1,8 @@
 import numpy as np
+from typing import Any
 
 
-def norm(x: np.ndarray) -> float:
+def norm(x: np.ndarray) -> np.floating[Any]:
     return np.linalg.norm(x, ord=2)
 
 

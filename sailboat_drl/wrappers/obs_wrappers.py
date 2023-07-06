@@ -1,25 +1,26 @@
 import numpy as np
 from gymnasium import ObservationWrapper, spaces
+from gymnasium.wrappers.record_video import RecordVideo
 
 from ..rewards import AbcReward
-from ..utils import norm
+from ..utils import norm, is_env_instance
+from ..logger import log
 
 
 class ObservationWrapperUsingReward(ObservationWrapper):
     def __init__(self, env, reward: AbcReward):
         super().__init__(env)
         self.reward = reward
+        self.is_eval_env = is_env_instance(env, RecordVideo)
 
     @property
     def observation_space(self):
         return self.reward.observation_space
 
     def observation(self, obs):
-        return self.reward.observation(obs)
-
-
-class OnlyRewardObs(ObservationWrapperUsingReward):
-    pass
+        obs = self.reward.observation(obs)
+        log(obs, prefix=f'{"eval" if self.is_eval_env else "train"}/obs')
+        return obs
 
 
 class Basic2DObs(ObservationWrapperUsingReward):
@@ -39,7 +40,7 @@ class Basic2DObs(ObservationWrapperUsingReward):
         v = obs['dt_p_boat'][0:2]
         v_angle = np.arctan2(v[1], v[0])
         v_norm = norm(v)
-        return {
+        obs = {
             **super().observation(obs),
             'v_angle': v_angle,
             'v_norm': v_norm,
@@ -48,3 +49,5 @@ class Basic2DObs(ObservationWrapperUsingReward):
             'theta_rudder': obs['theta_rudder'][0],
             'dt_theta_rudder': obs['dt_theta_rudder'][0],
         }
+        log(obs, prefix=f'{"eval" if self.is_eval_env else "train"}/obs')
+        return obs

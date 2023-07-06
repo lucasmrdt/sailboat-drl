@@ -10,7 +10,6 @@ available_path_planning_rewards = {
 }
 
 available_path_following_rewards = {
-    # 'pf_ours': PFOursReward,
     'pf_max_vmc': PFMaxVMC,
 }
 
