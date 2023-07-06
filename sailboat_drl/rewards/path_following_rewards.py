@@ -36,6 +36,10 @@ class AbcPFReward(AbcReward):  # PF: Path Following
     def _compute_vmc(self, obs: Observation):
         d = self.path[1] - self.path[0]
         v = obs['dt_p_boat'][0:2]  # X and Y axis
+        theta_boat = obs['theta_boat'][2]
+        rot_mat = np.array([[np.cos(theta_boat), -np.sin(theta_boat)],
+                            [np.sin(theta_boat), np.cos(theta_boat)]])
+        v = rot_mat@v
         vmc = np.dot(v, d) / norm(d)
         return vmc
 
