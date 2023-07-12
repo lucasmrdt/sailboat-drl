@@ -1,5 +1,2 @@
-from .cli import *
-from .env import *
-from .rewards import *
-from .env import *
-from .callbacks import *
+from .train import train
+from .cli import args

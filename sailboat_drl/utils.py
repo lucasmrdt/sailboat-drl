@@ -1,3 +1,6 @@
+import time
+import threading
+import subprocess
 import numpy as np
 from typing import Any
 
@@ -25,3 +28,9 @@ def extract_env_instance(env, env_class):
             return env
         env = env.env if hasattr(env, 'env') else None
     return None
+
+def _force_kill_wandb():
+    subprocess.run(['pkill', '-9', 'wandb-service'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+def timeout_wandb(seconds: float):
+    threading.Timer(seconds, _force_kill_wandb).start()

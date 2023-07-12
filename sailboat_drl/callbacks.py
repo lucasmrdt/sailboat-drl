@@ -1,10 +1,8 @@
 import time
 from stable_baselines3.common.callbacks import BaseCallback
-from sailboat_gym import SailboatLSAEnv
 
-from .cli import args
-from .utils import extract_env_instance
-
+from .cli import runtime_env, args
+from .logger import Logger
 
 class TimeLoggerCallback(BaseCallback):
     def __init__(self, verbose=0):
@@ -19,14 +17,10 @@ class TimeLoggerCallback(BaseCallback):
 
     def _on_rollout_end(self) -> None:
         assert self.start_time is not None
-        base_env = extract_env_instance(self.training_env, SailboatLSAEnv)
         rollout_time = time.time() - self.start_time
-        n_steps_per_episode = args.episode_duration * SailboatLSAEnv.NB_STEPS_PER_SECONDS
-        n_steps_per_rollout = args.n_episode_per_rollout * n_steps_per_episode
-        average_step_time = rollout_time / n_steps_per_rollout
-        self.logger.record("time/step",
-                           average_step_time)
-        self.logger.record("time/episode",
-                           average_step_time * n_steps_per_episode)
-        self.logger.record("time/factor",
-                           (1/SailboatLSAEnv.NB_STEPS_PER_SECONDS) / average_step_time)
+        average_step_time = rollout_time / args.n_steps
+        Logger.record({
+            "time/rollout": rollout_time,
+            "time/step": average_step_time,
+            "time/factor": (1/runtime_env.nb_steps_per_second) / average_step_time,
+        })

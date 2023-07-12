@@ -12,6 +12,6 @@ class AbcReward(ABC, ObservationWrapper):
     @property
     def observation_space(self):
         return spaces.Dict({})
-
+    
     def observation(self, obs: Observation) -> Dict[str, Any]:
         return obs  # type: ignore

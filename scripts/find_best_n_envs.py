@@ -10,7 +10,7 @@ from tqdm import trange, tqdm
 from itertools import count
 from stable_baselines3.common.vec_env import SubprocVecEnv
 
-from sailboat_drl import prepare_env
+from sailboat_drl import prepare_env, args
 
 current_dir = osp.dirname(osp.abspath(__file__))
 
@@ -19,7 +19,7 @@ def find_best_n_envs():
     time_per_step_by_n_envs = {}
 
     for n_envs in trange(1, 32+1, desc='running experiments'):
-        env = SubprocVecEnv([prepare_env(f'train-{i}') for i in range(n_envs)])
+        env = SubprocVecEnv([prepare_env(i) for i in range(n_envs)])
 
         start = time.time()
         env.reset()
@@ -45,5 +45,8 @@ if __name__ == '__main__':
     if not osp.exists(save_dir):
         os.makedirs(save_dir)
     save_path = osp.join(save_dir, 'best_n_envs.pkl')
+
+    eval_envs = SubprocVecEnv([prepare_env(i, eval=True, record=True) for i in range(args.n_eval_envs)])
+
     pickle.dump(find_best_n_envs(), open(save_path, 'wb'))
     print(f'Best n_envs saved to {save_path}')

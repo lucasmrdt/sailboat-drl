@@ -4,7 +4,7 @@ from gymnasium import spaces
 from sailboat_gym import CV2DRenderer, Observation
 
 from .abc_reward import AbcReward
-from ..utils import norm, normalize
+from ..utils import norm
 
 
 def smallest_signed_angle(angle):
@@ -69,7 +69,7 @@ class PFRenderer(CV2DRenderer):
         cv2.line(img,
                  tuple(path[0].astype(int)),
                  tuple(path[1].astype(int)),
-                 (0, 255, 0),
+                 (0, 127, 0),
                  2)
 
     def render(self, obs, draw_extra_fct=None):
@@ -108,7 +108,22 @@ class PFMaxVMC(AbcPFReward):
 
     def observation(self, obs):
         return {'vmc': np.array([self._compute_vmc(obs)])}
+    
+    @property
+    def keys_to_log(self):
+        return set(['vmc'])
 
     def __call__(self, obs, act, next_obs):
         vmc = self._compute_vmc(next_obs)
         return vmc
+
+class PFCircularCamille(AbcPFReward):
+    def __init__(self, max_vmc=.50, k1=5, **kwargs):
+        super().__init__(**kwargs)
+        self.max_vmc = max_vmc
+        self.k1 = k1
+
+    def __call__(self, obs, act, next_obs):
+        xte = self._compute_xte(next_obs)
+        vmc = self._compute_vmc(next_obs)
+        return -(self.k1 * (self.max_vmc - vmc)**2 + xte**2)**.5

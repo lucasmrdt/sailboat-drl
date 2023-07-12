@@ -1,14 +1,34 @@
-from sailboat_drl import prepare_env
-from sailboat_gym import EPISODE_LENGTH
+from sailboat_drl import prepare_env, args
+from sailboat_gym import SailboatLSAEnv
+from stable_baselines3.common.vec_env import SubprocVecEnv
+from itertools import count
 import time
+import tqdm
 import numpy as np
+import wandb
 
-env = prepare_env('0', eval=True)()
-obs, _ = env.reset(seed=0)
+if __name__ == '__main__':
+    group_id = wandb.util.generate_id()
+    wandb_args = {
+        'project': 'sailboat-drl',
+        'config': vars(args),
+        'group': group_id,
+        'mode': 'online',
+    }
+    wandb.init(**wandb_args, name='train.py', sync_tensorboard=True)
 
-for _ in range(EPISODE_LENGTH):
-    # act = env.action_space.sample()
-    act = 0
-    obs, reward, terminated, truncated, info = env.step(act)
 
-env.close()
+    envs = SubprocVecEnv([
+        prepare_env(f'eval-{i}', eval=True, record=True, wandb_args=wandb_args) for i in range(args.n_eval_envs)
+    ])
+
+    obs = envs.reset()
+    for _ in tqdm.tqdm(count()):
+        act = envs.action_space.sample()
+        obs, reward, done, info = envs.step([act for _ in range(args.n_eval_envs)])
+        if any(done):
+            break
+
+    envs.close()
+
+# 1199it [00:52, 22.65it/s] (eval=False, record=False)
