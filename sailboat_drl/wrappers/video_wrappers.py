@@ -1,8 +1,6 @@
 import tqdm
-import numpy as np
 from gymnasium.wrappers.time_limit import TimeLimit
 from gymnasium.wrappers.record_video import RecordVideo
-from stable_baselines3.common.logger import Video
 
 from ..utils import extract_env_instance
 from ..logger import Logger
@@ -32,6 +30,5 @@ class CustomRecordVideo(RecordVideo):
         super().close_video_recorder()
         if was_recording and self.video_recorder:
             self.idx += 1
-            fps = self.env.metadata.get('render.fps', 30)
-            print(f'[LogRecordVideo] logging video (idx={self.idx})')
-            Logger.record({f'video/{self.idx}': self.video_recorder.path})
+            Logger.record({f'video/{self.idx}': self.video_recorder.path}, exclude=('csv',))
+            Logger.dump(step=self.idx)

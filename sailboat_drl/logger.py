@@ -1,5 +1,5 @@
 from gymnasium import Wrapper
-from stable_baselines3.common.logger import configure
+from stable_baselines3.common.logger import configure, HParam
 
 from .cli import args
 
@@ -11,21 +11,21 @@ class Logger:
     def configure(name: str):
         global _sb3_logger, _logger_name
         _logger_name = name
-        _sb3_logger = configure(f'logs/{args.name}/{name}', ['tensorboard', 'csv'])
+        _sb3_logger = configure(f'runs/{args.name}/{name}/0', ['tensorboard', 'csv'])
 
     @staticmethod
-    def re_configure(postfix: str):
+    def re_configure(postfix):
         global _sb3_logger
-        _sb3_logger = configure(f'logs/{args.name}/{_logger_name}/{postfix}', ['tensorboard', 'csv'])
+        _sb3_logger = configure(f'runs/{args.name}/{_logger_name}/{postfix}', ['tensorboard', 'csv'])
 
     @staticmethod
-    def record(data={}):
+    def record(data={}, exclude=None):
         global _sb3_logger
         assert _sb3_logger is not None, 'Logger not configured, call Logger.configure() first'
         for k, v in data.items():
             if hasattr(v, 'item') and callable(v.item):
                 v = v.item()
-            _sb3_logger.record(k, v)
+            _sb3_logger.record(k, v, exclude=exclude)
 
     @staticmethod
     def dump(step: int):
@@ -38,13 +38,20 @@ class Logger:
         global _sb3_logger
         assert _sb3_logger is not None, 'Logger not configured, call Logger.configure() first'
         return _sb3_logger
+    
+    @staticmethod
+    def log_hyperparams(hyperparams={}, metrics={}):
+        global _sb3_logger
+        assert _sb3_logger is not None, 'Logger not configured, call Logger.configure() first'
+        hyperparams = HParam(hyperparams, metrics)
+        _sb3_logger.record('hyperparams', hyperparams, exclude=('csv',))
+        Logger.dump(0)
 
 class LoggerDumpWrapper(Wrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.n_steps = 0
         self.n_episodes = 0
-
 
     def reset(self, **kwargs):
         self.n_steps = 0
@@ -55,6 +62,6 @@ class LoggerDumpWrapper(Wrapper):
 
     def step(self, action):
         self.n_steps += 1
-        observation, reward, done, info = super().step(action)
+        observation, reward, terminated, truncated, info = super().step(action)
         Logger.dump(step=self.n_steps)
-        return observation, reward, done, info
+        return observation, reward, terminated, truncated, info

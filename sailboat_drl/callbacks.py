@@ -24,3 +24,4 @@ class TimeLoggerCallback(BaseCallback):
             "time/step": average_step_time,
             "time/factor": (1/runtime_env.nb_steps_per_second) / average_step_time,
         })
+        Logger.dump(step=self.num_timesteps)

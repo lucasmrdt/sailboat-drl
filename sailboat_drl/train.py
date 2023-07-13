@@ -1,4 +1,3 @@
-import wandb
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.vec_env import SubprocVecEnv
@@ -24,7 +23,6 @@ def train(trial=None) -> float:
     # }
     # wandb.init(**wandb_args, name='train.py', sync_tensorboard=True)
     Logger.configure('train.py')
-    # log_hyperparams(vars(args))
 
     train_env = SubprocVecEnv(
         [prepare_env(i) for i in range(args.n_train_envs)])
@@ -43,29 +41,24 @@ def train(trial=None) -> float:
                 gae_lambda=args.gae_lambda,
                 max_grad_norm=args.max_grad_norm,
                 vf_coef=args.vf_coef,
-                policy_kwargs=args.policy_kwargs,
-                # tensorboard_log=f'runs/{args.name}'
-                )
+                policy_kwargs=args.policy_kwargs)
     model.set_logger(Logger.get_sb3_logger())
 
     time_cb = TimeLoggerCallback()
 
     if trial:
         from rl_zoo3.callbacks import TrialEvalCallback
-        # wandb_cb = WandbCallback(model_save_path=None, log=None)
         eval_cb = TrialEvalCallback(eval_env,
                                      trial,
                                      log_path=f'runs/{args.name}',
                                      eval_freq=args.total_steps * args.eval_freq // args.n_train_envs,
-                                     n_eval_episodes=1)
+                                     n_eval_episodes=args.n_eval_envs)
     else:
-        # wandb_cb = WandbCallback(model_save_path=None, log=None)
-        # wandb_cb = WandbCallback(model_save_path=f'models/{args.name}')
         eval_cb = EvalCallback(eval_env,
-                            # best_model_save_path=f'models/{args.name}',
+                            best_model_save_path=f'runs/{args.name}',
                             log_path=f'runs/{args.name}',
                             eval_freq=args.total_steps * args.eval_freq // args.n_train_envs,
-                            n_eval_episodes=1)
+                            n_eval_episodes=args.n_eval_envs)
 
     try:
         model.learn(args.total_steps,
@@ -80,16 +73,17 @@ def train(trial=None) -> float:
 
     train_env.close()
     eval_env.close()
-    # if wandb.run:
-    #     wandb.run.finish()
 
     if trial:
         import optuna
         if eval_cb.is_pruned: # type: ignore
             raise optuna.TrialPruned()
     else:
-        model.save(f'models/{args.name}/final')
+        model.save(f'runs/{args.name}/final')
 
+    hparams = {k: v if isinstance(v, (int, float, str, bool)) else str(v)
+               for k, v in vars(args).items()}
+    Logger.log_hyperparams(hparams, {'last_mean_reward': eval_cb.last_mean_reward}) # type: ignore
     return eval_cb.last_mean_reward # type: ignore
 
 

@@ -1,4 +1,5 @@
 import optuna
+import sys
 from rl_zoo3.hyperparams_opt import sample_ppo_params
 
 from sailboat_drl import train, args
@@ -9,7 +10,11 @@ def objective(trial: optuna.Trial) -> float:
     args.__dict__ = init_args.copy()
     sampled_args = sample_ppo_params(trial)
     args.__dict__.update(sampled_args)
-    args.__dict__['name'] += f'-{trial.number}'
+
+    trial_name = f'{args.name}-{trial.number}'
+    args.__dict__['name'] = trial_name
+    sys.argv = [v for v in sys.argv if not v.startswith('--name=')]
+    sys.argv.append(f'--name={args.name}')
     return train(trial=trial)
 
 def optimize():

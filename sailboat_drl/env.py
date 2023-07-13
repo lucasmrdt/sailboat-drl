@@ -49,8 +49,10 @@ assert args.obs in available_obs_wrappers, f'unknown obs wrapper {args.obs} in {
 
 def prepare_env(env_idx=0, eval=False, record=False):
     def wind_generator_fn(seed: int | None):
-        thetas = np.linspace(-np.pi, 0, args.n_eval_envs if eval else args.n_train_envs, endpoint=False)
-        # eps_translate = np.random.uniform(-np.pi, np.pi) TODO: add random translation
+        if eval:
+            thetas = np.linspace(-np.pi, 0, args.n_eval_envs, endpoint=False)
+        else:
+            thetas = np.linspace(-np.pi, np.pi, args.n_train_envs, endpoint=False)
         theta_wind = thetas[env_idx]
         wind_speed = 2
         return np.array([np.cos(theta_wind), np.sin(theta_wind)])*wind_speed
@@ -78,13 +80,12 @@ def prepare_env(env_idx=0, eval=False, record=False):
                        name=name)
         
         episode_duration = args.eval_episode_duration if eval else args.train_episode_duration
-        print(f'episode_duration={episode_duration}')
         env = TimeLimit(env,
                         max_episode_steps=episode_duration * runtime_env.nb_steps_per_second)
 
         if record:
             env = CustomRecordVideo(env,
-                                   video_folder=f'videos/{name}',
+                                   video_folder=f'runs/{args.name}/{name}/videos',
                                    episode_trigger=lambda _: True,
                                    video_length=0)
 
@@ -92,26 +93,11 @@ def prepare_env(env_idx=0, eval=False, record=False):
         env = ObsWrapper(env, reward)
         env = FlattenObservation(env)
         env = NormalizeObservation(env)
+        # if not eval:
+        #     env = NormalizeReward(env)
 
-        if not eval:
-            env = NormalizeReward(env)
-
-        env = Monitor(env)
-
-        # # finish wandb run on close
-        # def on_close():
-        #     if wandb.run is not None:
-        #         wandb.run.finish()
-
-        # count episodes
-        episode = 0
-        def on_reset():
-            nonlocal episode
-            Logger.record({'episode': episode})
-            episode += 1
-
+        # env = Monitor(env)
         env = LoggerDumpWrapper(env)
-        env = CbWrapper(env, on_reset=on_reset)
 
         return env
     return __init
