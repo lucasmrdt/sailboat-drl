@@ -46,7 +46,8 @@ if __name__ == '__main__':
         os.makedirs(save_dir)
     save_path = osp.join(save_dir, 'best_n_envs.pkl')
 
-    eval_envs = SubprocVecEnv([prepare_env(i, eval=True, record=True) for i in range(args.n_eval_envs)])
+    if args.n_eval_envs > 0:
+        eval_envs = SubprocVecEnv([prepare_env(i, eval=True, record=True) for i in range(args.n_eval_envs)])
 
     pickle.dump(find_best_n_envs(), open(save_path, 'wb'))
     print(f'Best n_envs saved to {save_path}')

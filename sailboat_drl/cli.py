@@ -35,6 +35,8 @@ def parse_args():
                         help='number of training environments')
     parser.add_argument('--n-eval-envs', type=int, default=4,
                         help='number of evaluation environments')
+    parser.add_argument('--use-same-sim', action='store_true',
+                        help='use the same simulation for evaluation and training')
     # parser.add('--log-freq', type=int, default=100, help='log frequency (in number of steps)')
 
     # stable-baselines3 arguments

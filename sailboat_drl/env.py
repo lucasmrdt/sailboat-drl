@@ -77,7 +77,7 @@ def prepare_env(env_idx=0, eval=False, record=False):
                        container_tag='mss1',
                        video_speed=20,
                        map_scale=.5,
-                       name=name)
+                       name=f'{env_idx}' if args.use_same_sim else name)
         
         episode_duration = args.eval_episode_duration if eval else args.train_episode_duration
         env = TimeLimit(env,
