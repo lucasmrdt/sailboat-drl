@@ -49,10 +49,17 @@ assert args.obs in available_obs_wrappers, f'unknown obs wrapper {args.obs} in {
 
 def prepare_env(env_idx=0, eval=False, record=False):
     def wind_generator_fn(seed: int | None):
+        if seed is not None:
+            np.random.seed(args.seed)
         if eval:
             thetas = np.linspace(-np.pi, 0, args.n_eval_envs, endpoint=False)
         else:
-            thetas = np.linspace(-np.pi, np.pi, args.n_train_envs, endpoint=False)
+            thetas = np.linspace(-np.pi, np.pi,
+                                 args.n_train_envs, endpoint=False)
+            rand_translate = np.random.uniform(-np.pi/args.n_train_envs,
+                                               np.pi/args.n_train_envs)
+            thetas += rand_translate  # add a random translation
+            thetas = (thetas + np.pi) % (2*np.pi) - np.pi  # wrap to [-pi, pi]
         theta_wind = thetas[env_idx]
         wind_speed = 2
         return np.array([np.cos(theta_wind), np.sin(theta_wind)])*wind_speed
@@ -77,17 +84,16 @@ def prepare_env(env_idx=0, eval=False, record=False):
                        container_tag='mss1',
                        video_speed=20,
                        map_scale=.5,
-                       name=f'{env_idx}' if args.use_same_sim else name)
-        
+                       name=f'{env_idx}' if args.reuse_train_sim_for_eval else name)
         episode_duration = args.eval_episode_duration if eval else args.train_episode_duration
         env = TimeLimit(env,
                         max_episode_steps=episode_duration * runtime_env.nb_steps_per_second)
 
         if record:
             env = CustomRecordVideo(env,
-                                   video_folder=f'runs/{args.name}/{name}/videos',
-                                   episode_trigger=lambda _: True,
-                                   video_length=0)
+                                    video_folder=f'runs/{args.name}/{name}/videos',
+                                    episode_trigger=lambda _: True,
+                                    video_length=0)
 
         env = ActWrapper(env)
         env = ObsWrapper(env, reward)

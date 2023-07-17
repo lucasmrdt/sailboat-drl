@@ -41,7 +41,8 @@ def train(trial=None) -> float:
                 gae_lambda=args.gae_lambda,
                 max_grad_norm=args.max_grad_norm,
                 vf_coef=args.vf_coef,
-                policy_kwargs=args.policy_kwargs)
+                policy_kwargs=args.policy_kwargs,
+                seed=args.seed)
     model.set_logger(Logger.get_sb3_logger())
 
     time_cb = TimeLoggerCallback()
@@ -49,16 +50,16 @@ def train(trial=None) -> float:
     if trial:
         from rl_zoo3.callbacks import TrialEvalCallback
         eval_cb = TrialEvalCallback(eval_env,
-                                     trial,
-                                     log_path=f'runs/{args.name}',
-                                     eval_freq=args.total_steps * args.eval_freq // args.n_train_envs,
-                                     n_eval_episodes=args.n_eval_envs)
+                                    trial,
+                                    log_path=f'runs/{args.name}',
+                                    eval_freq=args.total_steps * args.eval_freq // args.n_train_envs,
+                                    n_eval_episodes=args.n_eval_envs)
     else:
         eval_cb = EvalCallback(eval_env,
-                            best_model_save_path=f'runs/{args.name}',
-                            log_path=f'runs/{args.name}',
-                            eval_freq=args.total_steps * args.eval_freq // args.n_train_envs,
-                            n_eval_episodes=args.n_eval_envs)
+                               best_model_save_path=f'runs/{args.name}',
+                               log_path=f'runs/{args.name}',
+                               eval_freq=args.total_steps * args.eval_freq // args.n_train_envs,
+                               n_eval_episodes=args.n_eval_envs)
 
     try:
         model.learn(args.total_steps,
@@ -76,15 +77,16 @@ def train(trial=None) -> float:
 
     if trial:
         import optuna
-        if eval_cb.is_pruned: # type: ignore
+        if eval_cb.is_pruned:  # type: ignore
             raise optuna.TrialPruned()
     else:
         model.save(f'runs/{args.name}/final')
 
     hparams = {k: v if isinstance(v, (int, float, str, bool)) else str(v)
                for k, v in vars(args).items()}
-    Logger.log_hyperparams(hparams, {'last_mean_reward': eval_cb.last_mean_reward}) # type: ignore
-    return eval_cb.last_mean_reward # type: ignore
+    Logger.log_hyperparams(
+        hparams, {'last_mean_reward': eval_cb.last_mean_reward})  # type: ignore
+    return eval_cb.last_mean_reward  # type: ignore
 
 
 if __name__ == '__main__':

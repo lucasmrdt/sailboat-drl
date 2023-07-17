@@ -5,6 +5,7 @@ from functools import cache
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter, Namespace
 from sailboat_gym import env_by_name
 
+
 def extended_eval(s):
     return eval(s, {'pi': np.pi})
 
@@ -35,8 +36,8 @@ def parse_args():
                         help='number of training environments')
     parser.add_argument('--n-eval-envs', type=int, default=4,
                         help='number of evaluation environments')
-    parser.add_argument('--use-same-sim', action='store_true',
-                        help='use the same simulation for evaluation and training')
+    parser.add_argument('--reuse-train-sim-for-eval', action='store_true',
+                        help='reuse training simulation for evaluation')
     # parser.add('--log-freq', type=int, default=100, help='log frequency (in number of steps)')
 
     # stable-baselines3 arguments
@@ -74,4 +75,3 @@ args = parse_args()
 runtime_env = Namespace(
     nb_steps_per_second=env_by_name[args.env_name].NB_STEPS_PER_SECONDS,
 )
-
