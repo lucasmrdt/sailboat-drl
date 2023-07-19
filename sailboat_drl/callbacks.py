@@ -4,6 +4,7 @@ from stable_baselines3.common.callbacks import BaseCallback
 from .cli import runtime_env, args
 from .logger import Logger
 
+
 class TimeLoggerCallback(BaseCallback):
     def __init__(self, verbose=0):
         super().__init__(verbose)
@@ -24,4 +25,4 @@ class TimeLoggerCallback(BaseCallback):
             "time/step": average_step_time,
             "time/factor": (1/runtime_env.nb_steps_per_second) / average_step_time,
         })
-        Logger.dump(step=self.num_timesteps)
+        # Logger.dump(step=self.num_timesteps)

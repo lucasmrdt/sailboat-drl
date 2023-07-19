@@ -29,8 +29,15 @@ def extract_env_instance(env, env_class):
         env = env.env if hasattr(env, 'env') else None
     return None
 
+
 def _force_kill_wandb():
-    subprocess.run(['pkill', '-9', 'wandb-service'], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    subprocess.run(['pkill', '-9', 'wandb-service'],
+                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
 def timeout_wandb(seconds: float):
     threading.Timer(seconds, _force_kill_wandb).start()
+
+
+def dict_without_keys(d: dict[Any, Any], keys: set[Any]) -> dict[Any, Any]:
+    return {k: v for k, v in d.items() if k not in keys}

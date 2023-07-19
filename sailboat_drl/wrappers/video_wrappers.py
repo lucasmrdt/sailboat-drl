@@ -5,6 +5,7 @@ from gymnasium.wrappers.record_video import RecordVideo
 from ..utils import extract_env_instance
 from ..logger import Logger
 
+
 class CustomRecordVideo(RecordVideo):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -21,7 +22,8 @@ class CustomRecordVideo(RecordVideo):
         if self.pbar is None:
             timelimit_env = extract_env_instance(self.env, TimeLimit)
             episode_length = timelimit_env._max_episode_steps if timelimit_env else None
-            self.pbar = tqdm.tqdm(total=episode_length, desc='[LogRecordVideo]')
+            self.pbar = tqdm.tqdm(total=episode_length,
+                                  desc='[LogRecordVideo]')
         self.pbar.update(1)
         return super().step(action)
 
@@ -30,5 +32,5 @@ class CustomRecordVideo(RecordVideo):
         super().close_video_recorder()
         if was_recording and self.video_recorder:
             self.idx += 1
-            Logger.record({f'video/{self.idx}': self.video_recorder.path}, exclude=('csv',))
-            Logger.dump(step=self.idx)
+            # Logger.record({f'video/{self.idx}': self.video_recorder.path}, exclude=('csv',))
+            # Logger.dump(step=self.idx)

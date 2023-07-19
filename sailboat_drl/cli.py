@@ -38,6 +38,8 @@ def parse_args():
                         help='number of evaluation environments')
     parser.add_argument('--reuse-train-sim-for-eval', action='store_true',
                         help='reuse training simulation for evaluation')
+    parser.add_argument('--wind-speed', type=float, default=2,
+                        help='wind speed')
     # parser.add('--log-freq', type=int, default=100, help='log frequency (in number of steps)')
 
     # stable-baselines3 arguments

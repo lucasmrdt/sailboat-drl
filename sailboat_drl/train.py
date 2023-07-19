@@ -27,7 +27,7 @@ def train(trial=None) -> float:
     train_env = SubprocVecEnv(
         [prepare_env(i) for i in range(args.n_train_envs)])
     eval_env = SubprocVecEnv(
-        [prepare_env(i, eval=True, record=True) for i in range(args.n_eval_envs)])
+        [prepare_env(i, is_eval=True) for i in range(args.n_eval_envs)])
 
     model = PPO('MlpPolicy',
                 train_env,
