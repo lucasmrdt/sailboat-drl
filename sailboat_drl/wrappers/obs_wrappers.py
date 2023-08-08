@@ -117,7 +117,7 @@ class Basic2DObs_V2(RewardObs):
             'theta_boat': np.array([np.cos(theta_boat), np.sin(theta_boat)]),
             'dt_theta_boat': obs['dt_theta_boat'][2],  # Z axis
             'theta_rudder': np.array([np.cos(theta_rudder), np.sin(theta_rudder)]),
-            'dt_theta_rudder': obs['dt_theta_rudder'][0],
+            'dt_theta_rudder': obs['dt_theta_rudder'].item(),
             'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
             'wind_norm': wind_norm,
         }

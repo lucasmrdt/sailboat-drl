@@ -56,16 +56,16 @@ class RudderForceAction(BestFixedSail, ActionWrapper):
         self.dt = np.pi/(sailboat_env.NB_STEPS_PER_SECONDS*5)
 
         self.theta_rudder = np.array([0])  # in rad
-        self.directions = [-1, 1, 0]
+        self.directions = [-1, 0, 1]
         # -1: boat is turning left
-        # 1: boat is turning right
         # 0: boat is going straight
+        # 1: boat is turning right
         self.action_space = gym.spaces.Discrete(len(self.directions))
 
     def reset(self, **kwargs):
         self.theta_rudder = np.array([0])  # reset rudder angle
         return super().reset(**kwargs)
-    
+
     def action(self, action: int) -> Action:
         assert self.theta_sail is not None, 'theta_sail must be set by reset'
 

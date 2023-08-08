@@ -20,6 +20,7 @@ def load_master_run(run_id: str):
     df['rollout_idx'] = df.index
     return df
 
+<<<<<<< Updated upstream
 def load_master_runs(run_ids: list):
     runs = []
     for run_id in tqdm(run_ids, desc='loading', total=len(run_ids), leave=False):
@@ -29,6 +30,8 @@ def load_master_runs(run_ids: list):
             print(f'[WARNING] cannot load {run_id}')
     return runs
 
+=======
+>>>>>>> Stashed changes
 
 def load_run(run_id: str, eval=False):
     job_type = 'eval' if eval else 'train'
@@ -40,8 +43,8 @@ def load_run(run_id: str, eval=False):
     for file_path in glob.glob(osp.join(project_dir, pattern)):
         name = '/'.join(file_path.split('/')[-3:])
         try:
-            run_idx = re.search(f'{job_type}-(\d+)/', name).group(1)
-            episode_idx = re.search('/(\d+)/', name).group(1)
+            run_idx = int(re.search(f'{job_type}-(\d+)/', name).group(1))
+            episode_idx = int(re.search('/(\d+)/', name).group(1))
         except AttributeError:
             print(f'[WARNING] {file_path} is not a valid csv file')
             continue
@@ -169,11 +172,15 @@ def plot_last_cum_vmc_by_ep(df, ax=None, label=None):
     if ax is None:
         _, ax = plt.subplots(1, 1, figsize=(4, 4), dpi=150)
     df_cum_vmc = df['obs/cum_obs/vmc/0']
+<<<<<<< Updated upstream
     cum_vmc_by_episode = df_cum_vmc.groupby('episode_idx')
+=======
+    cum_vmc_by_episode = df_cum_vmc.sort_index(level='episode_idx').groupby('episode_idx')
+>>>>>>> Stashed changes
 
     means = []
     stds = []
-    for idx, (_, ep_cum_vmc) in enumerate(cum_vmc_by_episode):
+    for idx, (ep, ep_cum_vmc) in enumerate(cum_vmc_by_episode):
         ep_cum_vmc = ep_cum_vmc.sort_index(level='step_idx')
         step_idx = ep_cum_vmc.index.get_level_values('step_idx').values
         extract_last_step = step_idx == step_idx.max()

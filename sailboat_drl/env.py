@@ -5,7 +5,7 @@ from gymnasium.wrappers.flatten_observation import FlattenObservation
 from gymnasium.wrappers.normalize import NormalizeObservation, NormalizeReward
 from stable_baselines3.common.monitor import Monitor
 
-from .rewards import PFMaxVMC, PFCircularCamille, PFRenderer, PPSparseReward, PPDistToTargetReward, PPGainedDistToTargetReward, PPVelocityReward, PPRenderer
+from .rewards import PFMaxVMC, PFMaxVMCContinuity, PFCircularCamille, PFRenderer, PPSparseReward, PPDistToTargetReward, PPGainedDistToTargetReward, PPVelocityReward, PPRenderer
 from .wrappers import CbWrapper, CustomRecordVideo, Basic2DObs, Basic2DObs_V2, RudderAngleAction, RudderForceAction
 from .cli import args, runtime_env
 from .logger import Logger, LoggerDumpWrapper
@@ -19,6 +19,7 @@ available_path_planning_rewards = {
 
 available_path_following_rewards = {
     'pf_max_vmc': PFMaxVMC,
+    'pf_max_vmc_continuity': PFMaxVMCContinuity,
     'pf_circular_camille': PFCircularCamille,
 }
 
@@ -51,14 +52,15 @@ def prepare_env(env_idx=0, is_eval=False):
     def wind_generator_fn(seed: int | None):
         if seed is not None:
             np.random.seed(args.seed)
-        if is_eval:
-            thetas = np.linspace(-np.pi, 0, args.n_eval_envs, endpoint=False)
-        else:
-            thetas = np.linspace(-np.pi, np.pi,
-                                 args.n_train_envs, endpoint=False)
-            rand_translate = np.random.uniform(0, 2*np.pi)
-            thetas += rand_translate  # add a random translation
-            thetas = (thetas + np.pi) % (2*np.pi) - np.pi  # wrap to [-pi, pi]
+        # if is_eval:
+        #     thetas = np.linspace(-np.pi, 0, args.n_eval_envs, endpoint=False)
+        # else:
+        #     thetas = np.linspace(-np.pi, np.pi,
+        #                          args.n_train_envs, endpoint=False)
+        #     rand_translate = np.random.uniform(0, 2*np.pi)
+        #     thetas += rand_translate  # add a random translation
+        #     thetas = (thetas + np.pi) % (2*np.pi) - np.pi  # wrap to [-pi, pi]
+        thetas = np.linspace(-np.pi - .1, 0 + .1, args.n_eval_envs if is_eval else args.n_train_envs, endpoint=True)
         theta_wind = thetas[env_idx]
         wind_speed = args.wind_speed
         return np.array([np.cos(theta_wind), np.sin(theta_wind)])*wind_speed

@@ -108,14 +108,16 @@ class PFMaxVMC(AbcPFReward):
 
     def observation(self, obs):
         return {'vmc': np.array([self._compute_vmc(obs)])}
-    
-    @property
-    def keys_to_log(self):
-        return set(['vmc'])
 
     def __call__(self, obs, act, next_obs):
         vmc = self._compute_vmc(next_obs)
         return vmc
+
+class PFMaxVMCContinuity(AbcPFReward):
+    def __call__(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        delta_theta_rudder = (obs['theta_rudder'].item() - next_obs['theta_rudder'].item())**2
+        return vmc - delta_theta_rudder
 
 class PFCircularCamille(AbcPFReward):
     def __init__(self, max_vmc=.50, k1=5, **kwargs):

@@ -30,7 +30,8 @@ class Logger:
             if isinstance(v, Iterable) and not isinstance(v, str):
                 for i, x in enumerate(v):
                     _sb3_logger.record(f'{k}/{i}', x, exclude=exclude)
-            _sb3_logger.record(k, v, exclude=exclude)
+            else:
+                _sb3_logger.record(k, v, exclude=exclude)
 
     @staticmethod
     def dump(step: int):
