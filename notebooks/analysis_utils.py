@@ -20,7 +20,6 @@ def load_master_run(run_id: str):
     df['rollout_idx'] = df.index
     return df
 
-<<<<<<< Updated upstream
 def load_master_runs(run_ids: list):
     runs = []
     for run_id in tqdm(run_ids, desc='loading', total=len(run_ids), leave=False):
@@ -30,8 +29,6 @@ def load_master_runs(run_ids: list):
             print(f'[WARNING] cannot load {run_id}')
     return runs
 
-=======
->>>>>>> Stashed changes
 
 def load_run(run_id: str, eval=False):
     job_type = 'eval' if eval else 'train'
@@ -172,11 +169,7 @@ def plot_last_cum_vmc_by_ep(df, ax=None, label=None):
     if ax is None:
         _, ax = plt.subplots(1, 1, figsize=(4, 4), dpi=150)
     df_cum_vmc = df['obs/cum_obs/vmc/0']
-<<<<<<< Updated upstream
-    cum_vmc_by_episode = df_cum_vmc.groupby('episode_idx')
-=======
     cum_vmc_by_episode = df_cum_vmc.sort_index(level='episode_idx').groupby('episode_idx')
->>>>>>> Stashed changes
 
     means = []
     stds = []
