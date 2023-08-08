@@ -1,4 +1,5 @@
 import tqdm
+import gc
 from gymnasium.wrappers.time_limit import TimeLimit
 from gymnasium.wrappers.record_video import RecordVideo
 
@@ -32,5 +33,6 @@ class CustomRecordVideo(RecordVideo):
         super().close_video_recorder()
         if was_recording and self.video_recorder:
             self.idx += 1
+            gc.collect()
             # Logger.record({f'video/{self.idx}': self.video_recorder.path}, exclude=('csv',))
             # Logger.dump(step=self.idx)

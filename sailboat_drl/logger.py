@@ -62,13 +62,11 @@ class LoggerDumpWrapper(Wrapper):
         self.is_reset = False
 
     def reset(self, **kwargs):
-        # print(f'[{"eval" if self.eval else "train"}] reset')
         self.is_reset = True
         self.n_steps = 0
         return super().reset(**kwargs)
 
     def step(self, action):
-        # print(f'[{"eval" if self.eval else "train"}] step')
         if self.is_reset:
             Logger.re_configure(str(self.n_episodes))
             self.n_episodes += 1

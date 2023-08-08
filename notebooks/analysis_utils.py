@@ -2,6 +2,7 @@ from IPython.display import HTML
 from base64 import b64encode
 from collections import defaultdict
 from tqdm import tqdm
+from tbparse import SummaryReader
 import numpy as np
 import pandas as pd
 import os.path as osp
@@ -11,6 +12,22 @@ import re
 
 current_dir = osp.dirname(osp.abspath(__file__))
 project_dir = osp.join(current_dir, '..')
+
+
+def load_master_run(run_id: str):
+    df = pd.read_csv(
+        osp.join(project_dir, f'runs/{run_id}/train.py/0/progress.csv'))
+    df['rollout_idx'] = df.index
+    return df
+
+def load_master_runs(run_ids: list):
+    runs = []
+    for run_id in tqdm(run_ids, desc='loading', total=len(run_ids), leave=False):
+        try:
+            runs.append(load_master_run(run_id))
+        except Exception:
+            print(f'[WARNING] cannot load {run_id}')
+    return runs
 
 
 def load_run(run_id: str, eval=False):
@@ -26,18 +43,19 @@ def load_run(run_id: str, eval=False):
             run_idx = re.search(f'{job_type}-(\d+)/', name).group(1)
             episode_idx = re.search('/(\d+)/', name).group(1)
         except AttributeError:
+            print(f'[WARNING] {file_path} is not a valid csv file')
             continue
-
-        # print(f'[{file_path}] run_idx: {run_idx}, episode_idx: {episode_idx}')
 
         try:
             df = pd.read_csv(file_path)
         except pd.errors.EmptyDataError:
+            print(f'[WARNING] {file_path} is empty')
             continue
 
         if csv_length is None:
             csv_length = len(df)
-        elif len(df) != csv_length:
+        elif len(df) <= 1:
+            print(f'[WARNING] {file_path} is empty')
             continue
 
         df['run_idx'] = run_idx
@@ -59,6 +77,34 @@ def load_runs(run_ids: list, eval=False):
         except Exception:
             print(f'[WARNING] cannot load {run_id}')
     return runs
+
+
+def load_hparams_run(run_id: str):
+    dirs = glob.glob(osp.join(project_dir, f'runs/{run_id}/train.py/0/events.out.tfevents.*'))
+    reader = SummaryReader(dirs[0])
+    hparams = reader.hparams
+    hparams['run_id'] = run_id
+    hparams.set_index(['run_id', 'tag'], inplace=True)
+    return hparams
+
+def load_hparams_runs(run_ids: list):
+    dfs = []
+    for run_id in tqdm(run_ids, desc='loading', total=len(run_ids), leave=False):
+        try:
+            dfs.append(load_hparams_run(run_id))
+        except Exception as e:
+            print(f'[WARNING] cannot load {run_id}')
+    return pd.concat(dfs, ignore_index=False)
+
+def compare_hparams_of_runs(run_ids: list, hparam_names=['n_steps', 'n_epochs', 'batch_size', 'gamma', 'gae_lambda', 'learning_rate', 'ent_coef', 'clip_range', 'vf_coef', 'max_grad_norm']):
+    df = load_hparams_runs(run_ids)
+    df = df.loc[df.index.get_level_values('tag').isin(hparam_names)]
+    hparams_by_tag = df.groupby('tag')
+    print(f'{"tag":<15}{"median":<15}{"mean":<15}{"std":<15}{"min":<15}{"max":<15}')
+    for tag, hparams in hparams_by_tag:
+        hparams = hparams['value']
+        print(f'{tag:<15}{hparams.median():<15f}{hparams.mean():<15f}{hparams.std():<15f}{hparams.min():<15f}{hparams.max():<15f}')
+        # print(f'{tag}:median={hparams.median():.3f}, mean={hparams.mean():.3f}, std={hparams.std():.3f:^4}, min={hparams.min():.3f}, max={hparams.max():.3f}')
 
 
 def show_videos(run_id: str, selected_eps=None, drop_last=True):
@@ -90,7 +136,7 @@ def show_videos(run_id: str, selected_eps=None, drop_last=True):
             mp4 = open(filepath, 'rb').read()
             data_url = "data:video/mp4;base64," + b64encode(mp4).decode()
             html_str += f"""
-            <video width={1/(len(filepaths)+1):.0%} controls autoplay loop muted>
+            <video width={6/(len(filepaths)+1):.0%} controls autoplay loop muted>
                 <source src="{data_url}" type="video/mp4">
             </video>
             """
@@ -101,7 +147,7 @@ def show_videos(run_id: str, selected_eps=None, drop_last=True):
 def plot_cum_vmc_by_step(df, ax=None, label=lambda x: f'{x:.0%}', selected_eps=None):
     if ax is None:
         _, ax = plt.subplots(1, 1, figsize=(4, 4), dpi=150)
-    df_cum_vmc = df['obs/cum_obs/vmc']
+    df_cum_vmc = df['obs/cum_obs/vmc/0']
     cum_vmc_by_episode = df_cum_vmc.groupby('episode_idx')
 
     for idx, (_, ep_cum_vmc) in enumerate(cum_vmc_by_episode):
@@ -122,7 +168,7 @@ def plot_cum_vmc_by_step(df, ax=None, label=lambda x: f'{x:.0%}', selected_eps=N
 def plot_last_cum_vmc_by_ep(df, ax=None, label=None):
     if ax is None:
         _, ax = plt.subplots(1, 1, figsize=(4, 4), dpi=150)
-    df_cum_vmc = df['obs/cum_obs/vmc']
+    df_cum_vmc = df['obs/cum_obs/vmc/0']
     cum_vmc_by_episode = df_cum_vmc.groupby('episode_idx')
 
     means = []
@@ -130,7 +176,7 @@ def plot_last_cum_vmc_by_ep(df, ax=None, label=None):
     for idx, (_, ep_cum_vmc) in enumerate(cum_vmc_by_episode):
         ep_cum_vmc = ep_cum_vmc.sort_index(level='step_idx')
         step_idx = ep_cum_vmc.index.get_level_values('step_idx').values
-        extract_last_step = step_idx == 99
+        extract_last_step = step_idx == step_idx.max()
         ep_cum_vmc = ep_cum_vmc[extract_last_step]
         mean_cum_vmc = ep_cum_vmc.mean()
         std_cum_vmc = ep_cum_vmc.std()

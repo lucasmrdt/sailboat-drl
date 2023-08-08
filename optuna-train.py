@@ -19,7 +19,7 @@ def objective(trial: optuna.Trial) -> float:
 
 def optimize():
     study = optuna.create_study(
-        sampler=optuna.samplers.RandomSampler(),
+        # sampler=optuna.samplers.RandomSampler(),
         direction='maximize',
         study_name=args.name,
         storage=f'sqlite:///optuna.db',

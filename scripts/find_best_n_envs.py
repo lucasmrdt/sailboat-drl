@@ -18,7 +18,7 @@ current_dir = osp.dirname(osp.abspath(__file__))
 def find_best_n_envs():
     time_per_step_by_n_envs = {}
 
-    for n_envs in trange(1, 32+1, desc='running experiments'):
+    for n_envs in trange(1, 40+1, desc='running experiments'):
         env = SubprocVecEnv([prepare_env(i) for i in range(n_envs)])
 
         start = time.time()
@@ -29,13 +29,10 @@ def find_best_n_envs():
             if any(done):
                 break
         end = time.time()
+
         time_per_step = (end - start) / (n_envs * i)
         time_per_step_by_n_envs[n_envs] = time_per_step
-        print(f'n_envs = {n_envs}, time/step = {time_per_step*1000:.2f} ms')
-
-        # res = input('Continue? [y]/n ')
-        # if res == 'n':
-        #     break
+        print(f'n_envs = {n_envs}, time/step = {time_per_step*1000:.2f} ms, time/step/env = {time_per_step*1000/n_envs:.2f} ms')
 
     return time_per_step_by_n_envs
 
@@ -45,9 +42,6 @@ if __name__ == '__main__':
     if not osp.exists(save_dir):
         os.makedirs(save_dir)
     save_path = osp.join(save_dir, 'best_n_envs.pkl')
-
-    if args.n_eval_envs > 0:
-        eval_envs = SubprocVecEnv([prepare_env(i, eval=True, record=True) for i in range(args.n_eval_envs)])
 
     pickle.dump(find_best_n_envs(), open(save_path, 'wb'))
     print(f'Best n_envs saved to {save_path}')
