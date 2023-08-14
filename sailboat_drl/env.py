@@ -60,7 +60,9 @@ def prepare_env(env_idx=0, is_eval=False):
         #     rand_translate = np.random.uniform(0, 2*np.pi)
         #     thetas += rand_translate  # add a random translation
         #     thetas = (thetas + np.pi) % (2*np.pi) - np.pi  # wrap to [-pi, pi]
-        thetas = np.linspace(-np.pi - .1, 0 + .1, args.n_eval_envs if is_eval else args.n_train_envs, endpoint=True)
+        thetas = np.linspace(
+            0 + 30, 360 - 30, args.n_eval_envs if is_eval else args.n_train_envs, endpoint=True)
+        thetas = np.deg2rad(thetas)
         theta_wind = thetas[env_idx]
         wind_speed = args.wind_speed
         return np.array([np.cos(theta_wind), np.sin(theta_wind)])*wind_speed
@@ -86,15 +88,16 @@ def prepare_env(env_idx=0, is_eval=False):
                        video_speed=20,
                        map_scale=.5,
                        name=f'{env_idx}' if args.reuse_train_sim_for_eval else name)
-        episode_duration = args.eval_episode_duration if is_eval else args.train_episode_duration
-        env = TimeLimit(env,
-                        max_episode_steps=episode_duration * runtime_env.nb_steps_per_second)
 
         if is_eval:
             env = CustomRecordVideo(env,
                                     video_folder=f'runs/{args.name}/{name}/videos',
                                     episode_trigger=lambda _: True,
                                     video_length=0)
+
+        episode_duration = args.eval_episode_duration if is_eval else args.train_episode_duration
+        env = TimeLimit(env,
+                        max_episode_steps=episode_duration * runtime_env.nb_steps_per_second)
 
         env = ActWrapper(env)
         env = ObsWrapper(env, reward)

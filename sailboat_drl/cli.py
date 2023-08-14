@@ -7,7 +7,7 @@ from sailboat_gym import env_by_name
 
 
 def extended_eval(s):
-    return eval(s, {'pi': np.pi})
+    return eval(s, {'pi': np.pi, 'nn': nn})
 
 
 @cache

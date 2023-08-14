@@ -5,14 +5,10 @@ from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.vec_env import DummyVecEnv, VecVideoRecorder
 from wandb.integration.sb3 import WandbCallback
 
+def prepare_env():
+    
 
 def eval():
-    run = wandb.init(
-        project='sailboat-drl',
-        sync_tensorboard=True,
-        monitor_gym=True,
-    )
-
     env = DummyVecEnv([prepare_env()])
     env = VecVideoRecorder(
         env, f'videos/{run.id}', record_video_trigger=lambda x: x == 0, video_length=600, name_prefix='sailboat-')

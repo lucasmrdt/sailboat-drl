@@ -14,7 +14,7 @@ class CbWrapper(gym.Wrapper):
         if self.on_reset is not None:
             self.on_reset()
         return super().reset(*args, **kwargs)
-    
+
     def step(self, *args, **kwargs):
         if self.on_step is not None:
             self.on_step()
@@ -24,9 +24,8 @@ class CbWrapper(gym.Wrapper):
         if self.on_render is not None:
             self.on_render()
         return super().render(*args, **kwargs)
-    
+
     def close(self):
         if self.on_close is not None:
             self.on_close()
         return super().close()
-    

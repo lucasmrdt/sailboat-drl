@@ -1,11 +1,25 @@
 from typing import Any
 from collections import defaultdict
-import numpy as np
 from gymnasium import ObservationWrapper, spaces, Wrapper
+from gymnasium.wrappers.normalize import NormalizeObservation
+import numpy as np
+import pickle
+import os.path as osp
 
 from ..rewards import AbcReward
 from ..utils import norm
 from ..logger import Logger
+
+
+class PersistentNormalizeObservation(NormalizeObservation):
+    def save(self, path: str) -> None:
+        with open(osp.join(path, 'normalize_obs.pkl'), 'wb') as f:
+            pickle.dump(self, f)
+
+    @classmethod
+    def load(cls, path: str) -> 'PersistentNormalizeObservation':
+        with open(osp.join(path, 'normalize_obs.pkl'), 'rb') as f:
+            return pickle.load(f)
 
 
 class CustomObservationWrapper(ObservationWrapper, Wrapper):
