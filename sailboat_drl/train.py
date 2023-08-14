@@ -127,13 +127,13 @@ def train(trial=None) -> float:
                                     trial,
                                     log_path=f'runs/{args.name}',
                                     eval_freq=args.total_steps * args.eval_freq // args.n_envs,
-                                    n_eval_episodes=args.n_eval_envs)
+                                    n_eval_episodes=args.n_envs)
     else:
         eval_cb = EvalCallback(env,
                                best_model_save_path=f'runs/{args.name}',
                                log_path=f'runs/{args.name}',
                                eval_freq=args.total_steps * args.eval_freq // args.n_envs,
-                               n_eval_episodes=args.n_eval_envs)
+                               n_eval_episodes=args.n_envs)
 
     try:
         model.learn(args.total_steps,
