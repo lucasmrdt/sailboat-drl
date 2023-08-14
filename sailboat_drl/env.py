@@ -43,7 +43,7 @@ available_obs_wrappers = {
 }
 
 
-def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_vmc', reward_kwargs={'path': [[0,.5],[1,.5]]}, obs='basic_2d_obs_v2', act='rudder_force_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None):
+def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_vmc', reward_kwargs={'path': [[0, .5], [1, .5]]}, obs='basic_2d_obs_v2', act='rudder_force_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
@@ -75,26 +75,24 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_
     ObsWrapper = available_obs_wrappers[obs]
     ActWrapper = available_act_wrappers[act]
 
-
     reward = Reward(**reward_kwargs)
 
     env = gym.make(env_name,
-                    renderer=Renderer(reward, padding=0),
-                    reward_fn=reward,
-                    wind_generator_fn=wind_generator_fn,
-                    container_tag='mss1',
-                    video_speed=20,
-                    map_scale=.5,
-                    name=name)
+                   renderer=Renderer(reward, padding=0),
+                   reward_fn=reward,
+                   wind_generator_fn=wind_generator_fn,
+                   container_tag='mss1',
+                   video_speed=20,
+                   map_scale=.5,
+                   name=name)
+    env = TimeLimit(env,
+                    max_episode_steps=episode_duration * nb_steps_per_second)
 
     if is_eval:
         env = CustomRecordVideo(env,
                                 video_folder=f'runs/{name}/{name}/videos',
                                 episode_trigger=lambda _: True,
                                 video_length=0)
-
-    env = TimeLimit(env,
-                    max_episode_steps=episode_duration * nb_steps_per_second)
 
     env = ActWrapper(env)
     env = ObsWrapper(env, reward)
@@ -108,11 +106,13 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_
 
     return env
 
+
 def save_env_wrappers(env, path):
     while hasattr(env, 'env'):
         if hasattr(env, 'save'):
             env.save(path)
         env = env.env
+
 
 def load_env_wrappers(env, path):
     while hasattr(env, 'env'):

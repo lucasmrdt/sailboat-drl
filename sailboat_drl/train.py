@@ -1,18 +1,20 @@
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
+from stable_baselines3.common.evaluation import evaluate_policy
 from torch import nn as nn
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from sailboat_gym import env_by_name
 from functools import cache
 import numpy as np
 import uuid
+import pickle
 
 from .env import create_env, available_act_wrappers, available_obs_wrappers, available_rewards
 from .callbacks import TimeLoggerCallback
 from .logger import Logger
 
-@cache
+
 def get_args():
     def extended_eval(s):
         return eval(s, {'pi': np.pi, 'nn': nn})
@@ -70,26 +72,26 @@ def get_args():
 
     return args
 
-def prepare_env(env_idx=0, is_eval=False):
-    args = get_args()
+
+def prepare_env(args, env_idx=0, is_eval=False):
     def _init():
         return create_env(env_idx=env_idx,
-                        is_eval=is_eval,
-                        wind_speed=args.wind_speed,
-                        n_envs=args.n_envs,
-                        reward=args.reward,
-                        reward_kwargs=args.reward_kwargs,
-                        obs=args.obs,
-                        act=args.act,
-                        env_name=args.env_name,
-                        seed=args.seed,
-                        episode_duration=args.episode_duration,
-                        prepare_env_for_nn=True,
-                        logger_prefix=args.name)
+                          is_eval=is_eval,
+                          wind_speed=args.wind_speed,
+                          n_envs=args.n_envs,
+                          reward=args.reward,
+                          reward_kwargs=args.reward_kwargs,
+                          obs=args.obs,
+                          act=args.act,
+                          env_name=args.env_name,
+                          seed=args.seed,
+                          episode_duration=args.episode_duration,
+                          prepare_env_for_nn=True,
+                          logger_prefix=args.name)
     return _init
 
 
-def train(trial=None) -> float:
+def train(trial=None):
     args = get_args()
 
     print('Training with the following arguments:')
@@ -99,7 +101,7 @@ def train(trial=None) -> float:
     Logger.configure(f'{args.name}/train.py')
 
     env = SubprocVecEnv(
-        [prepare_env(i) for i in range(args.n_envs)])
+        [prepare_env(args, i) for i in range(args.n_envs)])
     env = VecNormalize(env, norm_obs=True, norm_reward=True)
 
     model = PPO('MlpPolicy',
@@ -121,54 +123,19 @@ def train(trial=None) -> float:
     time_cb = TimeLoggerCallback(n_steps_by_rollout=args.n_steps,
                                  n_steps_per_second=env_by_name[args.env_name].NB_STEPS_PER_SECONDS)
 
-    if trial:
-        from rl_zoo3.callbacks import TrialEvalCallback
-        eval_cb = TrialEvalCallback(env,
-                                    trial,
-                                    log_path=f'runs/{args.name}',
-                                    eval_freq=args.total_steps * args.eval_freq // args.n_envs,
-                                    n_eval_episodes=args.n_envs)
-    else:
-        eval_cb = EvalCallback(env,
-                               best_model_save_path=f'runs/{args.name}',
-                               log_path=f'runs/{args.name}',
-                               eval_freq=args.total_steps * args.eval_freq // args.n_envs,
-                               n_eval_episodes=args.n_envs)
-
-    try:
-        model.learn(args.total_steps,
-                    callback=[time_cb, eval_cb],
-                    progress_bar=True)
-    except (AssertionError, ValueError) as e:
-        if trial:
-            import optuna
-            raise optuna.TrialPruned() from e
-        else:
-            raise e
+    model.learn(args.total_steps,
+                callback=[time_cb],
+                progress_bar=True)
+    model.save(f'runs/{args.name}/final.model.zip')
+    env.save(f'runs/{args.name}/final.envstats.pkl')
+    pickle.dump(args, open(f'runs/{args.name}/final.args.pkl', 'wb'))
 
     env.close()
 
-    if trial:
-        import optuna
-        if eval_cb.is_pruned:  # type: ignore
-            raise optuna.TrialPruned()
-    else:
-        model.save(f'runs/{args.name}/final')
-        env.save(f'runs/{args.name}/final.envstats.pkl')
-
     hparams = {k: v if isinstance(v, (int, float, str, bool)) else str(v)
                for k, v in vars(args).items()}
-
-    last_mean_reward: float = eval_cb.last_mean_reward  # type: ignore
-    Logger.log_hyperparams(
-        hparams, {'last_mean_reward': last_mean_reward})
-    print(f'last_mean_reward = {last_mean_reward}')
-    return last_mean_reward
+    Logger.log_hyperparams(hparams, {'last_mean_reward': -1})
 
 
 if __name__ == '__main__':
     train()
-
-
-# pip install --upgrade wandb[service]
-# wandb.require("service")

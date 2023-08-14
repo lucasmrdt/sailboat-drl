@@ -1,0 +1,92 @@
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-13/eval-13/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-13/eval-13/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-19/eval-19/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-19/eval-19/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-22/eval-22/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-22/eval-22/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-6/eval-6/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-6/eval-6/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-8/eval-8/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-8/eval-8/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-27/eval-27/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-27/eval-27/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-11/eval-11/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-11/eval-11/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-20/eval-20/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-20/eval-20/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-7/eval-7/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-7/eval-7/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-21/eval-21/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-21/eval-21/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-4/eval-4/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-4/eval-4/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-5/eval-5/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-5/eval-5/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-15/eval-15/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-15/eval-15/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-9/eval-9/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-9/eval-9/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-0/eval-0/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-0/eval-0/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-1/eval-1/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-1/eval-1/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-12/eval-12/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-12/eval-12/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-16/eval-16/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-16/eval-16/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-25/eval-25/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-25/eval-25/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-28/eval-28/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-28/eval-28/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-18/eval-18/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-18/eval-18/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-10/eval-10/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-10/eval-10/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-17/eval-17/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-17/eval-17/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-23/eval-23/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-23/eval-23/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-26/eval-26/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-26/eval-26/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-2/eval-2/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-2/eval-2/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-24/eval-24/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-24/eval-24/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-14/eval-14/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-14/eval-14/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-29/eval-29/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-29/eval-29/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-3/eval-3/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-3/eval-3/videos/rl-video-episode-0.mp4
+
+mean_reward = 4.788510499999999
+std_reward = 9.394898692983203
