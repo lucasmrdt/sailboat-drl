@@ -13,13 +13,13 @@ from ..logger import Logger
 
 class PersistentNormalizeObservation(NormalizeObservation):
     def save(self, path: str) -> None:
-        with open(osp.join(path, 'normalize_obs.pkl'), 'wb') as f:
-            pickle.dump(self, f)
+        with open(f'{path}_normalize_obs.pkl', 'wb') as f:
+            pickle.dump(self.obs_rms, f)
 
-    @classmethod
-    def load(cls, path: str) -> 'PersistentNormalizeObservation':
-        with open(osp.join(path, 'normalize_obs.pkl'), 'rb') as f:
-            return pickle.load(f)
+    def load(self, path: str) -> None:
+        with open(f'{path}_normalize_obs.pkl', 'rb') as f:
+            obs_rms = pickle.load(f)
+        self.obs_rms = obs_rms
 
 
 class CustomObservationWrapper(ObservationWrapper, Wrapper):

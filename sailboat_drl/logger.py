@@ -2,8 +2,6 @@ from gymnasium import Wrapper
 from stable_baselines3.common.logger import configure, HParam
 from collections.abc import Iterable
 
-from .cli import args
-
 _sb3_logger = None
 _logger_name = None
 
@@ -14,13 +12,13 @@ class Logger:
         global _sb3_logger, _logger_name
         _logger_name = name
         _sb3_logger = configure(
-            f'runs/{args.name}/{name}/0', ['tensorboard', 'csv'])
+            f'runs/{name}/0', ['tensorboard', 'csv'])
 
     @staticmethod
     def re_configure(postfix):
         global _sb3_logger
         _sb3_logger = configure(
-            f'runs/{args.name}/{_logger_name}/{postfix}', ['tensorboard', 'csv'])
+            f'runs/{_logger_name}/{postfix}', ['tensorboard', 'csv'])
 
     @staticmethod
     def record(data={}, exclude=None):

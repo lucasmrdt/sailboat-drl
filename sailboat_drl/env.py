@@ -2,12 +2,11 @@ import numpy as np
 import gymnasium as gym
 from gymnasium.wrappers.time_limit import TimeLimit
 from gymnasium.wrappers.flatten_observation import FlattenObservation
-from gymnasium.wrappers.normalize import NormalizeObservation, NormalizeReward
 from stable_baselines3.common.monitor import Monitor
+from sailboat_gym import env_by_name
 
 from .rewards import PFMaxVMC, PFMaxVMCContinuity, PFCircularCamille, PFRenderer, PPSparseReward, PPDistToTargetReward, PPGainedDistToTargetReward, PPVelocityReward, PPRenderer
-from .wrappers import CbWrapper, CustomRecordVideo, Basic2DObs, Basic2DObs_V2, RudderAngleAction, RudderForceAction
-from .cli import args, runtime_env
+from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, RudderAngleAction, RudderForceAction, PersistentNormalizeObservation
 from .logger import Logger, LoggerDumpWrapper
 
 available_path_planning_rewards = {
@@ -43,15 +42,17 @@ available_obs_wrappers = {
     'basic_2d_obs_v2': Basic2DObs_V2,
 }
 
-assert args.reward in available_rewards, f'unknown reward {args.reward} in {available_rewards.keys()}'
-assert args.act in available_act_wrappers, f'unknown act wrapper {args.act} in {available_act_wrappers.keys()}'
-assert args.obs in available_obs_wrappers, f'unknown obs wrapper {args.obs} in {available_obs_wrappers.keys()}'
 
+def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_vmc', reward_kwargs={'path': [[0,.5],[1,.5]]}, obs='basic_2d_obs_v2', act='rudder_force_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None):
+    nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
-def prepare_env(env_idx=0, is_eval=False):
-    def wind_generator_fn(seed: int | None):
-        if seed is not None:
-            np.random.seed(args.seed)
+    assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
+    assert act in available_act_wrappers, f'unknown act wrapper {act} in {available_act_wrappers.keys()}'
+    assert obs in available_obs_wrappers, f'unknown obs wrapper {obs} in {available_obs_wrappers.keys()}'
+
+    def wind_generator_fn(_):
+        # if seed is not None:
+        #     np.random.seed(seed) # use global seed
         # if is_eval:
         #     thetas = np.linspace(-np.pi, 0, args.n_eval_envs, endpoint=False)
         # else:
@@ -60,54 +61,61 @@ def prepare_env(env_idx=0, is_eval=False):
         #     rand_translate = np.random.uniform(0, 2*np.pi)
         #     thetas += rand_translate  # add a random translation
         #     thetas = (thetas + np.pi) % (2*np.pi) - np.pi  # wrap to [-pi, pi]
-        thetas = np.linspace(
-            0 + 30, 360 - 30, args.n_eval_envs if is_eval else args.n_train_envs, endpoint=True)
+        thetas = np.linspace(0 + 30, 360 - 30, n_envs, endpoint=True)
         thetas = np.deg2rad(thetas)
         theta_wind = thetas[env_idx]
-        wind_speed = args.wind_speed
         return np.array([np.cos(theta_wind), np.sin(theta_wind)])*wind_speed
 
-    def __init():
+    name = f'{"eval" if is_eval else "train"}-{env_idx}'
 
-        name = f'{"eval" if is_eval else "train"}-{env_idx}'
+    Logger.configure(f'{logger_prefix}/{name}')
 
-        Logger.configure(name)
+    Reward = available_rewards[reward]
+    Renderer = available_renderer[reward]
+    ObsWrapper = available_obs_wrappers[obs]
+    ActWrapper = available_act_wrappers[act]
 
-        Reward = available_rewards[args.reward]
-        Renderer = available_renderer[args.reward]
-        ObsWrapper = available_obs_wrappers[args.obs]
-        ActWrapper = available_act_wrappers[args.act]
 
-        reward = Reward(**args.reward_kwargs)
+    reward = Reward(**reward_kwargs)
 
-        env = gym.make(args.env_name,
-                       renderer=Renderer(reward, padding=0),
-                       reward_fn=reward,
-                       wind_generator_fn=wind_generator_fn,
-                       container_tag='mss1',
-                       video_speed=20,
-                       map_scale=.5,
-                       name=f'{env_idx}' if args.reuse_train_sim_for_eval else name)
+    env = gym.make(env_name,
+                    renderer=Renderer(reward, padding=0),
+                    reward_fn=reward,
+                    wind_generator_fn=wind_generator_fn,
+                    container_tag='mss1',
+                    video_speed=20,
+                    map_scale=.5,
+                    name=name)
 
-        if is_eval:
-            env = CustomRecordVideo(env,
-                                    video_folder=f'runs/{args.name}/{name}/videos',
-                                    episode_trigger=lambda _: True,
-                                    video_length=0)
+    if is_eval:
+        env = CustomRecordVideo(env,
+                                video_folder=f'runs/{name}/{name}/videos',
+                                episode_trigger=lambda _: True,
+                                video_length=0)
 
-        episode_duration = args.eval_episode_duration if is_eval else args.train_episode_duration
-        env = TimeLimit(env,
-                        max_episode_steps=episode_duration * runtime_env.nb_steps_per_second)
+    env = TimeLimit(env,
+                    max_episode_steps=episode_duration * nb_steps_per_second)
 
-        env = ActWrapper(env)
-        env = ObsWrapper(env, reward)
+    env = ActWrapper(env)
+    env = ObsWrapper(env, reward)
+
+    if prepare_env_for_nn:
         env = FlattenObservation(env)
-        env = NormalizeObservation(env)
-        # if not is_eval:
-        #     env = NormalizeReward(env)
+        env = PersistentNormalizeObservation(env)
 
-        env = Monitor(env)
-        env = LoggerDumpWrapper(is_eval, env)
+    env = Monitor(env)
+    env = LoggerDumpWrapper(is_eval, env)
 
-        return env
-    return __init
+    return env
+
+def save_env_wrappers(env, path):
+    while hasattr(env, 'env'):
+        if hasattr(env, 'save'):
+            env.save(path)
+        env = env.env
+
+def load_env_wrappers(env, path):
+    while hasattr(env, 'env'):
+        if hasattr(env, 'load'):
+            env.load(path)
+        env = env.env
