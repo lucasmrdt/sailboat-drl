@@ -37,6 +37,7 @@ def eval_model(overwrite_args={}):
 
     Logger.configure(f'{args.name}/eval.py')
 
+    print(f'Loaded model from {path}/final.model.zip')
     model = PPO.load(f'{path}/final.model.zip')
     train_args = pickle.load(open(f'{path}/final.args.pkl', 'rb'))
 

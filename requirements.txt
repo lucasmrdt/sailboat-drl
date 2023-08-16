@@ -1,5 +1,5 @@
 stable-baselines3==2.0.0
-sailboat_gym==1.0.33
+sailboat_gym==1.0.35
 gymnasium
 wandb
 tensorboard

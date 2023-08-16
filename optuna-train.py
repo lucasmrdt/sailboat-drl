@@ -24,7 +24,7 @@ def prepare_objective(study_name):
 
         train_model(overwrite_args)
         mean_reward, std_reward = eval_model(overwrite_args)
-        return mean_reward, std_reward
+        return mean_reward
     return objective
 
 
@@ -33,7 +33,7 @@ def optimize():
 
     study = optuna.create_study(
         # sampler=optuna.samplers.RandomSampler(),
-        directions=('maximize', 'minimize'),
+        direction='maximize',
         study_name=args.name,
         storage=f'sqlite:///optuna.db',
         load_if_exists=True)

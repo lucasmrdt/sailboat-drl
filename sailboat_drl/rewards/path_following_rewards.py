@@ -7,15 +7,15 @@ from .abc_reward import AbcReward
 from ..utils import norm, smallest_signed_angle, rotate_vector
 
 class AbcPFReward(AbcReward):  # PF: Path Following
-    def __init__(self, path: list, map_bounds: list):
+    def __init__(self, path: list):
         assert len(path) == 2 and len(path[0]) == 2 and len(
             path[1]) == 2, 'Path must be a list of 2D vectors'
-        self.path = np.array(path)
-        self.map_bounds = np.array(map_bounds)
-        self.absolute_path = self.path * (self.map_bounds[1] - self.map_bounds[0]) + self.map_bounds[0]
+        self.path = np.array(path, dtype=np.float32)
+        # self.map_bounds = np.array(map_bounds)
+        # self.absolute_path = self.path * (self.map_bounds[1] - self.map_bounds[0]) + self.map_bounds[0]
 
     def _compute_xte(self, obs: Observation):
-        path = self.absolute_path
+        path = self.path
         p_boat = obs['p_boat'][0:2]  # X and Y axis
         d = (path[1] - path[0])
         n = np.array([-d[1], d[0]])  # Normal vector to the path
@@ -31,7 +31,7 @@ class AbcPFReward(AbcReward):  # PF: Path Following
         v_angle = np.arctan2(v[1], v[0])
 
         # get absolute target angle
-        path = self.absolute_path
+        path = self.path
         d = path[1] - path[0]
         target_angle = np.arctan2(d[1], d[0])
 
@@ -45,7 +45,7 @@ class AbcPFReward(AbcReward):  # PF: Path Following
         v = rotate_vector(v, theta_boat)
 
         # get absolute path
-        path = self.absolute_path
+        path = self.path
         d = path[1] - path[0]
 
         vmc = np.dot(v, d) / norm(d)
@@ -73,7 +73,7 @@ class PFRenderer(CV2DRenderer):
         self.reward = reward
 
     def _draw_reward(self, img, obs):
-        path = self.reward.path * (self.size - 2*self.padding) + self.padding
+        path = self._translate_and_scale_to_fit_in_map(self.reward.path)
         cv2.line(img,
                  tuple(path[0].astype(int)),
                  tuple(path[1].astype(int)),
@@ -126,7 +126,7 @@ class PFMaxVMCContinuity(AbcPFReward):
     def __call__(self, obs, act, next_obs):
         vmc = self._compute_vmc(next_obs)
         delta_theta_rudder = (obs['theta_rudder'].item() - next_obs['theta_rudder'].item())**2
-        return vmc - delta_theta_rudder
+        return vmc - .1*delta_theta_rudder
 
 class PFCircularCamille(AbcPFReward):
     def __init__(self, max_vmc=.50, k1=5, **kwargs):

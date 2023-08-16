@@ -6,7 +6,7 @@ from stable_baselines3.common.monitor import Monitor
 from sailboat_gym import env_by_name
 
 from .rewards import PFMaxVMC, PFMaxVMCContinuity, PFCircularCamille, PFRenderer, PPSparseReward, PPDistToTargetReward, PPGainedDistToTargetReward, PPVelocityReward, PPRenderer, PFMaxVMCWithAllObs
-from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, RudderAngleAction, RudderForceAction, RawObs
+from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, RudderAngleAction, RudderForceAction, RawObs
 from .logger import Logger, LoggerDumpWrapper
 
 available_path_planning_rewards = {
@@ -41,6 +41,7 @@ available_act_wrappers = {
 available_obs_wrappers = {
     'basic_2d_obs': Basic2DObs,
     'basic_2d_obs_v2': Basic2DObs_V2,
+    'basic_2d_obs_v3': Basic2DObs_V3,
     'raw_obs': RawObs,
 }
 

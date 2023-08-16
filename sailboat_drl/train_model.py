@@ -75,8 +75,11 @@ def parse_args(overwrite_args={}):
 
 def prepare_env(args, env_idx=0, is_eval=False):
     def _init():
-        thetas = np.linspace(0 + 30, 360 - 30, args.n_envs, endpoint=True)
-        thetas = np.deg2rad(thetas)
+        no_go_zone = np.deg2rad(30)
+        thetas = np.linspace(-np.pi + no_go_zone,
+                             np.pi - no_go_zone,
+                             args.n_envs,
+                             endpoint=True)
         return create_env(env_idx=env_idx,
                           is_eval=is_eval,
                           wind_speed=args.wind_speed,
@@ -105,7 +108,7 @@ def train_model(overwrite_args={}):
 
     env = SubprocVecEnv(
         [prepare_env(args, i) for i in range(args.n_envs)])
-    env = VecNormalize(env, norm_obs=True, norm_reward=True)
+    env = VecNormalize(env, norm_obs=True, norm_reward=True, gamma=args.gamma)
 
     model = PPO('MlpPolicy',
                 env,

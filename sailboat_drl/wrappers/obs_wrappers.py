@@ -140,6 +140,7 @@ class Basic2DObs_V2(RewardObs):
 class Basic2DObs_V3(RewardObs):
     """Changes:
         - the velocity vector is relative to the heading direction of the boat, we should use the velocity vector in the world frame instead
+        - change theta_rudder representation to angle only as the rudder angle is relative to the boat heading direction and its bounded between -pi/2 and pi/2
     """
 
     @property
@@ -150,7 +151,7 @@ class Basic2DObs_V3(RewardObs):
             'v_norm': spaces.Box(low=0, high=np.inf, shape=(1,)),
             'theta_boat': spaces.Box(low=-1, high=1, shape=(2,)),
             'dt_theta_boat': spaces.Box(low=-np.inf, high=np.inf, shape=(1,)),
-            'theta_rudder': spaces.Box(low=-1, high=1, shape=(2,)),
+            'theta_rudder': spaces.Box(low=-1, high=1, shape=(1,)),
             'dt_theta_rudder': spaces.Box(low=-np.inf, high=np.inf, shape=(1,)),
             'wind_angle': spaces.Box(low=-1, high=1, shape=(2,)),
             'wind_norm': spaces.Box(low=0, high=np.inf, shape=(1,)),
@@ -176,7 +177,7 @@ class Basic2DObs_V3(RewardObs):
             'v_norm': v_norm,
             'theta_boat': np.array([np.cos(theta_boat), np.sin(theta_boat)]),
             'dt_theta_boat': obs['dt_theta_boat'][2],  # Z axis
-            'theta_rudder': np.array([np.cos(theta_rudder), np.sin(theta_rudder)]),
+            'theta_rudder': theta_rudder,
             'dt_theta_rudder': obs['dt_theta_rudder'].item(),
             'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
             'wind_norm': wind_norm,

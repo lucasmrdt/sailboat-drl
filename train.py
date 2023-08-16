@@ -1,4 +1,5 @@
-from sailboat_drl import train
+from sailboat_drl import train_model, eval_model
 
 if __name__ == '__main__':
-    train()
+    train_model()
+    eval_model()

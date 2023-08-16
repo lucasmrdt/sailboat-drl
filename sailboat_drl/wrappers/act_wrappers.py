@@ -52,8 +52,12 @@ class RudderForceAction(BestFixedSail, ActionWrapper):
         sailboat_env = extract_env_instance(self.env, SailboatEnv)
         assert sailboat_env is not None, 'env must inherit from SailboatEnv'
 
-        # in 5 second we can turn the rudder at most pi
-        self.dt = np.pi/(sailboat_env.NB_STEPS_PER_SECONDS*5)
+        # constraint theta rudder to [-pi/4, pi/4]
+        self.theta_rudder_bounds = np.array([-np.pi/4, np.pi/4])
+
+        # in 2 second we can turn the rudder at most from theta_rudder_min to theta_rudder_max
+        theta_rudder_min, theta_rudder_max = self.theta_rudder_bounds
+        self.dt = (theta_rudder_max - theta_rudder_min)/(sailboat_env.NB_STEPS_PER_SECONDS*2)
 
         self.theta_rudder = np.array([0])  # in rad
         self.directions = [-1, 0, 1]
@@ -71,8 +75,7 @@ class RudderForceAction(BestFixedSail, ActionWrapper):
 
         direction = self.directions[action]
         self.theta_rudder = np.clip(self.theta_rudder + direction * self.dt,
-                                    -np.pi/4,
-                                    np.pi/4)
+                                    *self.theta_rudder_bounds)
         Logger.record({'act/mlp': action, 'act/theta_rudder': self.theta_rudder})
         return {
             'theta_rudder': self.theta_rudder,

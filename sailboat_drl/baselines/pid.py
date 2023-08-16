@@ -74,25 +74,31 @@ class LOSModel(type_aliases.PolicyPredictor):
     vel = rotate_vector(vel, theta_boat)
 
     los = np.array(self.compute_los(pos))
-    # print(f'pos: {pos}, los: {pos+los}')
+
+    if len(los) > 0:
+      path_vec = self.path[1] - self.path[0]
+      los = los[np.dot(los, path_vec) > 0] # keep only points in the path direction
 
     los_angles = np.arctan2(los[:,1], los[:,0]) if len(los) > 0 else np.array([-np.sign(xte)*np.pi/2])
 
     vel_angle = np.arctan2(vel[1], vel[0])
-    angle_diffs = smallest_signed_angle(los_angles - vel_angle)
+    vel_norm = np.linalg.norm(vel)
+    ref_angle = vel_angle if vel_norm > 0.1 else theta_boat # if vel is too small, use boat angle
+    angle_diffs = smallest_signed_angle(los_angles - ref_angle)
 
     angle_error = min(angle_diffs, key=abs)
     # angle_to_follow *= np.sign(xte)
     # angle_error = smallest_signed_angle(angle_to_follow - theta_boat)
 
     control = self.pid(angle_error, dt=self.dt)
-    print(f'vel_angle: {vel_angle}, angle_diffs: {angle_diffs}, angle_error: {angle_error}, xte: {xte}, control: {control}')
-    if control is None:
-      action = 1 # noop
-    elif control < 0:
-      action = 0 # turn left
-    else:
-      action = 2 # turn right
+    print(f'vel_angle: {vel_angle}, vel_norm: {vel_norm}, angle_error: {angle_error}, xte: {xte}, control: {control}')
+    action = np.array([control])
+    # if control is None:
+    #   action = 1 # noop
+    # elif control < 0:
+    #   action = 0 # turn left
+    # else:
+    #   action = 2 # turn right
     return [action], None # noop
 
 def get_args():
@@ -135,6 +141,7 @@ def prepare_env(args, env_idx=0, is_eval=False, theta_wind=np.pi/2):
                           act=args.act,
                           env_name=args.env_name,
                           seed=args.seed,
+                          keep_sim_running=True,
                           episode_duration=args.episode_duration,
                           prepare_env_for_nn=False,
                           logger_prefix=args.name)
@@ -152,10 +159,10 @@ def run_pid(theta_wind, Kp, Ki, Kd):
     nb_steps_per_seconds = env_by_name[args.env_name].NB_STEPS_PER_SECONDS
     dt = 1/nb_steps_per_seconds
     # model = TAEModel(Kp, Ki, Kd, dt)
-    path = np.array(args.reward_kwargs['path'])
-    map_bounds = np.array(args.reward_kwargs['map_bounds'])
-    path = path * (map_bounds[1] - map_bounds[0])[None,:] + map_bounds[0][None,:]
-    model = LOSModel(Kp, Ki, Kd, dt, path, 50)
+    path = np.array(args.reward_kwargs['path'], dtype=np.float32)
+    # map_bounds = np.array(args.reward_kwargs['map_bounds'])
+    # path = path * (map_bounds[1] - map_bounds[0])[None,:] + map_bounds[0][None,:]
+    model = LOSModel(Kp, Ki, Kd, dt, path, 5)
 
     mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=args.n_envs)
 
