@@ -43,7 +43,7 @@ available_obs_wrappers = {
 }
 
 
-def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_vmc', reward_kwargs={'path': [[0, .5], [1, .5]]}, obs='basic_2d_obs_v2', act='rudder_force_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None):
+def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_vmc', reward_kwargs={'path': [[0, .5], [1, .5]]}, obs='basic_2d_obs_v2', act='rudder_force_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
@@ -67,8 +67,9 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_
         return np.array([np.cos(theta_wind), np.sin(theta_wind)])*wind_speed
 
     name = f'{"eval" if is_eval else "train"}-{env_idx}'
+    log_name = f'{logger_prefix}/{name}'
 
-    Logger.configure(f'{logger_prefix}/{name}')
+    Logger.configure(log_name)
 
     Reward = available_rewards[reward]
     Renderer = available_renderer[reward]
@@ -84,13 +85,14 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, n_envs=1, reward='pf_max_
                    container_tag='mss1',
                    video_speed=20,
                    map_scale=.5,
+                   keep_sim_alive=keep_sim_running,
                    name=name)
     env = TimeLimit(env,
                     max_episode_steps=episode_duration * nb_steps_per_second)
 
     if is_eval:
         env = CustomRecordVideo(env,
-                                video_folder=f'runs/{name}/{name}/videos',
+                                video_folder=f'runs/{log_name}/videos',
                                 episode_trigger=lambda _: True,
                                 video_length=0)
 

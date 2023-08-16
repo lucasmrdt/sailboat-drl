@@ -1,11 +1,8 @@
 from stable_baselines3 import PPO
-from stable_baselines3.common.callbacks import EvalCallback
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
-from stable_baselines3.common.evaluation import evaluate_policy
 from torch import nn as nn
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from sailboat_gym import env_by_name
-from functools import cache
 import numpy as np
 import uuid
 import pickle
@@ -15,7 +12,7 @@ from .callbacks import TimeLoggerCallback
 from .logger import Logger
 
 
-def get_args():
+def parse_args(overwrite_args={}):
     def extended_eval(s):
         return eval(s, {'pi': np.pi, 'nn': nn})
 
@@ -36,12 +33,12 @@ def get_args():
                         default={}, help='reward function arguments')
     parser.add_argument('--episode-duration', type=int,
                         default=100, help='episode duration (in seconds)')
-    parser.add_argument('--eval-freq', type=float,
-                        default=.1, help='evaluation frequency (in percentage of total steps, should be in [0, 1])')
     parser.add_argument('--n-envs', type=int, default=20,
                         help='number of environments')
     parser.add_argument('--wind-speed', type=float, default=1,
                         help='wind speed')
+    parser.add_argument('--keep-sim-running', action='store_true',
+                        help='keep the simulator running after training')
 
     # stable-baselines3 arguments
     parser.add_argument('--n-steps', type=int, default=1000,
@@ -68,8 +65,11 @@ def get_args():
                         default={'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': False}, help='policy kwargs')
     parser.add_argument('--total-steps', type=int, default=1e6,
                         help='total steps')
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
+    args.__dict__ = {k: v for k, v in vars(args).items()
+                     if k not in overwrite_args}
+    args.__dict__.update(overwrite_args)
     return args
 
 
@@ -87,12 +87,13 @@ def prepare_env(args, env_idx=0, is_eval=False):
                           seed=args.seed,
                           episode_duration=args.episode_duration,
                           prepare_env_for_nn=True,
+                          keep_sim_running=args.keep_sim_running,
                           logger_prefix=args.name)
     return _init
 
 
-def train(trial=None):
-    args = get_args()
+def train_model(overwrite_args={}):
+    args = parse_args(overwrite_args)
 
     print('Training with the following arguments:')
     for k, v in vars(args).items():
@@ -135,7 +136,3 @@ def train(trial=None):
     hparams = {k: v if isinstance(v, (int, float, str, bool)) else str(v)
                for k, v in vars(args).items()}
     Logger.log_hyperparams(hparams, {'last_mean_reward': -1})
-
-
-if __name__ == '__main__':
-    train()
