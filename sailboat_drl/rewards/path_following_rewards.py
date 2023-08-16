@@ -1,45 +1,53 @@
 import cv2
 import numpy as np
 from gymnasium import spaces
-from sailboat_gym import CV2DRenderer, Observation
+from sailboat_gym import Action, CV2DRenderer, Observation
 
 from .abc_reward import AbcReward
-from ..utils import norm
-
-
-def smallest_signed_angle(angle):
-    """Transform an angle to be between -pi and pi"""
-    return (angle + np.pi) % (2 * np.pi) - np.pi
-
+from ..utils import norm, smallest_signed_angle, rotate_vector
 
 class AbcPFReward(AbcReward):  # PF: Path Following
-    def __init__(self, path: list):
+    def __init__(self, path: list, map_bounds: list):
         assert len(path) == 2 and len(path[0]) == 2 and len(
             path[1]) == 2, 'Path must be a list of 2D vectors'
         self.path = np.array(path)
+        self.map_bounds = np.array(map_bounds)
+        self.absolute_path = self.path * (self.map_bounds[1] - self.map_bounds[0]) + self.map_bounds[0]
 
     def _compute_xte(self, obs: Observation):
-        d = self.path[1] - self.path[0]
+        path = self.absolute_path
         p_boat = obs['p_boat'][0:2]  # X and Y axis
+        d = (path[1] - path[0])
         n = np.array([-d[1], d[0]])  # Normal vector to the path
         n /= norm(n)
-        xte = np.dot(p_boat - self.path[0], n)
+        xte = np.dot(path[0] - p_boat, n)
         return xte
 
     def _compute_tae(self, obs: Observation):
-        d = self.path[1] - self.path[0]
+        # get absolute velocity angle
+        v = obs['dt_p_boat'][0:2]  # X and Y axis
+        theta_boat = obs['theta_boat'][2]
+        v = rotate_vector(v, theta_boat)
+        v_angle = np.arctan2(v[1], v[0])
+
+        # get absolute target angle
+        path = self.absolute_path
+        d = path[1] - path[0]
         target_angle = np.arctan2(d[1], d[0])
-        theta_boat = obs['theta_boat'][2]  # Z axis
-        tae = smallest_signed_angle(target_angle - theta_boat)
+
+        tae = smallest_signed_angle(target_angle - v_angle)
         return tae
 
     def _compute_vmc(self, obs: Observation):
-        d = self.path[1] - self.path[0]
+        # get absolute velocity
         v = obs['dt_p_boat'][0:2]  # X and Y axis
         theta_boat = obs['theta_boat'][2]
-        rot_mat = np.array([[np.cos(theta_boat), -np.sin(theta_boat)],
-                            [np.sin(theta_boat), np.cos(theta_boat)]])
-        v = rot_mat@v
+        v = rotate_vector(v, theta_boat)
+
+        # get absolute path
+        path = self.absolute_path
+        d = path[1] - path[0]
+
         vmc = np.dot(v, d) / norm(d)
         return vmc
 
@@ -75,11 +83,7 @@ class PFRenderer(CV2DRenderer):
     def render(self, obs, draw_extra_fct=None):
         return super().render(obs, draw_extra_fct=self._draw_reward)  # type: ignore
 
-
 class PFSparseReward(AbcPFReward):
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-
     def __call__(self, obs, act, next_obs):
         xte = self._compute_xte(next_obs)
         vmc = self._compute_vmc(next_obs)
@@ -109,6 +113,11 @@ class PFMaxVMC(AbcPFReward):
     def observation(self, obs):
         return {'vmc': np.array([self._compute_vmc(obs)])}
 
+    def __call__(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        return vmc
+
+class PFMaxVMCWithAllObs(AbcPFReward):
     def __call__(self, obs, act, next_obs):
         vmc = self._compute_vmc(next_obs)
         return vmc

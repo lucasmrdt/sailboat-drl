@@ -71,8 +71,8 @@ class RudderForceAction(BestFixedSail, ActionWrapper):
 
         direction = self.directions[action]
         self.theta_rudder = np.clip(self.theta_rudder + direction * self.dt,
-                                    -np.pi/2,
-                                    np.pi/2)
+                                    -np.pi/4,
+                                    np.pi/4)
         Logger.record({'act/mlp': action, 'act/theta_rudder': self.theta_rudder})
         return {
             'theta_rudder': self.theta_rudder,

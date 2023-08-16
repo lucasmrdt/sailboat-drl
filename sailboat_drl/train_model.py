@@ -33,7 +33,7 @@ def parse_args(overwrite_args={}):
                         default={}, help='reward function arguments')
     parser.add_argument('--episode-duration', type=int,
                         default=100, help='episode duration (in seconds)')
-    parser.add_argument('--n-envs', type=int, default=20,
+    parser.add_argument('--n-envs', type=int, default=30,
                         help='number of environments')
     parser.add_argument('--wind-speed', type=float, default=1,
                         help='wind speed')
@@ -75,10 +75,12 @@ def parse_args(overwrite_args={}):
 
 def prepare_env(args, env_idx=0, is_eval=False):
     def _init():
+        thetas = np.linspace(0 + 30, 360 - 30, args.n_envs, endpoint=True)
+        thetas = np.deg2rad(thetas)
         return create_env(env_idx=env_idx,
                           is_eval=is_eval,
                           wind_speed=args.wind_speed,
-                          n_envs=args.n_envs,
+                          theta_wind=thetas[env_idx],
                           reward=args.reward,
                           reward_kwargs=args.reward_kwargs,
                           obs=args.obs,
