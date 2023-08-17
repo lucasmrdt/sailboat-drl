@@ -46,7 +46,7 @@ available_obs_wrappers = {
 }
 
 
-def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi/2, reward='pf_max_vmc', reward_kwargs={'path': [[0, .5], [1, .5]]}, obs='raw_obs', act='rudder_force_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False):
+def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi / 2, reward='pf_max_vmc', reward_kwargs={}, obs='raw_obs', act='rudder_angle_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
@@ -67,7 +67,7 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi/2, rewar
         # thetas = np.linspace(0 + 30, 360 - 30, n_envs, endpoint=True)
         # thetas = np.deg2rad(thetas)
         # theta_wind = thetas[env_idx]
-        return np.array([np.cos(theta_wind), np.sin(theta_wind)])*wind_speed
+        return np.array([np.cos(theta_wind), np.sin(theta_wind)]) * wind_speed
 
     name = f'{"eval" if is_eval else "train"}-{env_idx}'
     log_name = f'{logger_prefix}/{name}'

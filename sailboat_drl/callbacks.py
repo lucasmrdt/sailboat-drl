@@ -24,6 +24,6 @@ class TimeLoggerCallback(BaseCallback):
         Logger.record({
             "time/rollout": rollout_time,
             "time/step": average_step_time,
-            "time/factor": (1/self.n_steps_per_second) / average_step_time,
+            "time/factor": (1 / self.n_steps_per_second) / average_step_time,
         })
         # Logger.dump(step=self.num_timesteps)

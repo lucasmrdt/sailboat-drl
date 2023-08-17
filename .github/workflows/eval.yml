@@ -1,54 +1,54 @@
-name: Evaluate Model with Sailboat Gym
+# name: Evaluate Model with Sailboat Gym
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
 
-jobs:
-  evaluation:
-    runs-on: ubuntu-latest
+# jobs:
+#   evaluation:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Set up Python environment
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.11
+#     steps:
+#       - name: Set up Python environment
+#         uses: actions/setup-python@v2
+#         with:
+#           python-version: 3.11
 
-      - name: Check out code
-        uses: actions/checkout@v2
+#       - name: Check out code
+#         uses: actions/checkout@v2
 
-      - name: Cache Python dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
+#       - name: Cache Python dependencies
+#         uses: actions/cache@v2
+#         with:
+#           path: ~/.cache/pip
+#           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+#           restore-keys: |
+#             ${{ runner.os }}-pip-
 
-      # - name: Cache Docker images.
-      #   uses: ScribeMD/docker-cache@0.3.3
-      #   with:
-      #     key: docker-${{ runner.os }}
+#       # - name: Cache Docker images.
+#       #   uses: ScribeMD/docker-cache@0.3.3
+#       #   with:
+#       #     key: docker-${{ runner.os }}
 
-      - name: Set up Docker
-        uses: addnab/docker-run-action@v3
-        with:
-          registry: gcr.io
-          image: lucasmrdt/sailboat-sim-lsa-gym:realtime
+#       - name: Set up Docker
+#         uses: addnab/docker-run-action@v3
+#         with:
+#           registry: gcr.io
+#           image: lucasmrdt/sailboat-sim-lsa-gym:realtime
 
-      - name: Install dependencies
-        run: |
-          pip install --upgrade -r requirements.txt
+#       - name: Install dependencies
+#         run: |
+#           pip install --upgrade -r requirements.txt
 
-      - name: Set up wandb
-        run: |
-          pip install wandb
-          wandb login ${{ secrets.WANDB_API_KEY }}
+#       - name: Set up wandb
+#         run: |
+#           pip install wandb
+#           wandb login ${{ secrets.WANDB_API_KEY }}
 
-      - name: Run evaluation
-        run: |
-          python test.py
+#       - name: Run evaluation
+#         run: |
+#           python test.py

@@ -32,7 +32,6 @@ def optimize():
     args = parse_args()
 
     study = optuna.create_study(
-        # sampler=optuna.samplers.RandomSampler(),
         direction='maximize',
         study_name=args.name,
         storage=f'sqlite:///optuna.db',
