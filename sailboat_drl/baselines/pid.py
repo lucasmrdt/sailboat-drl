@@ -130,7 +130,7 @@ def get_args(overwrite_args={}):
                         help='wind speed')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
 
     args.__dict__ = {k: v for k, v in vars(args).items()
                      if k not in overwrite_args}
@@ -138,10 +138,10 @@ def get_args(overwrite_args={}):
     return args
 
 
-def prepare_env(args, is_eval=False, theta_wind=np.pi / 2):
+def prepare_env(args, theta_wind=np.pi / 2):
     def _init():
         return create_env(env_idx=args.name,
-                          is_eval=is_eval,
+                          is_eval=True,
                           wind_speed=args.wind_speed,
                           theta_wind=theta_wind,
                           reward=args.reward,
@@ -173,7 +173,7 @@ def evaluate_pid_algo(args, theta_wind):
         raise ValueError(f'Unknown PID algorithm: {PIDAlgo}')
 
     Logger.configure(f'{args.name}/eval.py')
-    env = prepare_env(args, is_eval=True, theta_wind=theta_wind)()
+    env = prepare_env(args, theta_wind=theta_wind)()
     mean_reward, std_reward = evaluate_policy(pid_algo,
                                               env,
                                               n_eval_episodes=1)

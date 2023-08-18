@@ -86,7 +86,7 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi / 2, rew
                    reward_fn=reward,
                    wind_generator_fn=wind_generator_fn,
                    container_tag='mss1',
-                   video_speed=1,
+                   video_speed=10,
                    map_scale=.5,
                    keep_sim_alive=keep_sim_running,
                    name=name)

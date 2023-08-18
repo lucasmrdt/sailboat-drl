@@ -23,7 +23,7 @@ def prepare_objective(study_name, theta_wind):
         los_radius = trial.suggest_float('los_radius', 0.1, 200)
 
         overwrite_args = {
-            'name': f'{study_name}-{trial.number}',
+            'name': study_name,
             'keep_sim_running': True,
             'Kp': Kp,
             'Ki': Ki,
@@ -56,10 +56,14 @@ def optimize():
     args = parse_args()
 
     no_go_zone = np.deg2rad(30)
+    # thetas = np.linspace(-np.pi + no_go_zone,
+    #                      np.pi - no_go_zone,
+    #                      30,
+    #                      endpoint=True)
     thetas = np.linspace(-np.pi + no_go_zone,
                          np.pi - no_go_zone,
                          30,
-                         endpoint=True)
+                         endpoint=True)[[0]]
 
     _optimize_for_theta_wind = partial(optimize_for_theta_wind, args.name)
     with Pool(len(thetas)) as p:
