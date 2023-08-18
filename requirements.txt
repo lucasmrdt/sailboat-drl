@@ -6,3 +6,4 @@ tensorboard
 stable-baselines3[extra]
 optuna
 optuna-dashboard
+simple_pid

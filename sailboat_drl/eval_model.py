@@ -14,6 +14,7 @@ def parse_args(overwrite_args={}):
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--name',
                         type=str, required=True, help='experiment name')
+    parser.add_argument('--log-name', type=str, help='log name')
     parser.add_argument('--n-envs', type=int, default=20,
                         help='number of environments')
     parser.add_argument('--keep-sim-running', action='store_true',
@@ -37,9 +38,11 @@ def eval_model(overwrite_args={}):
 
     Logger.configure(f'{args.name}/eval.py')
 
-    print(f'Loaded model from {path}/final.model.zip')
     model = PPO.load(f'{path}/final.model.zip')
     train_args = pickle.load(open(f'{path}/final.args.pkl', 'rb'))
+
+    if args.log_name is not None:
+        train_args.__dict__['name'] = args.log_name
 
     env = SubprocVecEnv(
         [prepare_env(train_args, i, is_eval=True) for i in range(args.n_envs)])

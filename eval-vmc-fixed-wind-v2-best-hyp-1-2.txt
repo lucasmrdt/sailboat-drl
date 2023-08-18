@@ -1,0 +1,307 @@
+Evaluating with the following arguments:
+name = vmc-fixed-wind-v2-best-hyp-1
+log_name = eval-vmc-fixed-wind-v2-best-hyp-1-2
+n_envs = 30
+keep_sim_running = False
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-4/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-4/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-18/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-18/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-16/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-16/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-0/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-0/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-5/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-5/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-12/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-12/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-20/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-20/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-19/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-19/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-7/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-7/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-23/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-23/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-22/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-22/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-25/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-25/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-27/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-27/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-26/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-26/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-24/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-24/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-21/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-21/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-11/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-11/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-2/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-2/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-9/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-9/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-13/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-13/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-6/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-6/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-1/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-1/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-29/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-29/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-3/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-3/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-8/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-8/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-28/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-28/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-10/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-10/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-15/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-15/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-14/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-14/videos/rl-video-episode-0.mp4
+
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-17/videos/rl-video-episode-0.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-17/videos/rl-video-episode-0.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-26/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-26/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-26/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-6/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-6/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-6/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-23/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-23/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-23/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-2/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-2/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-2/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-8/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-8/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-8/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-17/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-17/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-17/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-9/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-9/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-9/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-28/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-28/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-28/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-27/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-27/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-27/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-1/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-1/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-1/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-25/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-25/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-25/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-20/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-20/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-20/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-3/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-3/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-3/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-12/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-12/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-12/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-29/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-29/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-29/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-22/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-22/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-22/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-14/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-14/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-14/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-13/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-13/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-13/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-19/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-19/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-19/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-5/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-5/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-5/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-21/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-21/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-21/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-7/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-7/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-7/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-15/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-15/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-15/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-11/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-11/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-11/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-10/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-10/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-10/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-0/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-0/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-0/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-18/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-18/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-18/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-4/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-4/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-4/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-16/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-16/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-16/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-24/videos/rl-video-episode-0.mp4
+Moviepy - Building video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-24/videos/rl-video-episode-1.mp4.
+Moviepy - Writing video /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-24/videos/rl-video-episode-1.mp4
+
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-26/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-20/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-23/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-2/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-29/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-25/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-10/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-4/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-8/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-9/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-27/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-12/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-6/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-13/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-0/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-19/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-17/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-3/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-5/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-1/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-28/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-22/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-11/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-14/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-7/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-21/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-15/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-18/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-16/videos/rl-video-episode-1.mp4
+Moviepy - Done !
+Moviepy - video ready /home/lamsade/lmarandat/internship-m2/sailboat-drl/runs/eval-vmc-fixed-wind-v2-best-hyp-1-2/eval-24/videos/rl-video-episode-1.mp4
+mean_reward = 131.75692823333333
+std_reward = 83.54186770137989
