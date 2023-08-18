@@ -46,7 +46,7 @@ available_obs_wrappers = {
 }
 
 
-def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi / 2, reward='pf_max_vmc', reward_kwargs={}, obs='raw_obs', act='rudder_angle_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False):
+def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi / 2, water_current=[0, 0], reward='pf_max_vmc', reward_kwargs={}, obs='raw_obs', act='rudder_angle_act', env_name=list(env_by_name.keys())[0], seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
@@ -67,7 +67,24 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi / 2, rew
         # thetas = np.linspace(0 + 30, 360 - 30, n_envs, endpoint=True)
         # thetas = np.deg2rad(thetas)
         # theta_wind = thetas[env_idx]
-        return np.array([np.cos(theta_wind), np.sin(theta_wind)]) * wind_speed
+        return np.array([np.cos(theta_wind), np.sin(theta_wind)], dtype=float) * wind_speed
+        # return np.array([np.cos(theta_wind), np.sin(theta_wind)], dtype=float) * wind_speed + np.random.normal(0, .2, size=2)
+
+    water_theta = np.arctan2(water_current[1], water_current[0])
+    _water_theta = water_theta
+    _next_water_theta = water_theta
+
+    def water_generator_fn(t):
+        # nonlocal _water_theta, _next_water_theta
+        # if t % 100 == 0:
+        #     _water_theta = _next_water_theta
+        #     _next_water_theta = water_theta + np.random.normal(0, 1)
+        # # theta = _water_theta + (_next_water_theta -
+        # #                         _water_theta) * (t % 100) / 100
+        # theta = _next_water_theta
+        # print(np.rad2deg(theta))
+        return np.array([np.cos(water_theta), np.sin(water_theta)], dtype=float) * np.linalg.norm(water_current)
+        return np.array([0, 0]).astype(float)
 
     name = f'{"eval" if is_eval else "train"}-{env_idx}'
     log_name = f'{logger_prefix}/{name}'
@@ -85,9 +102,10 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, theta_wind=np.pi / 2, rew
                    renderer=Renderer(reward, padding=30),
                    reward_fn=reward,
                    wind_generator_fn=wind_generator_fn,
+                   water_generator_fn=water_generator_fn,
                    container_tag='mss1',
                    video_speed=10,
-                   map_scale=.5,
+                   map_scale=1,
                    keep_sim_alive=keep_sim_running,
                    name=name)
     env = TimeLimit(env,

@@ -37,6 +37,8 @@ def parse_args(overwrite_args={}):
                         help='number of environments')
     parser.add_argument('--wind-speed', type=float, default=1,
                         help='wind speed')
+    parser.add_argument('--water-current', type=extended_eval,
+                        default=[0, 0], help='water current')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
 
@@ -83,6 +85,7 @@ def prepare_env(args, env_idx=0, is_eval=False):
         return create_env(env_idx=env_idx,
                           is_eval=is_eval,
                           wind_speed=args.wind_speed,
+                          water_current=args.water_current,
                           theta_wind=thetas[env_idx],
                           reward=args.reward,
                           reward_kwargs=args.reward_kwargs,
