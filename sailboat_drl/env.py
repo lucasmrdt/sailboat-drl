@@ -6,21 +6,13 @@ from stable_baselines3.common.monitor import Monitor
 from sailboat_gym import env_by_name
 
 from .weather_conditions import ConstantWindGenerator, NoWaterCurrentGenerator
-from .rewards import PFRenderer, 
+from .rewards import RewardRenderer, MaxDistReward, MaxVMCReward
 from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, RudderAngleAction, RudderForceAction, RawObs
 from .logger import Logger, LoggerWrapper
 
 available_rewards = {
-    'max_vmc': PFMaxVMC,
-    'max_vmc_with_all_reward_obs': PFMaxVMCWithAllRewardObs,
-    'max_vmc_continuity': PFMaxVMCContinuity,
-    'circular_camille': PFCircularCamille,
-    'max_dist_with_all_reward_obs': PFMaxDistWithAllRewardObs,
-}
-
-available_renderer = {
-    **{k: PPRenderer for k in available_path_planning_rewards},
-    **{k: PFRenderer for k in available_path_following_rewards},
+    'max_dist': MaxDistReward,
+    'max_vmc': MaxVMCReward,
 }
 
 available_act_wrappers = {
@@ -46,7 +38,7 @@ available_water_current_generators = {
 }
 
 
-def create_env(env_idx=0, is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, water_current_speed=.01, reward='pf_max_vmc', reward_kwargs={'path': [[0, 0], [200, 0]]}, obs='raw_obs', act='rudder_angle_act', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False, wind_generator='constant', water_current_generator='none'):
+def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, water_current_speed=.01, reward='pf_max_vmc', reward_kwargs={'path': [[0, 0], [200, 0]], 'full_obs': False}, obs='raw_obs', act='rudder_angle_act', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False, wind_generator='constant', water_current_generator='none', container_tag='mss1-ode'):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
@@ -60,13 +52,12 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water
     assert isinstance(water_current_dir, float), \
         f'water_current_dir must be a float, got {type(water_current_dir)}'
 
-    name = f'{"eval" if is_eval else "train"}-{env_idx}'
+    name = f'{"eval" if is_eval else "train"}-{env_id}'
     log_name = f'{logger_prefix}/{name}'
 
     Logger.configure(log_name)
 
     Reward = available_rewards[reward]
-    Renderer = available_renderer[reward]
     ObsWrapper = available_obs_wrappers[obs]
     ActWrapper = available_act_wrappers[act]
     WindGenerator = available_wind_generators[wind_generator]
@@ -78,11 +69,12 @@ def create_env(env_idx=0, is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water
     reward = Reward(**reward_kwargs)
 
     env = gym.make(env_name,
-                   renderer=Renderer(reward, padding=30),
-                   reward_fn=reward,
+                   renderer=RewardRenderer(reward, padding=30),
+                   reward_fn=reward.reward_fn,
+                   stop_condition_fn=reward.stop_condition_fn,
                    wind_generator_fn=wind_generator_fn,
                    water_generator_fn=water_current_generator_fn,
-                   container_tag='mss1',
+                   container_tag=container_tag,
                    video_speed=10,
                    map_scale=1,
                    keep_sim_alive=keep_sim_running,

@@ -75,18 +75,18 @@ def parse_args(overwrite_args={}):
     return args
 
 
-def prepare_env(args, env_idx=0, is_eval=False):
+def prepare_env(args, env_id=0, is_eval=False):
     def _init():
         no_go_zone = np.deg2rad(30)
         thetas = np.linspace(-np.pi + no_go_zone,
                              np.pi - no_go_zone,
                              args.n_envs,
                              endpoint=True)
-        return create_env(env_idx=env_idx,
+        return create_env(env_id=env_id,
                           is_eval=is_eval,
                           wind_speed=args.wind_speed,
                           water_current=args.water_current,
-                          wind_dir=thetas[env_idx],
+                          wind_dir=thetas[env_id],
                           reward=args.reward,
                           reward_kwargs=args.reward_kwargs,
                           obs=args.obs,

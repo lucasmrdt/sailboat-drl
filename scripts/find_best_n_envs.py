@@ -18,7 +18,7 @@ def prepare_env(idx):
     name = f'find-best-n-envs-{idx}'
 
     def _init():
-        return create_env(env_idx=name,
+        return create_env(env_id=name,
                           is_eval=True,
                           keep_sim_running=True,
                           episode_duration=10,

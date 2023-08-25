@@ -42,9 +42,9 @@ def get_args(overwrite_args={}):
     parser.add_argument('--env-name', choices=list(env_by_name.keys()),
                         default='SailboatLSAEnv-v0', help='environment name')
     parser.add_argument('--reward', choices=list(available_rewards.keys()),
-                        default='pf_max_dist_with_all_reward_obs', help='reward function')
+                        default='max_dist', help='reward function')
     parser.add_argument('--reward-kwargs', type=extended_eval,
-                        default={'path': [[0, 0], [200, 0]]}, help='reward function arguments')
+                        default={'path': [[0, 0], [200, 0]], 'full_obs': True}, help='reward function arguments')
     parser.add_argument('--water-current', choices=list(available_water_current_generators.keys()),
                         default='none', help='water current generator')
     parser.add_argument('--wind', choices=list(available_wind_generators.keys()),
@@ -63,6 +63,8 @@ def get_args(overwrite_args={}):
                         help='keep the simulator running after training')
     parser.add_argument('--n', type=int, default=1,
                         help='number of trials')
+    parser.add_argument('--container-tag', type=str, default='mss1-ode',
+                        help='container tag')
     args, unknown = parser.parse_known_args()
 
     args.__dict__ = {k: v for k, v in vars(args).items()
@@ -75,7 +77,7 @@ def prepare_env(args):
     def deg2rad(deg):
         return np.deg2rad(deg) % (2 * np.pi)
 
-    return create_env(env_idx=f'{args.wind_dir}deg',
+    return create_env(env_id=f'{args.wind_dir}deg',
                       is_eval=True,
                       water_current_generator=args.water_current,
                       water_current_speed=args.water_current_speed,
@@ -87,6 +89,7 @@ def prepare_env(args):
                       reward_kwargs=args.reward_kwargs,
                       act='rudder_angle_act',
                       obs='raw_obs',
+                      container_tag=args.container_tag,
                       env_name=args.env_name,
                       keep_sim_running=args.keep_sim_running,
                       episode_duration=args.episode_duration,

@@ -1,14 +1,11 @@
 import cv2
-import numpy as np
-from gymnasium import spaces
-from sailboat_gym import Action, CV2DRenderer, Observation
+from sailboat_gym import CV2DRenderer
 
 from .abc_reward import AbcReward
-from ..utils import norm, smallest_signed_angle, rotate_vector
 
 
-class PFRenderer(CV2DRenderer):
-    def __init__(self, reward: AbcPFReward, *args, **kwargs):
+class RewardRenderer(CV2DRenderer):
+    def __init__(self, reward: AbcReward, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.reward = reward
 

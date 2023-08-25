@@ -79,14 +79,9 @@ class LoggerWrapper(Wrapper):
 
         observation, reward, terminated, truncated, info = super().step(action)
 
-        if terminated or truncated:
-            rollout_time = time.time() - self.start_time
-            average_step_time = rollout_time / self.n_steps
-            Logger.record({
-                "time/rollout": rollout_time,
-                "time/step": average_step_time,
-                "time/factor": (1 / self.n_steps_per_second) / average_step_time,
-            })
+        Logger.record({
+            "relative_time": time.time() - self.start_time,
+        })
 
         Logger.dump(step=self.n_steps)
         return observation, reward, terminated, truncated, info
