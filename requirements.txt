@@ -1,5 +1,5 @@
 stable-baselines3==2.0.0
-sailboat_gym==1.0.38
+sailboat_gym==1.0.39
 gymnasium
 wandb
 tensorboard
@@ -7,3 +7,4 @@ stable-baselines3[extra]
 optuna
 optuna-dashboard
 simple_pid
+prettytable
