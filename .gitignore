@@ -49,3 +49,4 @@ output
 events.out.tfevents*
 runs
 models
+backups

@@ -15,7 +15,7 @@ def parse_args(overwrite_args={}):
     parser.add_argument('--name',
                         type=str, required=True, help='experiment name')
     parser.add_argument('--log-name', type=str, help='log name')
-    parser.add_argument('--n-envs', type=int, default=20,
+    parser.add_argument('--n-envs', type=int, default=30,
                         help='number of environments')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
@@ -37,6 +37,7 @@ def eval_model(overwrite_args={}):
     path = f'runs/{args.name}'
 
     Logger.configure(f'{args.name}/eval.py')
+    logger.log_hyperparams(args.__dict__)
 
     model = PPO.load(f'{path}/final.model.zip')
     train_args = pickle.load(open(f'{path}/final.args.pkl', 'rb'))
@@ -62,3 +63,7 @@ def eval_model(overwrite_args={}):
     print(f'mean_reward = {mean_reward}')
     print(f'std_reward = {std_reward}')
     return mean_reward, std_reward
+
+
+if __name__ == '__main__':
+    eval_model()

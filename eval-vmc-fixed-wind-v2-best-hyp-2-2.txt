@@ -1,5 +1,0 @@
-Evaluating with the following arguments:
-name = vmc-fixed-wind-v2-best-hyp-2
-log_name = eval-vmc-fixed-wind-v2-best-hyp-2-2
-n_envs = 30
-keep_sim_running = False

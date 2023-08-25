@@ -1,5 +1,6 @@
+import time
 from gymnasium import Wrapper
-from stable_baselines3.common.logger import configure, HParam
+from stable_baselines3.common.logger import configure
 from collections.abc import Iterable
 
 _sb3_logger = None
@@ -11,8 +12,8 @@ class Logger:
     def configure(name: str):
         global _sb3_logger, _logger_name
         _logger_name = name
-        _sb3_logger = configure(
-            f'runs/{name}/0', ['tensorboard', 'csv'])
+        _sb3_logger = configure(f'runs/{name}/0',
+                                ['tensorboard', 'csv'])
 
     @staticmethod
     def re_configure(postfix):
@@ -44,21 +45,24 @@ class Logger:
         return _sb3_logger
 
     @staticmethod
-    def log_hyperparams(hyperparams={}, metrics={}):
+    def log_hyperparams(hyperparams={}, exclude=None):
         global _sb3_logger
         assert _sb3_logger is not None, 'Logger not configured, call Logger.configure() first'
-        hyperparams = HParam(hyperparams, metrics)
-        _sb3_logger.record('hyperparams', hyperparams, exclude=('csv',))
+        for k, v in hyperparams.items():
+            if isinstance(v, Iterable):
+                v = str(v)
+            _sb3_logger.record(f'hyperparams/{k}', v, exclude=exclude)
         Logger.dump(0)
 
 
-class LoggerDumpWrapper(Wrapper):
-    def __init__(self, eval, *args, **kwargs):
+class LoggerWrapper(Wrapper):
+    def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.eval = eval
         self.n_steps = 0
         self.n_episodes = 0
+        self.n_steps_per_second = self.env.unwrapped.NB_STEPS_PER_SECONDS
         self.is_reset = False
+        self.start_time = None
 
     def reset(self, **kwargs):
         self.is_reset = True
@@ -70,7 +74,19 @@ class LoggerDumpWrapper(Wrapper):
             Logger.re_configure(str(self.n_episodes))
             self.n_episodes += 1
             self.is_reset = False
+            self.start_time = time.time()
         self.n_steps += 1
+
         observation, reward, terminated, truncated, info = super().step(action)
+
+        if terminated or truncated:
+            rollout_time = time.time() - self.start_time
+            average_step_time = rollout_time / self.n_steps
+            Logger.record({
+                "time/rollout": rollout_time,
+                "time/step": average_step_time,
+                "time/factor": (1 / self.n_steps_per_second) / average_step_time,
+            })
+
         Logger.dump(step=self.n_steps)
         return observation, reward, terminated, truncated, info

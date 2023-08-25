@@ -22,15 +22,15 @@ def parse_args(overwrite_args={}):
     parser.add_argument('--seed',
                         type=int, default=0, help='random seed')
     parser.add_argument('--env-name', choices=list(env_by_name.keys()),
-                        default=list(env_by_name.keys())[0], help='environment name')
+                        default='SailboatLSAEnv-v0', help='environment name')
     parser.add_argument('--obs', choices=list(available_obs_wrappers.keys()),
-                        default=list(available_obs_wrappers.keys())[0], help='observation used by the agent')
+                        default='basic_2d_obs_v3', help='observation used by the agent')
     parser.add_argument('--act', choices=list(available_act_wrappers.keys()),
-                        default=list(available_act_wrappers.keys())[0], help='action used by the agent')
+                        default='rudder_angle_act', help='action used by the agent')
     parser.add_argument('--reward', choices=list(available_rewards.keys()),
-                        default=list(available_rewards.keys())[0], help='reward function')
+                        default='pf_max_vmc', help='reward function')
     parser.add_argument('--reward-kwargs', type=extended_eval,
-                        default={}, help='reward function arguments')
+                        default={'path': [[0, 0], [200, 0]]}, help='reward function arguments')
     parser.add_argument('--episode-duration', type=int,
                         default=100, help='episode duration (in seconds)')
     parser.add_argument('--n-envs', type=int, default=30,
@@ -86,7 +86,7 @@ def prepare_env(args, env_idx=0, is_eval=False):
                           is_eval=is_eval,
                           wind_speed=args.wind_speed,
                           water_current=args.water_current,
-                          theta_wind=thetas[env_idx],
+                          wind_dir=thetas[env_idx],
                           reward=args.reward,
                           reward_kwargs=args.reward_kwargs,
                           obs=args.obs,
@@ -108,6 +108,7 @@ def train_model(overwrite_args={}):
         print(f'{k} = {v}')
 
     Logger.configure(f'{args.name}/train.py')
+    logger.log_hyperparams(args.__dict__)
 
     env = SubprocVecEnv(
         [prepare_env(args, i) for i in range(args.n_envs)])
@@ -141,6 +142,6 @@ def train_model(overwrite_args={}):
 
     env.close()
 
-    hparams = {k: v if isinstance(v, (int, float, str, bool)) else str(v)
-               for k, v in vars(args).items()}
-    Logger.log_hyperparams(hparams, {'last_mean_reward': -1})
+
+if __name__ == '__main__':
+    train_model()

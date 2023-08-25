@@ -52,6 +52,7 @@ class RewardObs(CustomObservationWrapper):
         obs = self.reward.observation(obs)
         return obs
 
+
 class Basic2DObs(RewardObs):
     @property
     def observation_space(self):
@@ -137,6 +138,7 @@ class Basic2DObs_V2(RewardObs):
         self.log(obs)
         return obs
 
+
 class Basic2DObs_V3(RewardObs):
     """Changes:
         - the velocity vector is relative to the heading direction of the boat, we should use the velocity vector in the world frame instead
@@ -184,6 +186,7 @@ class Basic2DObs_V3(RewardObs):
         }
         self.log(obs)
         return obs
+
 
 class RawObs(RewardObs):
     @property
