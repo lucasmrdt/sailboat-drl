@@ -122,8 +122,6 @@ def eval_pid(overwrite_args={}):
                                               n_eval_episodes=args.n)
     env.close()
 
-    print(pid_algo.first_pos, pid_algo.last_pos)
-    print(pid_algo.last_pos - pid_algo.first_pos)
     return mean_reward, std_reward
 
 

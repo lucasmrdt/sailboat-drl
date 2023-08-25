@@ -1,6 +1,7 @@
 import allow_local_package_imports
 
-import numpy as np
+import time
+import random
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from functools import partial
 from multiprocessing import Pool
@@ -14,20 +15,22 @@ def parse_args():
                         help='experiment name')
     parser.add_argument('--wind-dirs', type=eval, required=True,
                         help='wind directions (in deg)')
-    parser.add_argument('--n', type=int, default=1,
-                        help='number of trials')
     args, unknown = parser.parse_known_args()
     return args
 
 
 def eval_pid_for_wind_dir(args, wind_dir):
-    overwrite_args = {
-        'name': f'{args.name}-{wind_dir}deg',
-        'wind_dir': wind_dir,
-        'keep_sim_running': False,
-    }
-    mean_reward, std_reward = eval_pid(overwrite_args)
-    print(f'[{wind_dir}deg] mean_reward={mean_reward}, std_reward={std_reward}')
+    try:
+        time.sleep(random.random() * 5)
+        overwrite_args = {
+            'name': f'{args.name}-{wind_dir}deg',
+            'wind_dir': wind_dir,
+            'keep_sim_running': False,
+        }
+        mean_reward, std_reward = eval_pid(overwrite_args)
+        print(f'[{wind_dir}deg] mean_reward={mean_reward}, std_reward={std_reward}')
+    except Exception as e:
+        print(f'[{wind_dir}deg] {e}')
 
 
 def multi_eval_pid():

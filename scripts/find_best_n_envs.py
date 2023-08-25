@@ -7,6 +7,7 @@ import os.path as osp
 from tqdm import trange, tqdm
 from itertools import count
 from stable_baselines3.common.vec_env import SubprocVecEnv
+from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
 from sailboat_drl.env import create_env
 
@@ -14,24 +15,40 @@ current_dir = osp.dirname(osp.abspath(__file__))
 save_dir = osp.join(current_dir, '../output/pkl')
 
 
-def prepare_env(idx):
-    name = f'find-best-n-envs-{idx}'
+def get_args(overwrite_args={}):
+    parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
+    parser.add_argument('--container-tag', type=str, default='mss1-ode',
+                        help='container tag')
+    args, unknown = parser.parse_known_args()
+
+    args.__dict__ = {k: v for k, v in vars(args).items()
+                     if k not in overwrite_args}
+    args.__dict__.update(overwrite_args)
+    return args
+
+
+def prepare_env(args, idx, n_envs):
+    name = f'find-best-n-envs-{idx}-{n_envs}'
 
     def _init():
         return create_env(env_id=name,
                           is_eval=True,
                           keep_sim_running=True,
-                          episode_duration=10,
+                          episode_duration=50,
                           prepare_env_for_nn=False,
+                          container_tag=args.container_tag,
                           logger_prefix=name)
     return _init
 
 
 def find_best_n_envs():
+    args = get_args()
+
     time_per_step_by_n_envs = {}
 
-    for n_envs in trange(1, 40 + 1, desc='running experiments'):
-        env = SubprocVecEnv([prepare_env(i) for i in range(n_envs)])
+    for n_envs in tqdm(range(1, 40 + 1, 2), desc='running experiments'):
+        env = SubprocVecEnv([prepare_env(args, i, n_envs)
+                            for i in range(n_envs)])
 
         start = time.time()
         env.reset()

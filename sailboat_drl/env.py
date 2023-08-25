@@ -38,7 +38,7 @@ available_water_current_generators = {
 }
 
 
-def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, water_current_speed=.01, reward='pf_max_vmc', reward_kwargs={'path': [[0, 0], [200, 0]], 'full_obs': False}, obs='raw_obs', act='rudder_angle_act', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False, wind_generator='constant', water_current_generator='none', container_tag='mss1-ode'):
+def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, water_current_speed=.01, reward='max_dist', reward_kwargs={'path': [[0, 0], [200, 0]], 'full_obs': True}, obs='raw_obs', act='rudder_angle_act', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False, wind_generator='constant', water_current_generator='none', container_tag='mss1-ode'):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
