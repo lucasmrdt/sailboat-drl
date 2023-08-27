@@ -11,14 +11,16 @@ class CbWrapper(gym.Wrapper):
         self.on_render = on_render
 
     def reset(self, *args, **kwargs):
+        obs, info = super().reset(*args, **kwargs)
         if self.on_reset is not None:
-            self.on_reset()
-        return super().reset(*args, **kwargs)
+            self.on_reset(obs, info)
+        return obs, info
 
     def step(self, *args, **kwargs):
+        obs, reward, done, truncated, info = super().step(*args, **kwargs)
         if self.on_step is not None:
-            self.on_step()
-        return super().step(*args, **kwargs)
+            self.on_step(obs, reward, done, truncated, info)
+        return obs, reward, done, truncated, info
 
     def render(self, *args, **kwargs):
         if self.on_render is not None:

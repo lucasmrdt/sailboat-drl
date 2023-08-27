@@ -1,6 +1,4 @@
 import optuna
-import numpy as np
-import time
 import os
 from functools import partial
 from multiprocessing import Pool
@@ -27,7 +25,16 @@ def parse_args():
     return args
 
 
-def prepare_objective(args, study_name, wind_dir):
+def eval_pid_for_wind_dir(args, wind_dir):
+    overwrite_args = {
+        **args,
+        'wind_dir': wind_dir,
+    }
+    mean_reward, std_reward = eval_pid(overwrite_args)
+    return mean_reward
+
+
+def prepare_objective(args, study_name):
     def objective(trial: optuna.Trial):
         Kp = trial.suggest_float('Kp', 2e-4, 2, log=True) \
             if args.Kp is None else args.Kp
@@ -38,6 +45,9 @@ def prepare_objective(args, study_name, wind_dir):
         los_radius = trial.suggest_float('los_radius', 0.1, 400) \
             if args.los_radius is None else args.los_radius
 
+        wind_dirs = args.wind_dirs
+        assert isinstance(wind_dirs, list), 'wind_dirs must be a list'
+
         overwrite_args = {
             'name': f'{study_name}-{trial.number}',
             'keep_sim_running': True,
@@ -45,27 +55,27 @@ def prepare_objective(args, study_name, wind_dir):
             'Ki': Ki,
             'Kd': Kd,
             'los_radius': los_radius,
-            'wind_dir': wind_dir,
             'prefix_env_id': f'{args.name}-{args.index}-',
         }
 
-        mean_reward, std_reward = eval_pid(overwrite_args)
-        return mean_reward
+        _eval_pid_for_wind_dir = partial(eval_pid_for_wind_dir, overwrite_args)
+        with Pool(len(wind_dirs)) as p:
+            rewards = p.map(_eval_pid_for_wind_dir, wind_dirs)
+        return sum(rewards)
     return objective
 
 
-def optimize_for_wind_dir(args, wind_dir):
-    np.random.seed()
-    time.sleep(np.random.rand() * 5)
+def optimize():
+    args = parse_args()
 
-    study_name = f'{args.name}-{wind_dir}deg'
+    study_name = args.name
     study = optuna.create_study(
         direction='maximize',
         study_name=study_name,
         storage=f'sqlite:///optuna.db',
         load_if_exists=True)
 
-    objective = prepare_objective(args, study_name, wind_dir)
+    objective = prepare_objective(args, study_name)
     try:
         study.optimize(objective,
                        n_trials=args.n_trials,
@@ -74,17 +84,6 @@ def optimize_for_wind_dir(args, wind_dir):
                        show_progress_bar=True)
     except KeyboardInterrupt:
         pass
-
-
-def optimize():
-    args = parse_args()
-
-    wind_dirs = args.wind_dirs
-    assert isinstance(wind_dirs, list), 'wind_dirs must be a list'
-
-    _optimize_for_wind_dir = partial(optimize_for_wind_dir, args)
-    with Pool(len(wind_dirs)) as p:
-        p.map(_optimize_for_wind_dir, wind_dirs)
 
 
 if __name__ == '__main__':

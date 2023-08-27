@@ -1,3 +1,5 @@
+import allow_local_package_imports
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
 from torch import nn as nn
@@ -7,9 +9,8 @@ import numpy as np
 import uuid
 import pickle
 
-from .env import create_env, available_act_wrappers, available_obs_wrappers, available_rewards
-from .callbacks import TimeLoggerCallback
-from .logger import Logger
+from sailboat_drl.env import create_env, available_act_wrappers, available_obs_wrappers, available_rewards, available_water_current_generators, available_wind_generators
+from sailboat_drl.logger import Logger
 
 
 def parse_args(overwrite_args={}):
@@ -28,19 +29,31 @@ def parse_args(overwrite_args={}):
     parser.add_argument('--act', choices=list(available_act_wrappers.keys()),
                         default='rudder_angle_act', help='action used by the agent')
     parser.add_argument('--reward', choices=list(available_rewards.keys()),
-                        default='pf_max_vmc', help='reward function')
+                        default='max_dist', help='reward function')
     parser.add_argument('--reward-kwargs', type=extended_eval,
-                        default={'path': [[0, 0], [200, 0]]}, help='reward function arguments')
+                        default={'path': [[0, 0], [100, 0]], 'full_obs': True}, help='reward function arguments')
     parser.add_argument('--episode-duration', type=int,
-                        default=100, help='episode duration (in seconds)')
-    parser.add_argument('--n-envs', type=int, default=30,
+                        default=200, help='episode duration (in seconds)')
+    parser.add_argument('--n-envs', type=int, default=7,
                         help='number of environments')
-    parser.add_argument('--wind-speed', type=float, default=1,
+    parser.add_argument('--water-current', choices=list(available_water_current_generators.keys()),
+                        default='none', help='water current generator')
+    parser.add_argument('--wind', choices=list(available_wind_generators.keys()),
+                        default='constant', help='wind generator')
+    parser.add_argument('--wind-dirs', type=eval, required=True,
+                        help='wind directions (in deg)')
+    parser.add_argument('--wind-speed', type=float, default=2,
                         help='wind speed')
-    parser.add_argument('--water-current', type=extended_eval,
-                        default=[0, 0], help='water current')
+    parser.add_argument('--water-current-dir', type=float,
+                        default=90, help='water current direction (in deg)')
+    parser.add_argument('--water-current-speed', type=float,
+                        default=0.01, help='water current speed')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
+    parser.add_argument('--container-tag', type=str, default='mss1-ode',
+                        help='container tag')
+    parser.add_argument('--prefix-env-id', type=str, default='',
+                        help='prefix environment id')
 
     # stable-baselines3 arguments
     parser.add_argument('--n-steps', type=int, default=1000,
@@ -76,47 +89,54 @@ def parse_args(overwrite_args={}):
 
 
 def prepare_env(args, env_id=0, is_eval=False):
+    def deg2rad(deg):
+        return np.deg2rad(deg) % (2 * np.pi)
+
+    assert isinstance(args.wind_dirs, list), 'wind_dirs must be a list'
+
     def _init():
-        no_go_zone = np.deg2rad(30)
-        thetas = np.linspace(-np.pi + no_go_zone,
-                             np.pi - no_go_zone,
-                             args.n_envs,
-                             endpoint=True)
-        return create_env(env_id=env_id,
+        wind_dir = args.wind_dirs[env_id % len(args.wind_dirs)]
+        return create_env(env_id=f'{args.prefix_env_id}{env_id}',
                           is_eval=is_eval,
+                          water_current_generator=args.water_current,
+                          water_current_speed=args.water_current_speed,
+                          water_current_dir=deg2rad(args.water_current_dir),
+                          wind_generator=args.wind,
                           wind_speed=args.wind_speed,
-                          water_current=args.water_current,
-                          wind_dir=thetas[env_id],
+                          wind_dir=deg2rad(wind_dir),
                           reward=args.reward,
                           reward_kwargs=args.reward_kwargs,
-                          obs=args.obs,
                           act=args.act,
+                          obs=args.obs,
+                          container_tag=args.container_tag,
                           env_name=args.env_name,
+                          keep_sim_running=args.keep_sim_running,
                           seed=args.seed,
                           episode_duration=args.episode_duration,
                           prepare_env_for_nn=True,
-                          keep_sim_running=args.keep_sim_running,
                           logger_prefix=args.name)
     return _init
 
 
 def train_model(overwrite_args={}):
     args = parse_args(overwrite_args)
+    assert isinstance(args.wind_dirs, list), 'wind_dirs must be a list'
+    n_envs = len(args.wind_dirs)
 
     print('Training with the following arguments:')
     for k, v in vars(args).items():
         print(f'{k} = {v}')
 
     Logger.configure(f'{args.name}/train.py')
-    logger.log_hyperparams(args.__dict__)
+    Logger.log_hyperparams(args.__dict__)
 
     env = SubprocVecEnv(
-        [prepare_env(args, i) for i in range(args.n_envs)])
+        [prepare_env(args, i) for i in range(n_envs)])
     env = VecNormalize(env, norm_obs=True, norm_reward=True, gamma=args.gamma)
 
     model = PPO('MlpPolicy',
                 env,
-                n_steps=max(1, args.n_steps // args.n_envs),
+                n_steps=max(1, args.n_steps // n_envs),
                 batch_size=args.batch_size,
                 gamma=args.gamma,
                 learning_rate=args.learning_rate,
@@ -130,11 +150,7 @@ def train_model(overwrite_args={}):
                 seed=args.seed)
     model.set_logger(Logger.get_sb3_logger())
 
-    time_cb = TimeLoggerCallback(n_steps_by_rollout=args.n_steps,
-                                 n_steps_per_second=env_by_name[args.env_name].NB_STEPS_PER_SECONDS)
-
     model.learn(args.total_steps,
-                callback=[time_cb],
                 progress_bar=True)
     model.save(f'runs/{args.name}/final.model.zip')
     env.save(f'runs/{args.name}/final.envstats.pkl')

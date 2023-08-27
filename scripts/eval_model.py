@@ -1,13 +1,14 @@
+import allow_local_package_imports
+
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
-from stable_baselines3.common.evaluation import evaluate_policy
 from torch import nn as nn
-import sailboat_gym
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 import pickle
 
-from .logger import Logger
-from .train_model import prepare_env
+from sailboat_drl.logger import Logger
+from train_model import prepare_env
+from utils import evaluate_policy
 
 
 def parse_args(overwrite_args={}):
@@ -15,7 +16,7 @@ def parse_args(overwrite_args={}):
     parser.add_argument('--name',
                         type=str, required=True, help='experiment name')
     parser.add_argument('--log-name', type=str, help='log name')
-    parser.add_argument('--n-envs', type=int, default=30,
+    parser.add_argument('--n-envs', type=int, default=7,
                         help='number of environments')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
@@ -37,7 +38,7 @@ def eval_model(overwrite_args={}):
     path = f'runs/{args.name}'
 
     Logger.configure(f'{args.name}/eval.py')
-    logger.log_hyperparams(args.__dict__)
+    Logger.log_hyperparams(args.__dict__)
 
     model = PPO.load(f'{path}/final.model.zip')
     train_args = pickle.load(open(f'{path}/final.args.pkl', 'rb'))
@@ -45,14 +46,16 @@ def eval_model(overwrite_args={}):
     if args.log_name is not None:
         train_args.__dict__['name'] = args.log_name
 
+    n_envs = len(train_args.wind_dirs)
+
     env = SubprocVecEnv(
-        [prepare_env(train_args, i, is_eval=True) for i in range(args.n_envs)])
+        [prepare_env(train_args, i, is_eval=True) for i in range(n_envs)])
     env = VecNormalize.load(f'{path}/final.envstats.pkl', env)
     env.training = False
     env.norm_reward = False
 
     mean_reward, std_reward = evaluate_policy(model, env,
-                                              n_eval_episodes=args.n_envs)
+                                              n_eval_episodes=n_envs)
     if isinstance(mean_reward, list):
         mean_reward = mean_reward[0]
     if isinstance(std_reward, list):

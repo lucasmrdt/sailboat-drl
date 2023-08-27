@@ -2,15 +2,12 @@ import allow_local_package_imports
 
 import numpy as np
 from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common import type_aliases
-from simple_pid import PID
 from torch import nn as nn
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from sailboat_gym import env_by_name
 
 from sailboat_drl.env import create_env, available_rewards, available_wind_generators, available_water_current_generators
 from sailboat_drl.logger import Logger
-from sailboat_drl.utils import rotate_vector, smallest_signed_angle
 from sailboat_drl.baselines.pid_tae import PIDTAEAlgo
 from sailboat_drl.baselines.pid_los import PIDLOSAlgo
 
@@ -44,27 +41,29 @@ def get_args(overwrite_args={}):
     parser.add_argument('--reward', choices=list(available_rewards.keys()),
                         default='max_dist', help='reward function')
     parser.add_argument('--reward-kwargs', type=extended_eval,
-                        default={'path': [[0, 0], [200, 0]], 'full_obs': True}, help='reward function arguments')
+                        default={'path': [[0, 0], [100, 0]], 'full_obs': True}, help='reward function arguments')
     parser.add_argument('--water-current', choices=list(available_water_current_generators.keys()),
                         default='none', help='water current generator')
     parser.add_argument('--wind', choices=list(available_wind_generators.keys()),
                         default='constant', help='wind generator')
     parser.add_argument('--wind-dir', type=float, default=90,
                         help='wind direction (in deg)')
-    parser.add_argument('--wind-speed', type=float, default=1.5,
+    parser.add_argument('--wind-speed', type=float, default=2,
                         help='wind speed')
     parser.add_argument('--water-current-dir', type=float,
                         default=90, help='water current direction (in deg)')
     parser.add_argument('--water-current-speed', type=float,
                         default=0.01, help='water current speed')
     parser.add_argument('--episode-duration', type=int,
-                        default=100, help='episode duration (in seconds)')
+                        default=200, help='episode duration (in seconds)')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
     parser.add_argument('--n', type=int, default=1,
                         help='number of trials')
     parser.add_argument('--container-tag', type=str, default='mss1-ode',
                         help='container tag')
+    parser.add_argument('--prefix-env-id', type=str, default='',
+                        help='prefix environment id')
     args, unknown = parser.parse_known_args()
 
     args.__dict__ = {k: v for k, v in vars(args).items()
@@ -77,7 +76,7 @@ def prepare_env(args):
     def deg2rad(deg):
         return np.deg2rad(deg) % (2 * np.pi)
 
-    return create_env(env_id=f'{args.wind_dir}deg',
+    return create_env(env_id=f'{args.prefix_env_id}{args.wind_dir}deg',
                       is_eval=True,
                       water_current_generator=args.water_current,
                       water_current_speed=args.water_current_speed,

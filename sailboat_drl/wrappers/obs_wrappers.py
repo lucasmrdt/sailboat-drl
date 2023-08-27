@@ -1,25 +1,12 @@
 from typing import Any
 from collections import defaultdict
 from gymnasium import ObservationWrapper, spaces, Wrapper
-from gymnasium.wrappers.normalize import NormalizeObservation
 from sailboat_gym import GymObservation
 import numpy as np
-import pickle
 
 from ..rewards import AbcReward
 from ..utils import norm, rotate_vector
 from ..logger import Logger
-
-
-class PersistentNormalizeObservation(NormalizeObservation):
-    def save(self, path: str) -> None:
-        with open(f'{path}_normalize_obs.pkl', 'wb') as f:
-            pickle.dump(self.obs_rms, f)
-
-    def load(self, path: str) -> None:
-        with open(f'{path}_normalize_obs.pkl', 'rb') as f:
-            obs_rms = pickle.load(f)
-        self.obs_rms = obs_rms
 
 
 class CustomObservationWrapper(ObservationWrapper, Wrapper):
@@ -27,9 +14,9 @@ class CustomObservationWrapper(ObservationWrapper, Wrapper):
         super().__init__(*args, **kwargs)
         self.cum_sum = defaultdict(float)
 
-    def reset(self, *, seed: int | None = None, options: dict[str, Any] | None = None) -> tuple[Any, dict[str, Any]]:
+    def reset(self, **kwargs) -> Any:
         self.cum_sum.clear()
-        return super().reset(seed=seed, options=options)
+        return super().reset(**kwargs)
 
     def log(self, obs):
         log_obs = {f'obs/{k}': v for k, v in obs.items()}
@@ -49,8 +36,7 @@ class RewardObs(CustomObservationWrapper):
         return self.reward.observation_space
 
     def observation(self, obs):
-        obs = self.reward.observation(obs)
-        return obs
+        return self.reward.observation(obs)
 
 
 class Basic2DObs(RewardObs):
@@ -77,8 +63,12 @@ class Basic2DObs(RewardObs):
         wind_angle = np.arctan2(wind[1], wind[0])
         wind_norm = norm(wind)
 
+        reward_obs = super().observation(obs)
+
+        self.log({**reward_obs, **obs})
+
         obs = {
-            **super().observation(obs),
+            **reward_obs,
             'v_angle': v_angle,
             'v_norm': v_norm,
             'theta_boat': obs['theta_boat'][2],  # Z axis
@@ -88,7 +78,6 @@ class Basic2DObs(RewardObs):
             'wind_angle': wind_angle,
             'wind_norm': wind_norm,
         }
-        self.log(obs)
         return obs
 
 
@@ -124,8 +113,12 @@ class Basic2DObs_V2(RewardObs):
         wind_angle = np.arctan2(wind[1], wind[0])
         wind_norm = norm(wind)
 
+        reward_obs = super().observation(obs)
+
+        self.log({**reward_obs, **obs})
+
         obs = {
-            **super().observation(obs),
+            **reward_obs,
             'v_angle': np.array([np.cos(v_angle), np.sin(v_angle)]),
             'v_norm': v_norm,
             'theta_boat': np.array([np.cos(theta_boat), np.sin(theta_boat)]),
@@ -135,7 +128,6 @@ class Basic2DObs_V2(RewardObs):
             'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
             'wind_norm': wind_norm,
         }
-        self.log(obs)
         return obs
 
 
@@ -173,8 +165,12 @@ class Basic2DObs_V3(RewardObs):
         wind_angle = np.arctan2(wind[1], wind[0])
         wind_norm = norm(wind)
 
+        reward_obs = super().observation(obs)
+
+        self.log({**reward_obs, **obs})
+
         obs = {
-            **super().observation(obs),
+            **reward_obs,
             'v_angle': np.array([np.cos(v_angle), np.sin(v_angle)]),
             'v_norm': v_norm,
             'theta_boat': np.array([np.cos(theta_boat), np.sin(theta_boat)]),
@@ -184,7 +180,42 @@ class Basic2DObs_V3(RewardObs):
             'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
             'wind_norm': wind_norm,
         }
-        self.log(obs)
+        return obs
+
+
+class Basic2DObs_V4(RewardObs):
+    """Changes:
+        - simplify the observation space by removing raw velocity, raw heading
+    """
+
+    @property
+    def observation_space(self):
+        return spaces.Dict({
+            **super().observation_space,
+            'theta_rudder': spaces.Box(low=-1, high=1, shape=(1,)),
+            'dt_theta_rudder': spaces.Box(low=-np.inf, high=np.inf, shape=(1,)),
+            'wind_angle': spaces.Box(low=-1, high=1, shape=(2,)),
+            'wind_norm': spaces.Box(low=0, high=np.inf, shape=(1,)),
+        })
+
+    def observation(self, obs):
+        theta_rudder = obs['theta_rudder'][0]
+
+        wind = obs['wind']
+        wind_angle = np.arctan2(wind[1], wind[0])
+        wind_norm = norm(wind)
+
+        reward_obs = super().observation(obs)
+
+        self.log({**reward_obs, **obs})
+
+        obs = {
+            **reward_obs,
+            'theta_rudder': theta_rudder,
+            'dt_theta_rudder': obs['dt_theta_rudder'].item(),
+            'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
+            'wind_norm': wind_norm,
+        }
         return obs
 
 

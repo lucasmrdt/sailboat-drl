@@ -6,12 +6,13 @@ from stable_baselines3.common.monitor import Monitor
 from sailboat_gym import env_by_name
 
 from .weather_conditions import ConstantWindGenerator, NoWaterCurrentGenerator
-from .rewards import RewardRenderer, MaxDistReward, MaxVMCReward
-from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, RudderAngleAction, RudderForceAction, RawObs
+from .rewards import RewardRenderer, MaxDistReward_V1, MaxVMCReward
+from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
 
 available_rewards = {
-    'max_dist': MaxDistReward,
+    'max_dist': MaxDistReward_V1,
+    'max_dist_v1': MaxDistReward_V1,
     'max_vmc': MaxVMCReward,
 }
 
@@ -24,6 +25,7 @@ available_obs_wrappers = {
     'basic_2d_obs': Basic2DObs,
     'basic_2d_obs_v2': Basic2DObs_V2,
     'basic_2d_obs_v3': Basic2DObs_V3,
+    'basic_2d_obs_v4': Basic2DObs_V4,
     'raw_obs': RawObs,
 }
 
@@ -38,7 +40,7 @@ available_water_current_generators = {
 }
 
 
-def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, water_current_speed=.01, reward='max_dist', reward_kwargs={'path': [[0, 0], [200, 0]], 'full_obs': True}, obs='raw_obs', act='rudder_angle_act', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix=None, keep_sim_running=False, wind_generator='constant', water_current_generator='none', container_tag='mss1-ode'):
+def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, water_current_speed=.01, reward='max_dist', reward_kwargs={'path': [[0, 0], [100, 0]], 'full_obs': True}, obs='raw_obs', act='rudder_angle_act', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix='default', keep_sim_running=False, wind_generator='constant', water_current_generator='none', container_tag='mss1-ode'):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
@@ -76,9 +78,12 @@ def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, wate
                    water_generator_fn=water_current_generator_fn,
                    container_tag=container_tag,
                    video_speed=10,
-                   map_scale=1,
+                   map_scale=.5,
                    keep_sim_alive=keep_sim_running,
                    name=name)
+    env = CbWrapper(env,
+                    on_reset=reward.on_reset,
+                    on_step=reward.on_step)
     env = TimeLimit(env,
                     max_episode_steps=episode_duration * nb_steps_per_second)
 
