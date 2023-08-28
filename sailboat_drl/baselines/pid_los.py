@@ -6,11 +6,12 @@ from ..utils import rotate_vector, smallest_signed_angle
 
 
 class PIDLOSAlgo(type_aliases.PolicyPredictor):
-    def __init__(self, Kp, Ki, Kd, dt, path, radius):
+    def __init__(self, Kp, Ki, Kd, dt, path, radius, use_velocity_angle=True):
         self.pid = PID(Kp, Ki, Kd, setpoint=0)
         self.dt = dt
         self.path = path
         self.radius = radius
+        self.use_velocity_angle = use_velocity_angle
 
     def compute_los(self, pos):
         p1, p2 = self.path - pos  # center on pos
@@ -59,15 +60,13 @@ class PIDLOSAlgo(type_aliases.PolicyPredictor):
             los_angles = np.arctan2(los[:, 1], los[:, 0])
 
         vel_angle = np.arctan2(vel[1], vel[0])
-        vel_norm = np.linalg.norm(vel)
 
         # if vel is too small, use boat angle
-        if vel_norm < 0.1:
-            ref_angle = theta_boat
-        else:
+        if self.use_velocity_angle:
             ref_angle = vel_angle
+        else:
+            ref_angle = theta_boat
 
-        ref_angle = vel_angle if vel_norm > 0.1 else theta_boat
         angle_diffs = smallest_signed_angle(los_angles - ref_angle)
 
         angle_error = min(angle_diffs, key=abs)

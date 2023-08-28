@@ -5,7 +5,7 @@ from gymnasium.wrappers.flatten_observation import FlattenObservation
 from stable_baselines3.common.monitor import Monitor
 from sailboat_gym import env_by_name
 
-from .weather_conditions import ConstantWindGenerator, NoWaterCurrentGenerator
+from .weather_conditions import WindConstantGenerator, WindScenario1Generator, WaterCurrentNoneGenerator, WaterCurrentScenario1Generator, WindScenario2Generator, WaterCurrentScenario2Generator, WindScenario3Generator, WaterCurrentScenario3Generator
 from .rewards import RewardRenderer, MaxDistReward_V1, MaxVMCReward
 from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
@@ -32,11 +32,17 @@ available_obs_wrappers = {
 available_envs = list(env_by_name.keys())
 
 available_wind_generators = {
-    'constant': ConstantWindGenerator,
+    'constant': WindConstantGenerator,
+    'scenario_1': WindScenario1Generator,
+    'scenario_2': WindScenario2Generator,
+    'scenario_3': WindScenario3Generator,
 }
 
 available_water_current_generators = {
-    'none': NoWaterCurrentGenerator,
+    'none': WaterCurrentNoneGenerator,
+    'scenario_1': WaterCurrentScenario1Generator,
+    'scenario_2': WaterCurrentScenario2Generator,
+    'scenario_3': WaterCurrentScenario3Generator,
 }
 
 
@@ -58,6 +64,7 @@ def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, wate
     log_name = f'{logger_prefix}/{name}'
 
     Logger.configure(log_name)
+    np.random.seed(seed)
 
     Reward = available_rewards[reward]
     ObsWrapper = available_obs_wrappers[obs]
@@ -65,17 +72,20 @@ def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, wate
     WindGenerator = available_wind_generators[wind_generator]
     WaterCurrentGenerator = available_water_current_generators[water_current_generator]
 
-    wind_generator_fn = WindGenerator(wind_dir, wind_speed)
-    water_current_generator_fn = WaterCurrentGenerator(water_current_dir,
-                                                       water_current_speed)
+    # where the wind is coming from
+    wind_theta = (wind_dir + np.pi) % (2 * np.pi)
+
+    wind_generator = WindGenerator(wind_theta, wind_speed)
+    water_current_generator = WaterCurrentGenerator(water_current_dir,
+                                                    water_current_speed)
     reward = Reward(**reward_kwargs)
 
     env = gym.make(env_name,
                    renderer=RewardRenderer(reward, padding=30),
                    reward_fn=reward.reward_fn,
                    stop_condition_fn=reward.stop_condition_fn,
-                   wind_generator_fn=wind_generator_fn,
-                   water_generator_fn=water_current_generator_fn,
+                   wind_generator_fn=wind_generator.get_force,
+                   water_generator_fn=water_current_generator.get_force,
                    container_tag=container_tag,
                    video_speed=10,
                    map_scale=.5,
@@ -93,7 +103,7 @@ def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, wate
                                 episode_trigger=lambda _: True,
                                 video_length=0)
 
-    env = ActWrapper(env)
+    env = ActWrapper(env, wind_theta)
     env = ObsWrapper(env, reward)
 
     if prepare_env_for_nn:

@@ -43,7 +43,6 @@ def prepare_objective(args, idx):
 def optimize():
     args = parse_args()
 
-    random.seed()
     time.sleep(random.random() * 5)
     objective = prepare_objective(args, args.index)
     study = optuna.create_study(

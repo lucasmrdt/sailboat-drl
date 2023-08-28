@@ -64,6 +64,7 @@ def get_args(overwrite_args={}):
                         help='container tag')
     parser.add_argument('--prefix-env-id', type=str, default='',
                         help='prefix environment id')
+    parser.add_argument('--seed', type=int, default=0, help='seed')
     args, unknown = parser.parse_known_args()
 
     args.__dict__ = {k: v for k, v in vars(args).items()
@@ -93,6 +94,7 @@ def prepare_env(args):
                       keep_sim_running=args.keep_sim_running,
                       episode_duration=args.episode_duration,
                       prepare_env_for_nn=False,
+                      seed=args.seed,
                       logger_prefix=args.name)
 
 
@@ -118,7 +120,8 @@ def eval_pid(overwrite_args={}):
     env = prepare_env(args)
     mean_reward, std_reward = evaluate_policy(pid_algo,
                                               env,
-                                              n_eval_episodes=args.n)
+                                              n_eval_episodes=args.n,
+                                              deterministic=True)
     env.close()
 
     return mean_reward, std_reward

@@ -55,7 +55,6 @@ def prepare_objective(args, study_name, wind_dir):
 
 
 def optimize_for_wind_dir(args, wind_dir):
-    np.random.seed()
     time.sleep(np.random.rand() * 5)
 
     study_name = f'{args.name}-{wind_dir}deg'

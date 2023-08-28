@@ -21,7 +21,6 @@ def parse_args():
 
 def eval_pid_for_wind_dir(args, wind_dir):
     try:
-        random.seed()
         time.sleep(random.random() * 5)
         overwrite_args = {
             'name': f'{args.name}-{wind_dir}deg',
