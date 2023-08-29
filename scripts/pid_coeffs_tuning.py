@@ -6,7 +6,7 @@ from functools import partial
 from multiprocessing import Pool
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
-from eval_pid import eval_pid
+from pid_eval import eval_pid
 
 
 def parse_args():

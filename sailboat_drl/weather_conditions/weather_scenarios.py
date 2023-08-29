@@ -1,45 +1,45 @@
 import numpy as np
 
-from .utils import OscillationForceGenerator
+from .oscillation_generator import OscillationGenerator
 
 
-class WindConstantGenerator(OscillationForceGenerator):
-    def __init__(self, wind_theta, wind_speed):
+class WindConstantGenerator(OscillationGenerator):
+    def __init__(self, wind_theta):
         super().__init__(wind_theta,
-                         wind_speed,
+                         force_speed=2,
                          sigma_dir=0,
                          sigma_speed=0)
 
 
-class WaterCurrentNoneGenerator(OscillationForceGenerator):
-    def __init__(self, water_current_theta, water_current_speed):
+class WaterCurrentNoneGenerator(OscillationGenerator):
+    def __init__(self, water_current_theta):
         super().__init__(force_theta=0,
                          force_speed=0,
                          sigma_dir=0,
                          sigma_speed=0)
 
 
-class WindScenario1Generator(OscillationForceGenerator):
+class WindScenario1Generator(OscillationGenerator):
     # 0% -> 25%:
-    def __init__(self, wind_theta, wind_speed):
+    def __init__(self, wind_theta):
         super().__init__(wind_theta,
                          force_speed=1.5,
                          sigma_dir=np.deg2rad(5),
                          sigma_speed=0.2)
 
 
-class WaterCurrentScenario1Generator(OscillationForceGenerator):
+class WaterCurrentScenario1Generator(OscillationGenerator):
     # 0% -> 25%:
-    def __init__(self, water_current_theta, water_current_speed):
+    def __init__(self, water_current_theta):
         super().__init__(water_current_theta,
                          force_speed=0,
                          sigma_dir=0,
                          sigma_speed=0)
 
 
-class WindScenario2Generator(OscillationForceGenerator):
+class WindScenario2Generator(OscillationGenerator):
     # 25% -> 50%:
-    def __init__(self, wind_theta, wind_speed):
+    def __init__(self, wind_theta):
         super().__init__(wind_theta,
                          force_speed=1.5,
                          sigma_dir=np.deg2rad(10),
@@ -47,9 +47,9 @@ class WindScenario2Generator(OscillationForceGenerator):
                          nb_oscilations=4)
 
 
-class WaterCurrentScenario2Generator(OscillationForceGenerator):
+class WaterCurrentScenario2Generator(OscillationGenerator):
     # 25% -> 50%:
-    def __init__(self, water_current_theta, water_current_speed):
+    def __init__(self, water_current_theta):
         super().__init__(water_current_theta,
                          force_speed=0.15,
                          sigma_dir=np.deg2rad(10),
@@ -57,9 +57,9 @@ class WaterCurrentScenario2Generator(OscillationForceGenerator):
                          nb_oscilations=4)
 
 
-class WindScenario3Generator(OscillationForceGenerator):
+class WindScenario3Generator(OscillationGenerator):
     # 50% -> 75%:
-    def __init__(self, wind_theta, wind_speed):
+    def __init__(self, wind_theta):
         super().__init__(wind_theta,
                          force_speed=1.5,
                          sigma_dir=np.deg2rad(20),
@@ -67,9 +67,9 @@ class WindScenario3Generator(OscillationForceGenerator):
                          nb_oscilations=8)
 
 
-class WaterCurrentScenario3Generator(OscillationForceGenerator):
+class WaterCurrentScenario3Generator(OscillationGenerator):
     # 50% -> 75%:
-    def __init__(self, water_current_theta, water_current_speed):
+    def __init__(self, water_current_theta):
         super().__init__(water_current_theta,
                          force_speed=0.15,
                          sigma_dir=np.deg2rad(20),

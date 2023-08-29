@@ -4,24 +4,30 @@ from gymnasium.wrappers.time_limit import TimeLimit
 from gymnasium.wrappers.flatten_observation import FlattenObservation
 from stable_baselines3.common.monitor import Monitor
 from sailboat_gym import env_by_name
+from functools import partial
 
 from .weather_conditions import WindConstantGenerator, WindScenario1Generator, WaterCurrentNoneGenerator, WaterCurrentScenario1Generator, WindScenario2Generator, WaterCurrentScenario2Generator, WindScenario3Generator, WaterCurrentScenario3Generator
-from .rewards import RewardRenderer, MaxDistReward_V1, MaxVMCReward
+from .rewards import RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative
 from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
 
 available_rewards = {
-    'max_dist': MaxDistReward_V1,
-    'max_dist_v1': MaxDistReward_V1,
-    'max_vmc': MaxVMCReward,
+    'default': MaxDistReward,
+    'max_dist': MaxDistReward,
+    'max_dist_v1': MaxDistReward,
+    'max_dist_v2': partial(MaxDistRewardWithPenalty, rudder_change_penalty=.1),
+    'max_dist_v3': partial(MaxDistRewardWithPenaltyOnDerivative, rudder_change_penalty=.1 / (4**2)),
+    # 'max_vmc': MaxVMCReward,
 }
 
 available_act_wrappers = {
+    'default': RudderAngleAction,
     'rudder_angle_act': RudderAngleAction,
     'rudder_force_act': RudderForceAction,
 }
 
 available_obs_wrappers = {
+    'default': RawObs,
     'basic_2d_obs': Basic2DObs,
     'basic_2d_obs_v2': Basic2DObs_V2,
     'basic_2d_obs_v3': Basic2DObs_V3,
@@ -32,6 +38,7 @@ available_obs_wrappers = {
 available_envs = list(env_by_name.keys())
 
 available_wind_generators = {
+    'default': WindConstantGenerator,
     'constant': WindConstantGenerator,
     'scenario_1': WindScenario1Generator,
     'scenario_2': WindScenario2Generator,
@@ -39,6 +46,7 @@ available_wind_generators = {
 }
 
 available_water_current_generators = {
+    'default': WaterCurrentNoneGenerator,
     'none': WaterCurrentNoneGenerator,
     'scenario_1': WaterCurrentScenario1Generator,
     'scenario_2': WaterCurrentScenario2Generator,
@@ -46,7 +54,7 @@ available_water_current_generators = {
 }
 
 
-def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, water_current_speed=.01, reward='max_dist', reward_kwargs={'path': [[0, 0], [100, 0]], 'full_obs': True}, obs='raw_obs', act='rudder_angle_act', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix='default', keep_sim_running=False, wind_generator='constant', water_current_generator='none', container_tag='mss1-ode'):
+def create_env(env_id='0', is_eval=False, wind_dir=np.pi / 2, water_current_dir=np.pi / 2, reward='default', reward_kwargs={}, obs='default', act='default', env_name='SailboatLSAEnv-v0', seed=None, episode_duration=100, prepare_env_for_nn=True, logger_prefix='default', keep_sim_running=False, wind_generator='default', water_current_generator='default', container_tag='mss1-ode'):
     nb_steps_per_second = env_by_name[env_name].NB_STEPS_PER_SECONDS
 
     assert reward in available_rewards, f'unknown reward {reward} in {available_rewards.keys()}'
@@ -75,9 +83,8 @@ def create_env(env_id='0', is_eval=False, wind_speed=2, wind_dir=np.pi / 2, wate
     # where the wind is coming from
     wind_theta = (wind_dir + np.pi) % (2 * np.pi)
 
-    wind_generator = WindGenerator(wind_theta, wind_speed)
-    water_current_generator = WaterCurrentGenerator(water_current_dir,
-                                                    water_current_speed)
+    wind_generator = WindGenerator(wind_theta)
+    water_current_generator = WaterCurrentGenerator(water_current_dir)
     reward = Reward(**reward_kwargs)
 
     env = gym.make(env_name,

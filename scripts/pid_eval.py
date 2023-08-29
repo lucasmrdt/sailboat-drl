@@ -94,7 +94,7 @@ def prepare_env(args):
                       keep_sim_running=args.keep_sim_running,
                       episode_duration=args.episode_duration,
                       prepare_env_for_nn=False,
-                      seed=args.seed,
+                      seed=args.seed + args.wind_dir,
                       logger_prefix=args.name)
 
 

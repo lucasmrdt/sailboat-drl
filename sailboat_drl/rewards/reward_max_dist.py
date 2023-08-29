@@ -4,7 +4,7 @@ from gymnasium import spaces
 from .abc_reward import AbcReward
 
 
-class MaxDistReward_V1(AbcReward):
+class MaxDistReward(AbcReward):
     @property
     def observation_space(self):
         return spaces.Dict({
@@ -28,3 +28,34 @@ class MaxDistReward_V1(AbcReward):
         next_p_boat = next_obs['p_boat'][0:2]
         gain_dist = self._compute_gain_dist(p_boat, next_p_boat)
         return gain_dist
+
+
+class MaxDistRewardWithPenalty(MaxDistReward):
+    def __init__(self, rudder_change_penalty, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rudder_change_penalty = rudder_change_penalty
+
+    def reward_fn(self, obs, act, next_obs):
+        if self._is_in_failure_state(next_obs):
+            return -self.path_length
+        p_boat = obs['p_boat'][0:2]
+        next_p_boat = next_obs['p_boat'][0:2]
+        gain_dist = self._compute_gain_dist(p_boat, next_p_boat)
+        theta_rudder = obs['theta_rudder'][0]
+        next_theta_rudder = next_obs['theta_rudder'][0]
+        return gain_dist - self.rudder_change_penalty * (theta_rudder - next_theta_rudder)**2 / 2
+
+
+class MaxDistRewardWithPenaltyOnDerivative(MaxDistReward):
+    def __init__(self, rudder_change_penalty, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rudder_change_penalty = rudder_change_penalty
+
+    def reward_fn(self, obs, act, next_obs):
+        if self._is_in_failure_state(next_obs):
+            return -self.path_length
+        p_boat = obs['p_boat'][0:2]
+        next_p_boat = next_obs['p_boat'][0:2]
+        gain_dist = self._compute_gain_dist(p_boat, next_p_boat)
+        dt_theta_rudder = next_obs['dt_theta_rudder'][0]
+        return gain_dist - self.rudder_change_penalty * (dt_theta_rudder)**2 / 2

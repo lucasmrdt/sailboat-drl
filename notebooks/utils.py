@@ -51,9 +51,13 @@ def draw_trajectories(names, xte_delta=10):
 
 def get_metric(name, metric='cum_vmc', key=lambda df: 0):
     scores_by_key = defaultdict(list)
-    files = list(glob(f'../runs/{name}/**/*.csv'))
+    if not name.endswith('.csv'):
+        pattern = f'../runs/{name}/**/*.csv'
+    else:
+        pattern = f'../runs/{name}'
+    files = list(glob(pattern))
     nb_fails = 0
-    for file in tqdm(files, desc=name):
+    for file in tqdm(files, desc=name, leave=False):
         try:
             df = pd.read_csv(file)
             df_key = key(df)
@@ -83,7 +87,8 @@ def get_metric(name, metric='cum_vmc', key=lambda df: 0):
         except:
             nb_fails += 1
 
-    print(f'Failed to load {nb_fails} files for {name}')
+    if nb_fails > 0:
+        print(f'Failed to load {nb_fails} files for {name}')
     keys = list(scores_by_key.keys())
     scores_mean = np.array([np.mean(scores_by_key[k]) for k in keys])
     scores_std = np.array([np.std(scores_by_key[k]) for k in keys])

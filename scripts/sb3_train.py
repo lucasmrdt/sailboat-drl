@@ -31,7 +31,7 @@ def parse_args(overwrite_args={}):
     parser.add_argument('--reward', choices=list(available_rewards.keys()),
                         default='max_dist', help='reward function')
     parser.add_argument('--reward-kwargs', type=extended_eval,
-                        default={'path': [[0, 0], [100, 0]], 'full_obs': True}, help='reward function arguments')
+                        default={'path': [[0, 0], [100, 0]], 'xte_threshold': .1}, help='reward function arguments')
     parser.add_argument('--episode-duration', type=int,
                         default=200, help='episode duration (in seconds)')
     parser.add_argument('--n-envs', type=int, default=7,
@@ -40,14 +40,10 @@ def parse_args(overwrite_args={}):
                         default='none', help='water current generator')
     parser.add_argument('--wind', choices=list(available_wind_generators.keys()),
                         default='constant', help='wind generator')
-    parser.add_argument('--wind-dirs', type=eval, required=True,
+    parser.add_argument('--wind-dirs', type=eval, default=[45, 90, 135, 180, 225, 270, 315],
                         help='wind directions (in deg)')
-    parser.add_argument('--wind-speed', type=float, default=2,
-                        help='wind speed')
-    parser.add_argument('--water-current-dir', type=float,
-                        default=90, help='water current direction (in deg)')
-    parser.add_argument('--water-current-speed', type=float,
-                        default=0.01, help='water current speed')
+    parser.add_argument('--water-current-dir', type=float, default=90,
+                        help='water current direction (in deg)')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
     parser.add_argument('--container-tag', type=str, default='mss1-ode',
@@ -82,6 +78,8 @@ def parse_args(overwrite_args={}):
                         help='total steps')
     args, unknown = parser.parse_known_args()
 
+    print('Unknown arguments:', unknown)
+
     args.__dict__ = {k: v for k, v in vars(args).items()
                      if k not in overwrite_args}
     args.__dict__.update(overwrite_args)
@@ -99,10 +97,8 @@ def prepare_env(args, env_id=0, is_eval=False):
         return create_env(env_id=f'{args.prefix_env_id}{env_id}',
                           is_eval=is_eval,
                           water_current_generator=args.water_current,
-                          water_current_speed=args.water_current_speed,
                           water_current_dir=deg2rad(args.water_current_dir),
                           wind_generator=args.wind,
-                          wind_speed=args.wind_speed,
                           wind_dir=deg2rad(wind_dir),
                           reward=args.reward,
                           reward_kwargs=args.reward_kwargs,
@@ -111,7 +107,7 @@ def prepare_env(args, env_id=0, is_eval=False):
                           container_tag=args.container_tag,
                           env_name=args.env_name,
                           keep_sim_running=args.keep_sim_running,
-                          seed=args.seed,
+                          seed=args.seed + env_id,
                           episode_duration=args.episode_duration,
                           prepare_env_for_nn=True,
                           logger_prefix=args.name)
@@ -120,8 +116,10 @@ def prepare_env(args, env_id=0, is_eval=False):
 
 def train_model(overwrite_args={}):
     args = parse_args(overwrite_args)
-    assert isinstance(args.wind_dirs, list), 'wind_dirs must be a list'
-    n_envs = len(args.wind_dirs)
+    assert isinstance(args.wind_dirs, list), \
+        'wind_dirs must be a list'
+    assert args.n_envs % len(args.wind_dirs) == 0, \
+        'n_envs must be a multiple of len(wind_dirs)'
 
     print('Training with the following arguments:')
     for k, v in vars(args).items():
@@ -131,12 +129,12 @@ def train_model(overwrite_args={}):
     Logger.log_hyperparams(args.__dict__)
 
     env = SubprocVecEnv(
-        [prepare_env(args, i) for i in range(n_envs)])
+        [prepare_env(args, i) for i in range(args.n_envs)])
     env = VecNormalize(env, norm_obs=True, norm_reward=True, gamma=args.gamma)
 
     model = PPO('MlpPolicy',
                 env,
-                n_steps=max(1, args.n_steps // n_envs),
+                n_steps=max(1, args.n_steps // args.n_envs),
                 batch_size=args.batch_size,
                 gamma=args.gamma,
                 learning_rate=args.learning_rate,

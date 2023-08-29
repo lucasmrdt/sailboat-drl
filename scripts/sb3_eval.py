@@ -6,8 +6,9 @@ from torch import nn as nn
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 import pickle
 
+from sailboat_drl.env import available_water_current_generators, available_wind_generators
 from sailboat_drl.logger import Logger
-from train_model import prepare_env
+from sb3_train import prepare_env, parse_args as parse_train_args
 from utils import evaluate_policy
 
 
@@ -16,10 +17,16 @@ def parse_args(overwrite_args={}):
     parser.add_argument('--name',
                         type=str, required=True, help='experiment name')
     parser.add_argument('--log-name', type=str, help='log name')
-    parser.add_argument('--n-envs', type=int, default=7,
-                        help='number of environments')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
+    parser.add_argument('--water-current', choices=list(available_water_current_generators.keys()),
+                        default='none', help='water current generator')
+    parser.add_argument('--wind', choices=list(available_wind_generators.keys()),
+                        default='constant', help='wind generator')
+    parser.add_argument('--n-envs', type=int, default=7,
+                        help='number of environments')
+    parser.add_argument('--episode-duration', type=int, default=200,
+                        help='episode duration (in seconds)')
     args, unknown = parser.parse_known_args()
 
     args.__dict__ = {k: v for k, v in vars(args).items()
@@ -42,20 +49,22 @@ def eval_model(overwrite_args={}):
 
     model = PPO.load(f'{path}/final.model.zip')
     train_args = pickle.load(open(f'{path}/final.args.pkl', 'rb'))
+    train_args.__dict__.update(args.__dict__)
 
     if args.log_name is not None:
         train_args.__dict__['name'] = args.log_name
 
-    n_envs = len(train_args.wind_dirs)
+    assert args.n_envs % len(train_args.wind_dirs) == 0, \
+        'n_envs must be a multiple of len(wind_dirs)'
 
     env = SubprocVecEnv(
-        [prepare_env(train_args, i, is_eval=True) for i in range(n_envs)])
+        [prepare_env(train_args, i, is_eval=True) for i in range(args.n_envs)])
     env = VecNormalize.load(f'{path}/final.envstats.pkl', env)
     env.training = False
     env.norm_reward = False
 
     mean_reward, std_reward = evaluate_policy(model, env,
-                                              n_eval_episodes=n_envs)
+                                              n_eval_episodes=args.n_envs)
     if isinstance(mean_reward, list):
         mean_reward = mean_reward[0]
     if isinstance(std_reward, list):

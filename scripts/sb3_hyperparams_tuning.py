@@ -6,8 +6,8 @@ import random
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from rl_zoo3.hyperparams_opt import sample_ppo_params
 
-from train_model import train_model
-from eval_model import eval_model
+from sb3_train import train_model
+from sb3_eval import eval_model
 
 
 def parse_args():
