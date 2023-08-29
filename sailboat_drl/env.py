@@ -16,8 +16,8 @@ available_rewards = {
     'max_dist': MaxDistReward,
     'max_dist_v1': MaxDistReward,
     'max_dist_v2': partial(MaxDistRewardWithPenalty, rudder_change_penalty=.1),
-    'max_dist_v3': partial(MaxDistRewardWithPenaltyOnDerivative, rudder_change_penalty=.1 / (4**2)),
-    # 'max_vmc': MaxVMCReward,
+    # 0.05 is the max gain dist, 5 is the max derivative of the rudder angle
+    'max_dist_v3': partial(MaxDistRewardWithPenaltyOnDerivative, rudder_change_penalty=.1 * 0.05 / (5**2)),
 }
 
 available_act_wrappers = {

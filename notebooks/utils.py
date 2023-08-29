@@ -72,6 +72,8 @@ def get_metric(name, metric, plot_type='mean+std'):
     for file in tqdm(files, desc=name, leave=False):
         try:
             df = pd.read_csv(file)
+            if len(df) == 0:
+                continue
             if isinstance(metric, Callable):
                 keys, scores = metric(file, df)
             else:
@@ -84,7 +86,6 @@ def get_metric(name, metric, plot_type='mean+std'):
                 key = keys
                 scores_by_key[key].append(scores)
         except Exception as e:
-            print(e)
             nb_fails += 1
 
     if nb_fails > 0:
