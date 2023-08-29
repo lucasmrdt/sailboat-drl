@@ -2,6 +2,7 @@ import allow_local_package_imports
 
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import SubprocVecEnv, VecNormalize
+from stable_baselines3.common.callbacks import CheckpointCallback
 from torch import nn as nn
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from sailboat_gym import env_by_name
@@ -48,8 +49,6 @@ def parse_args(overwrite_args={}):
                         help='keep the simulator running after training')
     parser.add_argument('--container-tag', type=str, default='mss1-ode',
                         help='container tag')
-    parser.add_argument('--prefix-env-id', type=str, default='',
-                        help='prefix environment id')
 
     # stable-baselines3 arguments
     parser.add_argument('--n-steps', type=int, default=1000,
@@ -94,7 +93,7 @@ def prepare_env(args, env_id=0, is_eval=False):
 
     def _init():
         wind_dir = args.wind_dirs[env_id % len(args.wind_dirs)]
-        return create_env(env_id=f'{args.prefix_env_id}{env_id}',
+        return create_env(env_id=f'{args.name}-{env_id}',
                           is_eval=is_eval,
                           water_current_generator=args.water_current,
                           water_current_dir=deg2rad(args.water_current_dir),
@@ -148,11 +147,21 @@ def train_model(overwrite_args={}):
                 seed=args.seed)
     model.set_logger(Logger.get_sb3_logger())
 
+    pickle.dump(args, open(f'runs/{args.name}/model_args.pkl', 'wb'))
+
+    save_freq = args.total_steps // 10
+    checkpoint_callback = CheckpointCallback(
+        save_freq=max(1, save_freq // args.n_envs),
+        save_path=f'runs/{args.name}',
+        name_prefix='model',
+        save_vecnormalize=True,
+    )
+
     model.learn(args.total_steps,
+                callback=checkpoint_callback,
                 progress_bar=True)
-    model.save(f'runs/{args.name}/final.model.zip')
-    env.save(f'runs/{args.name}/final.envstats.pkl')
-    pickle.dump(args, open(f'runs/{args.name}/final.args.pkl', 'wb'))
+    model.save(f'runs/{args.name}/model_final.zip', )
+    env.save(f'runs/{args.name}/model_vecnormalize_final.pkl')
 
     env.close()
 

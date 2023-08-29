@@ -5,6 +5,7 @@ from tqdm import tqdm
 from matplotlib.patches import Rectangle
 from glob import glob
 from collections import defaultdict
+from typing import Callable
 
 
 def _draw_trajectories_of_name(name, ax, color='C0'):
@@ -15,7 +16,7 @@ def _draw_trajectories_of_name(name, ax, color='C0'):
     files = list(enumerate(glob(f'../runs/{name}/**/*.csv')))
     nb_fails = 0
     ax.plot([], [], alpha=1, color=color, label=label)
-    for i, file in tqdm(files, desc=name):
+    for i, file in tqdm(files, desc=name, leave=False):
         try:
             df = pd.read_csv(file)
             ax.plot(df["obs/p_boat/0"], df["obs/p_boat/1"],
@@ -24,10 +25,11 @@ def _draw_trajectories_of_name(name, ax, color='C0'):
             nb_fails += 1
         # ax.scatter(df["obs/p_boat/0"], df["obs/p_boat/1"],
         #            alpha=0.2, color=color, s=.1)
-    print(f'Failed to load {nb_fails} files for {name}')
+    if nb_fails > 0:
+        print(f'Failed to load {nb_fails} files for {name}')
 
 
-def draw_trajectories(names, xte_delta=10):
+def draw_trajectories(names, xte_delta=10, hide_legend=False):
     fig, ax = plt.subplots(figsize=(8, 3), dpi=200)
 
     ax.plot([0, 200], [0, 0], 'k--', label='Reference path')
@@ -44,52 +46,99 @@ def draw_trajectories(names, xte_delta=10):
     #              alpha=0.2))
     ax.set_xlim(0, 100)
     ax.set_ylim(-xte_delta * 1.2, xte_delta * 1.2)
-    fig.legend(loc='upper center',
-               bbox_to_anchor=(0.5, -.05),
-               ncol=len(names) + 2)
+    if not hide_legend:
+        fig.legend(loc='upper center',
+                   bbox_to_anchor=(0.5, -.05),
+                   ncol=len(names) + 2)
+
+# elif metric == 'nb_step_by_sec':
+#     max_time = int(df["relative_time"].iloc[-1])
+#     sums, bins = np.histogram(df["relative_time"][:-1],
+#                                 bins=range(max_time))
+#     last_idx = np.where(sums > 0)[0][-1]
+#     score = sums[:last_idx]
+#     df_key = bins[:last_idx]
 
 
-def get_metric(name, metric='cum_vmc', key=lambda df: 0):
-    scores_by_key = defaultdict(list)
+def get_metric(name, metric, plot_type='mean+std'):
     if not name.endswith('.csv'):
-        pattern = f'../runs/{name}/**/*.csv'
+        pattern = f'../runs/{name}/*.csv'
     else:
         pattern = f'../runs/{name}'
-    files = list(glob(pattern))
+    files = list(glob(pattern, recursive=True))
+
+    scores_by_key = defaultdict(list)
     nb_fails = 0
     for file in tqdm(files, desc=name, leave=False):
         try:
             df = pd.read_csv(file)
-            df_key = key(df)
-            if metric == 'cum_vmc':
-                score = df["obs/cum_obs/vmc/0"].iloc[-1]
-            elif metric == 'mean_xte':
-                score = df["obs/xte/0"].abs().mean()
-            elif metric == 'dist':
-                score = df["obs/cum_obs/gain_dist/0"].iloc[-1]
-            elif metric == 'duration':
-                score = df["relative_time"].iloc[-1]
-            elif metric == 'nb_step_by_sec':
-                max_time = int(df["relative_time"].iloc[-1])
-                counts, bins = np.histogram(df["relative_time"][:-1],
-                                            bins=range(max_time))
-                last_idx = np.where(counts > 0)[0][-1]
-                score = counts[:last_idx]
-                df_key = bins[:last_idx]
+            if isinstance(metric, Callable):
+                keys, scores = metric(file, df)
             else:
-                score = df[metric].values
-                df_key = np.arange(len(score))
-            if isinstance(score, np.ndarray) and isinstance(df_key, np.ndarray):
-                for k, s in zip(df_key, score):
+                scores = df[metric].values
+                keys = np.arange(len(scores))
+            if isinstance(scores, np.ndarray) and isinstance(keys, np.ndarray):
+                for k, s in zip(keys, scores):
                     scores_by_key[k].append(s)
             else:
-                scores_by_key[df_key].append(score)
-        except:
+                key = keys
+                scores_by_key[key].append(scores)
+        except Exception as e:
+            print(e)
             nb_fails += 1
 
     if nb_fails > 0:
         print(f'Failed to load {nb_fails} files for {name}')
     keys = list(scores_by_key.keys())
-    scores_mean = np.array([np.mean(scores_by_key[k]) for k in keys])
-    scores_std = np.array([np.std(scores_by_key[k]) for k in keys])
-    return keys, scores_mean, scores_std
+    if plot_type == 'mean+std':
+        scores_mean = np.array([np.mean(scores_by_key[k]) for k in keys])
+        scores_std = np.array([np.std(scores_by_key[k]) for k in keys])
+        return keys, scores_mean, scores_std
+    elif plot_type == 'sum':
+        scores_sum = np.array([sum(scores_by_key[k]) for k in keys])
+        return keys, scores_sum
+    else:
+        raise ValueError(f'Unknown plot_type {plot_type}')
+
+
+def plot_metric(names, metric, ax=None, x_label='Timesteps', y_label=None, plot_type='mean+std', hide_legend=False):
+    if not isinstance(names, list):
+        names = [names]
+    if ax is None:
+        _, ax = plt.subplots(figsize=(4, 4), dpi=150)
+    fig = ax.figure
+    nb_ploted = 0
+    for i, name in enumerate(names):
+        if isinstance(name, tuple):
+            name, label = name
+        else:
+            label = name
+        if plot_type == 'mean+std':
+            keys, scores_mean, scores_std = get_metric(
+                name, metric, plot_type=plot_type)
+            if not len(keys):
+                continue
+            ax.plot(keys, scores_mean,
+                    label=label if not hide_legend else None, color=f'C{i}')
+            ax.fill_between(keys, scores_mean - scores_std, scores_mean + scores_std,
+                            alpha=0.2, color=f'C{i}')
+        elif plot_type == 'sum':
+            keys, scores_sum = get_metric(
+                name, metric, plot_type=plot_type)
+            if not len(keys):
+                continue
+            ax.bar(keys, scores_sum, label=label, color=f'C{i}')
+        else:
+            raise ValueError(f'Unknown plot_type {plot_type}')
+        nb_ploted += 1
+
+    ax.set_xlabel(x_label)
+    if y_label is not None:
+        ax.set_ylabel(y_label)
+    else:
+        ax.set_ylabel(metric)
+    if not hide_legend:
+        fig.legend(loc='upper center',
+                   bbox_to_anchor=(0.5, -.05),
+                   ncol=min(3, len(names)))
+    return ax

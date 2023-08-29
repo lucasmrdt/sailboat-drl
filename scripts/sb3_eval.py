@@ -15,7 +15,11 @@ from utils import evaluate_policy
 def parse_args(overwrite_args={}):
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
     parser.add_argument('--name',
-                        type=str, required=True, help='experiment name')
+                        type=str, required=True, help='name of the train experiment')
+    parser.add_argument('--seed',
+                        type=int, default=0, help='random seed')
+    parser.add_argument('--checkpoint-step', type=int,
+                        help='checkpoint step')
     parser.add_argument('--log-name', type=str, help='log name')
     parser.add_argument('--keep-sim-running', action='store_true',
                         help='keep the simulator running after training')
@@ -38,17 +42,23 @@ def parse_args(overwrite_args={}):
 def eval_model(overwrite_args={}):
     args = parse_args(overwrite_args)
 
+    log_name = args.log_name or args.name
+
     print('Evaluating with the following arguments:')
     for k, v in vars(args).items():
         print(f'{k} = {v}')
 
-    path = f'runs/{args.name}'
-
-    Logger.configure(f'{args.name}/eval.py')
+    Logger.configure(f'{log_name}/eval.py')
     Logger.log_hyperparams(args.__dict__)
 
-    model = PPO.load(f'{path}/final.model.zip')
-    train_args = pickle.load(open(f'{path}/final.args.pkl', 'rb'))
+    if args.checkpoint_step is None:
+        model_name = 'final'
+    else:
+        model_name = f'{args.checkpoint_step}_steps'
+
+    path = f'runs/{args.name}'
+    model = PPO.load(f'{path}/model_{model_name}')
+    train_args = pickle.load(open(f'{path}/model_args.pkl', 'rb'))
     train_args.__dict__.update(args.__dict__)
 
     if args.log_name is not None:
@@ -59,7 +69,7 @@ def eval_model(overwrite_args={}):
 
     env = SubprocVecEnv(
         [prepare_env(train_args, i, is_eval=True) for i in range(args.n_envs)])
-    env = VecNormalize.load(f'{path}/final.envstats.pkl', env)
+    env = VecNormalize.load(f'{path}/model_vecnormalize_{model_name}.pkl', env)
     env.training = False
     env.norm_reward = False
 

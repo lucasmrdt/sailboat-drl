@@ -1,29 +1,27 @@
 import time
+import pickle
 from stable_baselines3.common.callbacks import BaseCallback
 
 from .logger import Logger
 
 
-class TimeLoggerCallback(BaseCallback):
-    def __init__(self, n_steps_by_rollout, n_steps_per_second, verbose=0):
-        super().__init__(verbose)
-        self.n_steps_by_rollout = n_steps_by_rollout
-        self.n_steps_per_second = n_steps_per_second
-        self.start_time = None
-
-    def _on_rollout_start(self) -> None:
-        self.start_time = time.time()
+class Callback(BaseCallback):
+    def __init__(self, save_freq: int, save_path: str, verbose=0):
+        super(SaveModelCallback, self).__init__(verbose)
+        self.save_freq = save_freq
+        self.save_path = save_path
+        self.step_count = 1
 
     def _on_step(self) -> bool:
+        t = self.num_timesteps
+        i = self.step_count
+        if (i) * self.save_freq <= t <= (i + 1) * self.save_freq:
+            print(f'Saving model at step {t}')
+            self.model.save(
+                f'{self.save_path}/step{self.step_count}_model.zip')
+            self.env.save(
+                f'{self.save_path}/step{self.step_count}_envstats.pkl')
+            pickle.dump(args, open(
+                f'{self.save_path}/step{self.step_count}_args.pkl', 'wb'))
+            self.step_count += 1
         return True
-
-    def _on_rollout_end(self) -> None:
-        assert self.start_time is not None
-        rollout_time = time.time() - self.start_time
-        average_step_time = rollout_time / self.n_steps_by_rollout
-        Logger.record({
-            "time/rollout": rollout_time,
-            "time/step": average_step_time,
-            "time/factor": (1 / self.n_steps_per_second) / average_step_time,
-        })
-        # Logger.dump(step=self.num_timesteps)
