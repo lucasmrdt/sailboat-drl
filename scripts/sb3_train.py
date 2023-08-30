@@ -144,8 +144,9 @@ def train_model(overwrite_args={}):
                 max_grad_norm=args.max_grad_norm,
                 vf_coef=args.vf_coef,
                 policy_kwargs=args.policy_kwargs,
-                seed=args.seed)
-    model.set_logger(Logger.get_sb3_logger())
+                seed=args.seed,
+                tensorboard_log=f'runs/{args.name}')
+    # model.set_logger(Logger.get_sb3_logger())
 
     pickle.dump(args, open(f'runs/{args.name}/model_args.pkl', 'wb'))
 
