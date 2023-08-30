@@ -1,27 +1,33 @@
-# import numpy as np
-# from gymnasium import spaces
+import numpy as np
+from gymnasium import spaces
 
-# from .abc_reward import AbcReward
+from .abc_reward import AbcReward
 
 
-# class MaxVMCReward(AbcReward):
-#     def __init__(self, path: list, full_obs: bool = False):
-#         super().__init__(path)
-#         self.full_obs = full_obs
+class MaxVMCWithPenality(AbcReward):
+    def __init__(self, rudder_change_penalty, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rudder_change_penalty = rudder_change_penalty
 
-#     @property
-#     def observation_space(self):
-#         return spaces.Dict({
-#             **(super().observation_space.spaces if self.full_obs else {}),
-#             'vmc': spaces.Box(low=-np.inf, high=np.inf, shape=(1,)),
-#         })
+    @property
+    def observation_space(self):
+        return spaces.Dict({
+            'xte': spaces.Box(low=0, high=np.inf, shape=(1,)),
+            'heading_error': spaces.Box(low=-np.pi, high=np.pi, shape=(1,)),
+            'vmc': spaces.Box(low=-np.inf, high=np.inf, shape=(1,)),
+        })
 
-#     def observation(self, obs):
-#         return {
-#             **(super().observation(obs) if self.full_obs else {}),
-#             'vmc': np.array([self._compute_vmc(obs)])
-#         }
+    def observation(self, obs):
+        return {
+            'xte': np.array([self._compute_xte(obs)]),
+            'heading_error': np.array([self._compute_heading_error(obs)]),
+            'vmc': np.array([self._compute_vmc(obs)])
+        }
 
-#     def __call__(self, obs, act, next_obs):
-#         vmc = self._compute_vmc(next_obs)
-#         return vmc
+    def reward_fn(self, obs, act, next_obs):
+        if self._is_in_failure_state(next_obs):
+            return -self.path_length
+        vmc = self._compute_vmc(next_obs)
+        dt_theta_rudder = next_obs['dt_theta_rudder'][0]
+        # bound of dt_theta_rudder is [-6, 6]
+        return vmc - self.rudder_change_penalty * (dt_theta_rudder / 6)**2

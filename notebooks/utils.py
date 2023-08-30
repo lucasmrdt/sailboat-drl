@@ -8,6 +8,22 @@ from collections import defaultdict
 from typing import Callable
 
 
+def get_dfs(name):
+    if not name.endswith('.csv'):
+        pattern = f'../runs/{name}/*.csv'
+    else:
+        pattern = f'../runs/{name}'
+    files = list(glob(pattern, recursive=True))
+    dfs = {}
+    for file in tqdm(files, desc=name, leave=False):
+        try:
+            df = pd.read_csv(file)
+            dfs[file] = df
+        except:
+            pass
+    return dfs
+
+
 def _draw_trajectories_of_name(name, ax, color='C0'):
     if isinstance(name, tuple):
         name, label = name
@@ -95,6 +111,9 @@ def get_metric(name, metric, plot_type='mean+std'):
         scores_mean = np.array([np.mean(scores_by_key[k]) for k in keys])
         scores_std = np.array([np.std(scores_by_key[k]) for k in keys])
         return keys, scores_mean, scores_std
+    elif plot_type == 'mean':
+        scores_mean = np.array([np.mean(scores_by_key[k]) for k in keys])
+        return keys, scores_mean
     elif plot_type == 'sum':
         scores_sum = np.array([sum(scores_by_key[k]) for k in keys])
         return keys, scores_sum
@@ -123,6 +142,13 @@ def plot_metric(names, metric, ax=None, x_label='Timesteps', y_label=None, plot_
                     label=label if not hide_legend else None, color=f'C{i}')
             ax.fill_between(keys, scores_mean - scores_std, scores_mean + scores_std,
                             alpha=0.2, color=f'C{i}')
+        elif plot_type == 'mean':
+            keys, scores_mean = get_metric(
+                name, metric, plot_type=plot_type)
+            if not len(keys):
+                continue
+            ax.plot(keys, scores_mean,
+                    label=label if not hide_legend else None, color=f'C{i}')
         elif plot_type == 'sum':
             keys, scores_sum = get_metric(
                 name, metric, plot_type=plot_type)

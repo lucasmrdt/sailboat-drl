@@ -33,6 +33,8 @@ def parse_args(overwrite_args={}):
                         help='episode duration (in seconds)')
     args, unknown = parser.parse_known_args()
 
+    print('unknown arguments:', unknown)
+
     args.__dict__ = {k: v for k, v in vars(args).items()
                      if k not in overwrite_args}
     args.__dict__.update(overwrite_args)
