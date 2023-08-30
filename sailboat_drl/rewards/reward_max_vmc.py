@@ -67,7 +67,7 @@ class MaxVMCWithPenalityAndDelta(AbcReward):
 
 class MaxVMCWith2PenalityAndDelta(MaxVMCWithPenalityAndDelta):
     def __init__(self, rudder_change_penalty, xte_penality, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(rudder_change_penalty, *args, **kwargs)
         self.rudder_change_penalty = rudder_change_penalty
         self.xte_penality = xte_penality
 

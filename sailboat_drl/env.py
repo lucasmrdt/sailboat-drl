@@ -29,9 +29,9 @@ available_rewards = {
     # v3 seems to be the best
     'max_vmc_v7': partial(MaxVMCWithPenalityAndDelta, rudder_change_penalty=.01 * .4),
 
-    'max_vmc_v8': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, delta_penalty=.01 * .4),
-    'max_vmc_v9': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, delta_penalty=.005 * .4),
-    'max_vmc_v10': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, delta_penalty=.001 * .4),
+    'max_vmc_v8': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, xte_penality=.01 * .4),
+    'max_vmc_v9': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, xte_penality=.005 * .4),
+    'max_vmc_v10': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, xte_penality=.001 * .4),
 }
 
 available_act_wrappers = {
