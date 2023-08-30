@@ -63,3 +63,20 @@ class MaxVMCWithPenalityAndDelta(AbcReward):
         xte = self._compute_xte(next_obs)
         # bound of dt_theta_rudder is [-6, 6]
         return vmc - self.rudder_change_penalty * (dt_theta_rudder / 6)**2
+
+
+class MaxVMCWith2PenalityAndDelta(MaxVMCWithPenalityAndDelta):
+    def __init__(self, rudder_change_penalty, xte_penality, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rudder_change_penalty = rudder_change_penalty
+        self.xte_penality = xte_penality
+
+    def reward_fn(self, obs, act, next_obs):
+        if self._is_in_failure_state(next_obs):
+            return -self.path_length
+        vmc = self._compute_vmc(next_obs)
+        dt_theta_rudder = next_obs['dt_theta_rudder'][0]
+        xte = self._compute_xte(next_obs)
+        # bound of dt_theta_rudder is [-6, 6]
+        # bound of xte is [-10, 10]
+        return vmc - self.rudder_change_penalty * (dt_theta_rudder / 6)**2 - self.xte_penality * (xte / 10)**2
