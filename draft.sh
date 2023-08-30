@@ -1,6 +1,19 @@
-python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v7 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-D0"
-python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v7 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-D1"
-python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v7 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-D2"
+screen -d -S drl-0 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v11 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-F0"
+screen -d -S drl-1 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v12 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-F1"
+screen -d -S drl-2 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v13 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-F2"
+
+screen -d -S drl-0 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=32 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v11 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-G0"
+screen -d -S drl-1 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=32 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v12 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-G1"
+screen -d -S drl-2 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=32 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v13 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-G2"
+
+
+screen -d -S drl-0 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': True}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v7 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-D0"
+screen -d -S drl-1 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v7 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-D1"
+screen -d -S drl-2 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v7 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-D2"
+
+screen -d -S drl-0 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}"  --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v8 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-E0"
+screen -d -S drl-1 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}"  --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v0 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-E1"
+screen -d -S drl-2 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v10 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-E2"
 
 
 python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[256, 256], vf=[256, 256]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=32 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v1 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-B1" && python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[256, 256], vf=[256, 256]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=32 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v2 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-B2"
@@ -19,7 +32,13 @@ python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[256, 256], v
 # screen -d -S drl-1 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[256, 256], vf=[256, 256]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=32 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v5 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-B5"
 # screen -d -S drl-2 -m python3 scripts/sb3_train.py --policy-kwargs="{'net_arch': dict(pi=[256, 256], vf=[256, 256]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=32 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_v6 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-30-B6"
 
-zip -r 08-30-C3.zip runs/08-30-C3/model_*
+zip -r 08-30-D0.zip runs/08-30-D0/model_*
+zip -r 08-30-D1.zip runs/08-30-D1/model_*
+zip -r 08-30-D2.zip runs/08-30-D2/model_*
+zip -r 08-30-E0.zip runs/08-30-E0/model_*
+zip -r 08-30-E1.zip runs/08-30-E1/model_*
+zip -r 08-30-E2.zip runs/08-30-E2/model_*
+
 zip -r 08-30-C3-1.zip runs/08-30-C3-1/model_*
 zip -r 08-30-C3-2.zip runs/08-30-C3-2/model_*
 mv *.zip saved_models/
@@ -27,6 +46,14 @@ mv *.zip saved_models/
 unzip saved_models/08-30-C3.zip 
 unzip saved_models/08-30-C3-1.zip 
 unzip saved_models/08-30-C3-2.zip 
+
+
+unzip saved_models/08-30-D0.zip
+unzip saved_models/08-30-D1.zip
+unzip saved_models/08-30-D2.zip
+unzip saved_models/08-30-E0.zip
+unzip saved_models/08-30-E1.zip
+unzip saved_models/08-30-E2.zip
 
 unzip saved_models/08-30-B1.zip
 unzip saved_models/08-30-B3.zip
@@ -50,6 +77,33 @@ unzip 08-30-B6.zip
 # 08-30-B1
 # 08-30-B2
 # 08-30-B3
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D0" --log-name="08-30-D0-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D0" --log-name="08-30-D0-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D0" --log-name="08-30-D0-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D0" --log-name="08-30-D0-99960" --checkpoint-step=99960
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D1" --log-name="08-30-D1-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D1" --log-name="08-30-D1-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D1" --log-name="08-30-D1-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D1" --log-name="08-30-D1-99960" --checkpoint-step=99960
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D2" --log-name="08-30-D2-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D2" --log-name="08-30-D2-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D2" --log-name="08-30-D2-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-D2" --log-name="08-30-D2-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E0" --log-name="08-30-E0-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E0" --log-name="08-30-E0-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E0" --log-name="08-30-E0-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E0" --log-name="08-30-E0-99960" --checkpoint-step=99960
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E1" --log-name="08-30-E1-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E1" --log-name="08-30-E1-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E1" --log-name="08-30-E1-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E1" --log-name="08-30-E1-99960" --checkpoint-step=99960
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E2" --log-name="08-30-E2-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E2" --log-name="08-30-E2-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E2" --log-name="08-30-E2-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-E2" --log-name="08-30-E2-99960" --checkpoint-step=99960
+
 
 python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-C3" --log-name="08-30-C3-9996" --checkpoint-step=9996
 python3 scripts/sb3_eval.py --n-envs=7 --name="08-30-C3" --log-name="08-30-C3-39984" --checkpoint-step=39984

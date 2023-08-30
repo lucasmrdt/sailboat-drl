@@ -32,6 +32,10 @@ available_rewards = {
     'max_vmc_v8': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, xte_penality=.01 * .4),
     'max_vmc_v9': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, xte_penality=.005 * .4),
     'max_vmc_v10': partial(MaxVMCWith2PenalityAndDelta, rudder_change_penalty=.01 * .4, xte_penality=.001 * .4),
+
+    'max_vmc_v11': partial(MaxVMCWithPenalityAndDelta, rudder_change_penalty=.05 * .4),
+    'max_vmc_v12': partial(MaxVMCWithPenalityAndDelta, rudder_change_penalty=.1 * .4),
+    'max_vmc_v13': partial(MaxVMCWithPenalityAndDelta, rudder_change_penalty=.5 * .4),
 }
 
 available_act_wrappers = {
