@@ -59,7 +59,7 @@ def eval_model(overwrite_args={}):
         model_name = f'{args.checkpoint_step}_steps'
 
     path = f'runs/{args.name}'
-    model = PPO.load(f'{path}/model_{model_name}')
+    model = PPO.load(f'{path}/model_{model_name}', device='cpu')
     train_args = pickle.load(open(f'{path}/model_args.pkl', 'rb'))
     train_args.__dict__.update(args.__dict__)
 
