@@ -81,6 +81,7 @@ class LoggerWrapper(Wrapper):
 
         Logger.record({
             "relative_time": time.time() - self.start_time,
+            "reward": reward,
         })
 
         Logger.dump(step=self.n_steps)

@@ -7,7 +7,7 @@ from sailboat_gym import env_by_name
 from functools import partial
 
 from .weather_conditions import WindConstantGenerator, WindScenario1Generator, WaterCurrentNoneGenerator, WaterCurrentScenario1Generator, WindScenario2Generator, WaterCurrentScenario2Generator, WindScenario3Generator, WaterCurrentScenario3Generator
-from .rewards import RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality
+from .rewards import RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta
 from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
 
@@ -25,6 +25,9 @@ available_rewards = {
     'max_vmc_v4': partial(MaxVMCWithPenality, rudder_change_penalty=.05 * .4),
     'max_vmc_v5': partial(MaxVMCWithPenality, rudder_change_penalty=.1 * .4),
     'max_vmc_v6': partial(MaxVMCWithPenality, rudder_change_penalty=.5 * .4),
+
+    # v3 seems to be the best
+    'max_vmc_v7': partial(MaxVMCWithPenalityAndDelta, rudder_change_penalty=.01 * .4),
 }
 
 available_act_wrappers = {

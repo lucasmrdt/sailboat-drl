@@ -39,6 +39,23 @@ class RewardObs(CustomObservationWrapper):
         return self.reward.observation(obs)
 
 
+class RawObs(RewardObs):
+    @property
+    def observation_space(self):
+        return spaces.Dict({
+            **super().observation_space,
+            **GymObservation,
+        })
+
+    def observation(self, obs):
+        obs = {
+            **super().observation(obs),
+            **obs,
+        }
+        self.log(obs)
+        return obs
+
+
 class Basic2DObs(RewardObs):
     @property
     def observation_space(self):
@@ -216,21 +233,4 @@ class Basic2DObs_V4(RewardObs):
             'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
             'wind_norm': wind_norm,
         }
-        return obs
-
-
-class RawObs(RewardObs):
-    @property
-    def observation_space(self):
-        return spaces.Dict({
-            **super().observation_space,
-            **GymObservation,
-        })
-
-    def observation(self, obs):
-        obs = {
-            **super().observation(obs),
-            **obs,
-        }
-        self.log(obs)
         return obs
