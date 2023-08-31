@@ -9,7 +9,10 @@ def get_init_wind_theta(wind_theta):
     assert 0 <= wind_theta < 2 * np.pi, \
         'wind_theta must be in [0, 2*pi['
     # 90° to 270° avoiding going upwind at the beginning
-    return np.clip(wind_theta, np.pi / 2, 3 * np.pi / 2)
+    wind_theta = np.clip(wind_theta, np.pi / 2, 3 * np.pi / 2)
+    # where the vector is going to
+    wind_theta = (wind_theta - np.pi) % (2 * np.pi)
+    return wind_theta
 
 
 class WindConstantGenerator(OscillationGenerator):

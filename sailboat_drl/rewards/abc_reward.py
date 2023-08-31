@@ -107,3 +107,27 @@ class AbcReward(ABC):
     @abstractmethod
     def reward_fn(self, obs: Observation, act: Action, next_obs: Observation) -> float:
         raise NotImplementedError
+
+
+class EvalReward(AbcReward):
+    def __init__(self, RewardCls, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.reward = RewardCls(*args, **kwargs)
+
+    @property
+    def observation_space(self):
+        return self.reward.observation_space
+
+    def observation(self, obs):
+        return self.reward.observation(obs)
+
+    def stop_condition_fn(self, obs: Observation, act: Action, next_obs: Observation) -> bool:
+        return self._is_in_failure_state(next_obs)
+
+    def reward_fn(self, obs: Observation, act: Action, next_obs: Observation) -> float:
+        if self._is_in_failure_state(next_obs):
+            return 0
+        p_boat = obs['p_boat'][0:2]
+        next_p_boat = next_obs['p_boat'][0:2]
+        gain_dist = self._compute_gain_dist(p_boat, next_p_boat)
+        return gain_dist

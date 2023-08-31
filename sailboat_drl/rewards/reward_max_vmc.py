@@ -123,6 +123,27 @@ class MaxVMCMinXTE(AbcReward):
         return self.vmc_coef * r_vmc + self.xte_coef * r_xte
 
 
+class MaxVMCMinXTEMinDtRudder(MaxVMCMinXTE):
+    def __init__(self, rudder_coef, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.rudder_coef = rudder_coef
+
+    def reward_fn(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        xte = self._compute_xte(next_obs)
+        dt_theta_rudder = next_obs['dt_theta_rudder'][0]
+
+        vmc = vmc / .4
+        xte = xte / 10
+        dt_theta_rudder = dt_theta_rudder / 6
+
+        r_vmc = 2 * (np.exp(vmc + 1) - 1) / (np.exp(2) - 1) - 1
+        r_xte = (np.exp(-(xte**2 - 1)) - 1) / (np.e - 1)
+        r_rudder = dt_theta_rudder**2
+
+        return self.vmc_coef * r_vmc + self.xte_coef * r_xte - self.rudder_coef * r_rudder
+
+
 class MaxVMCMinXTEPenalizeXTE(AbcReward):
     """changes:
         - r_xte \in [0,1] -> r_xte \in [-1,1]
