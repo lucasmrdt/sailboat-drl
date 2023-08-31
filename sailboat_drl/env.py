@@ -7,7 +7,7 @@ from sailboat_gym import env_by_name
 from functools import partial
 
 from .weather_conditions import WindConstantGenerator, WindScenario1Generator, WaterCurrentNoneGenerator, WaterCurrentScenario1Generator, WindScenario2Generator, WaterCurrentScenario2Generator, WindScenario3Generator, WaterCurrentScenario3Generator
-from .rewards import RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta, MaxVMCWith2PenalityAndDelta, MaxVMCMinXTE
+from .rewards import RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta, MaxVMCWith2PenalityAndDelta, MaxVMCMinXTE, MaxVMCMinXTEPenalizeXTE
 from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
 
@@ -40,6 +40,10 @@ available_rewards = {
     'max_vmc_min_xte_v1': partial(MaxVMCMinXTE, vmc_coef=1, xte_coef=1),
     'max_vmc_min_xte_v2': partial(MaxVMCMinXTE, vmc_coef=1, xte_coef=.5),
     'max_vmc_min_xte_v3': partial(MaxVMCMinXTE, vmc_coef=1, xte_coef=.1),
+
+    'max_vmc_min_xte_penalize_xte_v1': partial(MaxVMCMinXTEPenalizeXTE, vmc_coef=1, xte_coef=1),
+    'max_vmc_min_xte_penalize_xte_v2': partial(MaxVMCMinXTEPenalizeXTE, vmc_coef=1, xte_coef=.5),
+    'max_vmc_min_xte_penalize_xte_v3': partial(MaxVMCMinXTEPenalizeXTE, vmc_coef=1, xte_coef=.1),
 }
 
 available_act_wrappers = {

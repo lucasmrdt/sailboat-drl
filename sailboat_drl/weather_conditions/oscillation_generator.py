@@ -2,23 +2,27 @@ import numpy as np
 
 
 class OscillationGenerator:
-    def __init__(self, force_theta, force_speed, sigma_dir, sigma_speed, nb_oscilations=1, nb_steps_per_episode=2000, initialisation_duration=100):
+    def __init__(self, force_theta, force_speed, sigma_dir, sigma_speed, init_force_theta=None, nb_oscilations=1, nb_steps_per_episode=2000, initialisation_duration=100):
         assert 0 <= force_theta < 2 * np.pi, \
             'force_theta must be in [0, 2*pi['
         self.force_theta = force_theta
         self.force_speed = force_speed
         self.sigma_dir = sigma_dir
         self.sigma_speed = sigma_speed
+        self.init_force_theta = init_force_theta
 
-        # 5% of the episode
         self.initialisation_duration = initialisation_duration
         self.transition_duration = nb_steps_per_episode // nb_oscilations
 
     def _initialise(self):
-        self.current_theta = self.force_theta
-        self.current_speed = 0
+        if self.init_force_theta:
+            self.current_theta = self.init_force_theta
+        else:
+            self.current_theta = self.force_theta
+
         self.target_theta = np.random.normal(self.force_theta,
                                              self.sigma_dir)
+        self.current_speed = 0
         self.target_speed = np.random.normal(self.force_speed,
                                              self.sigma_speed)
 
