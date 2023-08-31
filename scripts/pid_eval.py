@@ -10,6 +10,7 @@ from sailboat_drl.env import create_env, available_rewards, available_wind_gener
 from sailboat_drl.logger import Logger
 from sailboat_drl.baselines.pid_tae import PIDTAEAlgo
 from sailboat_drl.baselines.pid_los import PIDLOSAlgo
+from sailboat_drl.baselines.pid_xte import PIDXTEAlgo
 
 
 #  Info: {'map_bounds': array([[   0., -100.,    0.],
@@ -19,6 +20,7 @@ from sailboat_drl.baselines.pid_los import PIDLOSAlgo
 pid_algo_by_name = {
     'tae': PIDTAEAlgo,
     'los': PIDLOSAlgo,
+    'xte': PIDXTEAlgo,
 }
 
 
@@ -48,12 +50,8 @@ def get_args(overwrite_args={}):
                         default='constant', help='wind generator')
     parser.add_argument('--wind-dir', type=float, default=90,
                         help='wind direction (in deg)')
-    parser.add_argument('--wind-speed', type=float, default=2,
-                        help='wind speed')
     parser.add_argument('--water-current-dir', type=float,
                         default=90, help='water current direction (in deg)')
-    parser.add_argument('--water-current-speed', type=float,
-                        default=0.01, help='water current speed')
     parser.add_argument('--episode-duration', type=int,
                         default=200, help='episode duration (in seconds)')
     parser.add_argument('--keep-sim-running', action='store_true',
@@ -80,10 +78,8 @@ def prepare_env(args):
     return create_env(env_id=f'{args.prefix_env_id}{args.wind_dir}deg',
                       is_eval=True,
                       water_current_generator=args.water_current,
-                      water_current_speed=args.water_current_speed,
                       water_current_dir=deg2rad(args.water_current_dir),
                       wind_generator=args.wind,
-                      wind_speed=args.wind_speed,
                       wind_dir=deg2rad(args.wind_dir),
                       reward=args.reward,
                       reward_kwargs=args.reward_kwargs,
@@ -106,6 +102,8 @@ def eval_pid(overwrite_args={}):
 
     PIDAlgo = pid_algo_by_name[args.pid_algo]
     if PIDAlgo == PIDTAEAlgo:
+        pid_algo = PIDAlgo(args.Kp, args.Ki, args.Kd, dt)
+    elif PIDAlgo == PIDXTEAlgo:
         pid_algo = PIDAlgo(args.Kp, args.Ki, args.Kd, dt)
     elif PIDAlgo == PIDLOSAlgo:
         path = np.array(args.reward_kwargs['path'], dtype=np.float32)
