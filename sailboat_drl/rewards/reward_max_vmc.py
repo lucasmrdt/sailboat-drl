@@ -206,3 +206,21 @@ class MaxVMCPenalizeXTEMPenalizeDtRudder(MaxVMCMinXTEPenalizeXTE):
         r_rudder = dt_theta_rudder**2
 
         return self.vmc_coef * r_vmc + self.xte_coef * r_xte - self.rudder_coef * r_rudder
+
+
+class MaxVMCPenalizeXTEMPenalizeDeltaRudder(MaxVMCPenalizeXTEMPenalizeDtRudder):
+    def reward_fn(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        xte = self._compute_xte(next_obs)
+        prev_theta_rudder = obs['theta_rudder'][0]
+        theta_rudder = next_obs['theta_rudder'][0]
+
+        vmc = vmc / .4
+        xte = xte / 10
+        delta_theta_rudder = (theta_rudder - prev_theta_rudder) / .2
+
+        r_vmc = 2 * (np.exp(vmc + 1) - 1) / (np.exp(2) - 1) - 1
+        r_xte = 2 * (np.exp(-(xte**2 - 1)) - 1) / (np.e - 1) - 1
+        r_rudder = delta_theta_rudder**2
+
+        return self.vmc_coef * r_vmc + self.xte_coef * r_xte - self.rudder_coef * r_rudder
