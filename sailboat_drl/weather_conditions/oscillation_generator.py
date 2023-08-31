@@ -22,7 +22,8 @@ class OscillationGenerator:
 
         self.target_theta = np.random.normal(self.force_theta,
                                              self.sigma_dir)
-        self.current_speed = 0
+        self.current_speed = np.random.normal(self.force_speed,
+                                              self.sigma_speed)
         self.target_speed = np.random.normal(self.force_speed,
                                              self.sigma_speed)
 
