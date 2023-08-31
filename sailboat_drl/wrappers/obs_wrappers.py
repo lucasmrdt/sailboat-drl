@@ -219,6 +219,41 @@ class Basic2DObs_V4(RewardObs):
         return obs
 
 
+class Basic2DObs_V5(RewardObs):
+    """Changes:
+        - simplify the observation space by removing rudder velocity
+        - fix bound of theta_rudder to [-pi/2, pi/2]
+    """
+
+    @property
+    def observation_space(self):
+        return spaces.Dict({
+            **super().observation_space,
+            'theta_rudder': spaces.Box(low=-np.pi / 2, high=np.pi / 2, shape=(1,)),
+            'wind_angle': spaces.Box(low=-1, high=1, shape=(2,)),
+            'wind_norm': spaces.Box(low=0, high=np.inf, shape=(1,)),
+        })
+
+    def observation(self, obs):
+        theta_rudder = obs['theta_rudder'][0]
+
+        wind = obs['wind']
+        wind_angle = np.arctan2(wind[1], wind[0])
+        wind_norm = norm(wind)
+
+        reward_obs = super().observation(obs)
+
+        self.log({**reward_obs, **obs})
+
+        obs = {
+            **reward_obs,
+            'theta_rudder': theta_rudder,
+            'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
+            'wind_norm': wind_norm,
+        }
+        return obs
+
+
 class RawObs(RewardObs):
     @property
     def observation_space(self):
