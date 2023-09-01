@@ -63,6 +63,9 @@ available_rewards = {
     'max_vmc_custom_shape_v1': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=15),
     'max_vmc_custom_shape_v2': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=10),
     'max_vmc_custom_shape_v3': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=1, xte_coef=1, xte_a=15),
+    'max_vmc_custom_shape_v4': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=15),
+    'max_vmc_custom_shape_v5': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=10),
+    'max_vmc_custom_shape_v6': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=1, xte_coef=1, xte_a=15),
 }
 
 available_act_wrappers = {
