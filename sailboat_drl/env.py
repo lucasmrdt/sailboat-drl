@@ -7,7 +7,7 @@ from sailboat_gym import env_by_name
 from functools import partial
 
 from .weather_conditions import WindConstantGenerator, WindScenario1Generator, WaterCurrentNoneGenerator, WaterCurrentScenario1Generator, WindScenario2Generator, WaterCurrentScenario2Generator, WindScenario3Generator, WaterCurrentScenario3Generator
-from .rewards import EvalReward, RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta, MaxVMCWith2PenalityAndDelta, MaxVMCMinXTE, MaxVMCMinXTEPenalizeXTE, MaxVMCMinXTEMinDtRudder, MaxVMCPenalizeXTEMPenalizeDtRudder, MaxVMCPenalizeXTEMPenalizeDeltaRudder
+from .rewards import EvalReward, RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta, MaxVMCWith2PenalityAndDelta, MaxVMCMinXTE, MaxVMCMinXTEPenalizeXTE, MaxVMCMinXTEMinDtRudder, MaxVMCPenalizeXTEMPenalizeDtRudder, MaxVMCPenalizeXTEMPenalizeDeltaRudder, MaxVMCCustomShape
 from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, Basic2DObs_V5, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
 
@@ -59,6 +59,10 @@ available_rewards = {
     'max_vmc_penalize_xte_and_delta_rudder_v1': partial(MaxVMCPenalizeXTEMPenalizeDeltaRudder, rudder_coef=1, vmc_coef=1, xte_coef=1),
     'max_vmc_penalize_xte_and_delta_rudder_v2': partial(MaxVMCPenalizeXTEMPenalizeDeltaRudder, rudder_coef=.5, vmc_coef=1, xte_coef=1),
     'max_vmc_penalize_xte_and_delta_rudder_v3': partial(MaxVMCPenalizeXTEMPenalizeDeltaRudder, rudder_coef=.1, vmc_coef=1, xte_coef=1),
+
+    'max_vmc_custom_shape_v1': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=15),
+    'max_vmc_custom_shape_v2': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=10),
+    'max_vmc_custom_shape_v3': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=1, xte_coef=1, xte_a=15),
 }
 
 available_act_wrappers = {

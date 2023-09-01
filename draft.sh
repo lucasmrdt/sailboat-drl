@@ -1,3 +1,28 @@
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_delta_rudder_v4 --obs=basic_2d_obs_v5 --total=200000 --n-envs=7 --name="09-01-max2xpenalize-v4-1" --reward_kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.Tanh, 'ortho_init': False},'rudder_coef':0.1,'xte_coef':"
+
+
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_custom_shape_v1 --obs=basic_2d_obs_v5 --total=10000 --n-envs=7 --name="09-01-custom-shape-1"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_custom_shape_v2 --obs=basic_2d_obs_v5 --total=10000 --n-envs=7 --name="09-01-custom-shape-2"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_custom_shape_v3 --obs=basic_2d_obs_v5 --total=10000 --n-envs=7 --name="09-01-custom-shape-3"
+
+
+
+
+
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_delta_rudder_v3 --obs=basic_2d_obs_v5 --total=200000 --n-envs=7 --name="09-01-max2xpenalize-v3-1"
+
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_delta_rudder_v1 --obs=basic_2d_obs_v5 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-delta-1"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_delta_rudder_v2 --obs=basic_2d_obs_v5 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-delta-2"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_delta_rudder_v3 --obs=basic_2d_obs_v5 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-delta-3"
+
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_dt_rudder_v1 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-1"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_dt_rudder_v2 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-2"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_dt_rudder_v3 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-3"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_dt_rudder_v4 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-4"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_dt_rudder_v5 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-5"
+python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_penalize_xte_and_dt_rudder_v6 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-max2xpenalize-6"
+
+
 python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_min_xte_penalize_xte_v1 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-maxminpenalize-A1"
 python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_min_xte_penalize_xte_v2 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-maxminpenalize-A2"
 python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_min_xte_penalize_xte_v3 --obs=basic_2d_obs_v4 --total=100000 --n-envs=7 --name="08-31-maxminpenalize-A3"
@@ -51,6 +76,54 @@ zip -r 08-30-E0.zip runs/08-30-E0/model_*
 zip -r 08-30-E1.zip runs/08-30-E1/model_*
 zip -r 08-30-E2.zip runs/08-30-E2/model_*
 
+08-31-max2xpenalize-1
+08-31-max2xpenalize-2
+08-31-max2xpenalize-3
+zip -r 08-31-max2xpenalize-1.zip runs/08-31-max2xpenalize-1/model_*
+zip -r 08-31-max2xpenalize-2.zip runs/08-31-max2xpenalize-2/model_*
+zip -r 08-31-max2xpenalize-3.zip runs/08-31-max2xpenalize-3/model_*
+unzip saved_models/08-31-max2xpenalize-1.zip
+unzip saved_models/08-31-max2xpenalize-2.zip
+unzip saved_models/08-31-max2xpenalize-3.zip
+
+99995
+199990
+299985
+399980
+499975
+599970
+699965
+799960
+899955
+999950
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-99995" --checkpoint-step=99995
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-199990" --checkpoint-step=199990
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-299985" --checkpoint-step=299985
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-399980" --checkpoint-step=399980
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-499975" --checkpoint-step=499975
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-599970" --checkpoint-step=599970
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-699965" --checkpoint-step=699965
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-799960" --checkpoint-step=799960
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-899955" --checkpoint-step=899955
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-delta-2" --log-name="08-31-max2xpenalize-1M-999950" --checkpoint-step=999950
+
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-1" --log-name="08-31-max2xpenalize-1-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-1" --log-name="08-31-max2xpenalize-1-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-1" --log-name="08-31-max2xpenalize-1-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-1" --log-name="08-31-max2xpenalize-1-5-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-2" --log-name="08-31-max2xpenalize-2-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-2" --log-name="08-31-max2xpenalize-2-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-2" --log-name="08-31-max2xpenalize-2-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-2" --log-name="08-31-max2xpenalize-2-5-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-3" --log-name="08-31-max2xpenalize-3-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-3" --log-name="08-31-max2xpenalize-3-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-3" --log-name="08-31-max2xpenalize-3-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-max2xpenalize-3" --log-name="08-31-max2xpenalize-3-5-99960" --checkpoint-step=99960
+
+
 08-31-maxminpenalize-A1
 08-31-maxminpenalize-A2
 08-31-maxminpenalize-A3
@@ -64,6 +137,45 @@ zip -r 08-31-maxminminrudder-A1.zip runs/08-31-maxminminrudder-A1/model_*
 zip -r 08-31-maxminminrudder-A2.zip runs/08-31-maxminminrudder-A2/model_*
 zip -r 08-31-maxminminrudder-A3.zip runs/08-31-maxminminrudder-A3/model_*
 mv *.zip saved_models/
+unzip saved_models/08-31-maxminpenalize-A1.zip
+unzip saved_models/08-31-maxminpenalize-A2.zip
+unzip saved_models/08-31-maxminpenalize-A3.zip
+unzip saved_models/08-31-maxminminrudder-A1.zip
+unzip saved_models/08-31-maxminminrudder-A2.zip
+unzip saved_models/08-31-maxminminrudder-A3.zip
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A1" --log-name="08-31-maxminpenalize-A1-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A1" --log-name="08-31-maxminpenalize-A1-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A1" --log-name="08-31-maxminpenalize-A1-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A1" --log-name="08-31-maxminpenalize-A1-5-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A2" --log-name="08-31-maxminpenalize-A2-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A2" --log-name="08-31-maxminpenalize-A2-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A2" --log-name="08-31-maxminpenalize-A2-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A2" --log-name="08-31-maxminpenalize-A2-5-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A3" --log-name="08-31-maxminpenalize-A3-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A3" --log-name="08-31-maxminpenalize-A3-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A3" --log-name="08-31-maxminpenalize-A3-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminpenalize-A3" --log-name="08-31-maxminpenalize-A3-5-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A1" --log-name="08-31-maxminminrudder-A1-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A1" --log-name="08-31-maxminminrudder-A1-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A1" --log-name="08-31-maxminminrudder-A1-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A1" --log-name="08-31-maxminminrudder-A1-5-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A2" --log-name="08-31-maxminminrudder-A2-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A2" --log-name="08-31-maxminminrudder-A2-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A2" --log-name="08-31-maxminminrudder-A2-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A2" --log-name="08-31-maxminminrudder-A2-5-99960" --checkpoint-step=99960
+
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A3" --log-name="08-31-maxminminrudder-A3-5-9996" --checkpoint-step=9996
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A3" --log-name="08-31-maxminminrudder-A3-5-39984" --checkpoint-step=39984
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A3" --log-name="08-31-maxminminrudder-A3-5-69972" --checkpoint-step=69972
+python3 scripts/sb3_eval.py --n-envs=7 --name="08-31-maxminminrudder-A3" --log-name="08-31-maxminminrudder-A3-5-99960" --checkpoint-step=99960
+
+
+
 
 08-31-maxmin-A1
 08-31-maxmin-A2

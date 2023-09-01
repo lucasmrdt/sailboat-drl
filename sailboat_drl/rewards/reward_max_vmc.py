@@ -224,3 +224,48 @@ class MaxVMCPenalizeXTEMPenalizeDeltaRudder(MaxVMCPenalizeXTEMPenalizeDtRudder):
         r_rudder = delta_theta_rudder**2
 
         return self.vmc_coef * r_vmc + self.xte_coef * r_xte - self.rudder_coef * r_rudder
+
+
+def f_sigm_inf(a, x, delta=1, eps=1e-2):
+    A = np.exp(-a)
+    A_x = np.exp(-a * x)
+    A_delta = np.exp(-a * delta)
+    B = (eps - A_delta) / (A_delta * (1 - eps))
+    return (A_x * (B + 1)) / (A_x * B + 1)
+
+
+def f_sigm_bounded(a, x, bound=[-1, 1]):
+    def sig(x):
+        return 1 / (1 + np.exp(-a * x))
+    return (1 - sig(x) - sig(bound[0])) / (sig(bound[1]) - sig(bound[0]))
+
+
+class MaxVMCCustomShape(AbcReward):
+    def __init__(self, xte_a, xte_coef, vmc_a, vmc_coef, rudder_coef, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.xte_a = xte_a
+        self.xte_coef = xte_coef
+        self.vmc_a = vmc_a
+        self.vmc_coef = vmc_coef
+        self.rudder_coef = rudder_coef
+
+    def reward_fn(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        xte = self._compute_xte(next_obs)
+        prev_theta_rudder = obs['theta_rudder'][0]
+        theta_rudder = next_obs['theta_rudder'][0]
+
+        vmc = vmc / .4
+        xte = xte / 10
+        delta_theta_rudder = (theta_rudder - prev_theta_rudder) / .2
+
+        # XTE penalty:
+        xte_penalty = f_sigm_inf(self.xte_a, xte**2) - 1
+
+        # VMC reward
+        vmc_reward = 2 * (1 - f_sigm_bounded(self.vmc_a, vmc)) - 1
+
+        # Rudder penalty
+        rudder_penality = -delta_theta_rudder**2
+
+        return self.vmc_coef * vmc_reward + self.xte_coef * xte_penalty + self.rudder_coef * rudder_penality
