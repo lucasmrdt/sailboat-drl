@@ -6,9 +6,9 @@ from .abc_reward import AbcReward
 
 
 class MaxVMCWithPenality(AbcReward):
-    def __init__(self, rudder_change_penalty, *args, **kwargs):
+    def __init__(self, rudder_change_penality, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rudder_change_penalty = rudder_change_penalty
+        self.rudder_change_penality = rudder_change_penality
 
     @property
     def observation_space(self):
@@ -31,13 +31,13 @@ class MaxVMCWithPenality(AbcReward):
         vmc = self._compute_vmc(next_obs)
         dt_theta_rudder = next_obs['dt_theta_rudder'][0]
         # bound of dt_theta_rudder is [-6, 6]
-        return vmc - self.rudder_change_penalty * (dt_theta_rudder / 6)**2
+        return vmc - self.rudder_change_penality * (dt_theta_rudder / 6)**2
 
 
 class MaxVMCWithPenalityAndDelta(AbcReward):
-    def __init__(self, rudder_change_penalty, *args, **kwargs):
+    def __init__(self, rudder_change_penality, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.rudder_change_penalty = rudder_change_penalty
+        self.rudder_change_penality = rudder_change_penality
 
     @property
     def observation_space(self):
@@ -63,13 +63,13 @@ class MaxVMCWithPenalityAndDelta(AbcReward):
         dt_theta_rudder = next_obs['dt_theta_rudder'][0]
         xte = self._compute_xte(next_obs)
         # bound of dt_theta_rudder is [-6, 6]
-        return vmc - self.rudder_change_penalty * (dt_theta_rudder / 6)**2
+        return vmc - self.rudder_change_penality * (dt_theta_rudder / 6)**2
 
 
 class MaxVMCWith2PenalityAndDelta(MaxVMCWithPenalityAndDelta):
-    def __init__(self, rudder_change_penalty, xte_penality, *args, **kwargs):
-        super().__init__(rudder_change_penalty, *args, **kwargs)
-        self.rudder_change_penalty = rudder_change_penalty
+    def __init__(self, rudder_change_penality, xte_penality, *args, **kwargs):
+        super().__init__(rudder_change_penality, *args, **kwargs)
+        self.rudder_change_penality = rudder_change_penality
         self.xte_penality = xte_penality
 
     def reward_fn(self, obs, act, next_obs):
@@ -81,7 +81,7 @@ class MaxVMCWith2PenalityAndDelta(MaxVMCWithPenalityAndDelta):
         # bound of dt_theta_rudder is [-6, 6]
         # bound of xte is [-10, 10]
         # bound of VMC is [-.4, .4]
-        return vmc / .4 - self.rudder_change_penalty * (dt_theta_rudder / 6)**2 - self.xte_penality * (xte / 10)**2
+        return vmc / .4 - self.rudder_change_penality * (dt_theta_rudder / 6)**2 - self.xte_penality * (xte / 10)**2
 
 
 class MaxVMCMinXTE(AbcReward):
@@ -259,13 +259,70 @@ class MaxVMCCustomShape(AbcReward):
         xte = xte / 10
         delta_theta_rudder = (theta_rudder - prev_theta_rudder) / .2
 
-        # XTE penalty:
-        xte_penalty = f_sigm_inf(self.xte_a, xte**2) - 1
+        # XTE penality:
+        xte_penality = f_sigm_inf(self.xte_a, xte**2) - 1
 
         # VMC reward
         vmc_reward = 2 * (1 - f_sigm_bounded(self.vmc_a, vmc)) - 1
 
-        # Rudder penalty
+        # Rudder penality
         rudder_penality = -delta_theta_rudder**2
 
-        return self.vmc_coef * vmc_reward + self.xte_coef * xte_penalty + self.rudder_coef * rudder_penality
+        return self.vmc_coef * vmc_reward + self.xte_coef * xte_penality + self.rudder_coef * rudder_penality
+
+
+def sig_norm(x, center=0, a=None, x_delta_to_center=.1, y_delta_from_1=.1, bound=[-1, 1]):
+    def sig(x):
+        nonlocal a
+        if a is None:
+            a = np.log(y_delta_from_1 / (1 - y_delta_from_1)) / \
+                x_delta_to_center
+        b = -center
+        return 1 / (1 + np.exp(-a * (x + b)))
+    return (sig(x) - sig(bound[0])) / (sig(bound[1]) - sig(bound[0]))
+
+
+class MaxVMCCustomShapeV2(AbcReward):
+    def __init__(self, xte_params, xte_coef, vmc_params, vmc_coef, rudder_coef, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.xte_params = xte_params
+        self.xte_coef = xte_coef
+        self.vmc_params = vmc_params
+        self.vmc_coef = vmc_coef
+        self.rudder_coef = rudder_coef
+
+    def xte_reward(self, xte):
+        steepness = self.vmc_params['steepness']
+        s = sig_norm(
+            np.abs(xte),
+            a=steepness,
+            center=1,
+            bound=[0, 2]
+        )
+        return -s
+
+    def vmc_reward(self, vmc):
+        start_penality = self.vmc_params['start_penality']
+        steepness = self.vmc_params['steepness']
+        s = sig_norm(
+            vmc,
+            center=start_penality,
+            a=steepness,
+        )
+        return 2 * s - 1
+
+    def reward_fn(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        xte = self._compute_xte(next_obs)
+        prev_theta_rudder = obs['theta_rudder'][0]
+        theta_rudder = next_obs['theta_rudder'][0]
+
+        vmc = vmc / .4
+        xte = xte / 10
+        delta_theta_rudder = (theta_rudder - prev_theta_rudder) / .2
+
+        vmc_reward = self.vmc_reward(vmc)
+        xte_penaltiy = self.xte_reward(xte)
+        rudder_penality = -delta_theta_rudder**2
+
+        return self.vmc_coef * vmc_reward + self.xte_coef * xte_penaltiy + self.rudder_coef * rudder_penality
