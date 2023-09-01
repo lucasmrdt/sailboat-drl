@@ -67,6 +67,8 @@ available_rewards = {
     'max_vmc_custom_shape_v5': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=10),
     'max_vmc_custom_shape_v6': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=1, xte_coef=1, xte_a=15),
 
+    'max_vmc_penalize_xte_and_delta_rudder_v4': MaxVMCPenalizeXTEMPenalizeDeltaRudder,
+
     'max_vmc_custom_shape_v7': partial(
         MaxVMCCustomShapeV2,
         rudder_coef=.2,

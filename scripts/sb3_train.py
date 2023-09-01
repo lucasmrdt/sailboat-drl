@@ -49,6 +49,8 @@ def parse_args(overwrite_args={}):
                         help='keep the simulator running after training')
     parser.add_argument('--container-tag', type=str, default='mss1-ode',
                         help='container tag')
+    parser.add_argument('--prefix-env-id', type=str, default='',
+                        help='prefix environment id')
 
     # stable-baselines3 arguments
     parser.add_argument('--n-steps', type=int, default=1000,
@@ -93,7 +95,8 @@ def prepare_env(args, env_id=0, is_eval=False):
 
     def _init():
         wind_dir = args.wind_dirs[env_id % len(args.wind_dirs)]
-        return create_env(env_id=f'{args.name}-{env_id}',
+        env_id_prefix = args.prefix_env_id if args.prefix_env_id is not None else args.name
+        return create_env(env_id=f'{env_id_prefix}-{env_id}',
                           is_eval=is_eval,
                           water_current_generator=args.water_current,
                           water_current_dir=deg2rad(args.water_current_dir),

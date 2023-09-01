@@ -97,6 +97,10 @@ def prepare_env(args):
 def eval_pid(overwrite_args={}):
     args = get_args(overwrite_args)
 
+    print('evaluating PID algorithm:', args.pid_algo)
+    for k, v in args.__dict__.items():
+        print(f'{k} = {v}')
+
     nb_steps_per_seconds = env_by_name[args.env_name].NB_STEPS_PER_SECONDS
     dt = 1 / nb_steps_per_seconds
 
