@@ -46,7 +46,7 @@ def prepare_objective(args, idx):
             'n_epochs': 10,
             'wind_dirs': [45, 90, 135, 180, 225, 270, 315],
             'reward': 'max_vmc_custom_shape_tuning',
-            'obs': 'basic_2d_obs_v5',
+            'obs': 'basic_2d_obs_v6',
             'total': 10_000,
             'n_envs': 7,
             'reward_kwargs': {

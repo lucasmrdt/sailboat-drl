@@ -254,6 +254,48 @@ class Basic2DObs_V5(RewardObs):
         return obs
 
 
+class Basic2DObs_V6(RewardObs):
+    """Changes:
+        - add water current to the observation
+    """
+
+    @property
+    def observation_space(self):
+        return spaces.Dict({
+            **super().observation_space,
+            'theta_rudder': spaces.Box(low=-np.pi / 2, high=np.pi / 2, shape=(1,)),
+            'wind_angle': spaces.Box(low=-1, high=1, shape=(2,)),
+            'wind_norm': spaces.Box(low=0, high=np.inf, shape=(1,)),
+            'water_current_angle': spaces.Box(low=-1, high=1, shape=(2,)),
+            'water_current_norm': spaces.Box(low=0, high=np.inf, shape=(1,)),
+        })
+
+    def observation(self, obs):
+        theta_rudder = obs['theta_rudder'][0]
+
+        wind = obs['wind']
+        wind_angle = np.arctan2(wind[1], wind[0])
+        wind_norm = norm(wind)
+
+        water_current = obs['water']
+        water_current_angle = np.arctan2(water_current[1], water_current[0])
+        water_current_norm = norm(water_current)
+
+        reward_obs = super().observation(obs)
+
+        self.log({**reward_obs, **obs})
+
+        obs = {
+            **reward_obs,
+            'theta_rudder': theta_rudder,
+            'wind_angle': np.array([np.cos(wind_angle), np.sin(wind_angle)]),
+            'wind_norm': wind_norm,
+            'water_current_angle': np.array([np.cos(water_current_angle), np.sin(water_current_angle)]),
+            'water_current_norm': water_current_norm,
+        }
+        return obs
+
+
 class RawObs(RewardObs):
     @property
     def observation_space(self):

@@ -8,7 +8,7 @@ from functools import partial
 
 from .weather_conditions import WindConstantGenerator, WindScenario1Generator, WaterCurrentNoneGenerator, WaterCurrentScenario1Generator, WindScenario2Generator, WaterCurrentScenario2Generator, WindScenario3Generator, WaterCurrentScenario3Generator
 from .rewards import EvalReward, RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta, MaxVMCWith2PenalityAndDelta, MaxVMCMinXTE, MaxVMCMinXTEPenalizeXTE, MaxVMCMinXTEMinDtRudder, MaxVMCPenalizeXTEMPenalizeDtRudder, MaxVMCPenalizeXTEMPenalizeDeltaRudder, MaxVMCCustomShape, MaxVMCCustomShapeV2
-from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, Basic2DObs_V5, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
+from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, Basic2DObs_V5, Basic2DObs_V6, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
 
 available_rewards = {
@@ -63,6 +63,8 @@ available_rewards = {
     'max_vmc_custom_shape_v1': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=15),
     'max_vmc_custom_shape_v2': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=10),
     'max_vmc_custom_shape_v3': partial(MaxVMCCustomShape, rudder_coef=.1, vmc_coef=1, vmc_a=1, xte_coef=1, xte_a=15),
+
+    # > 78
     'max_vmc_custom_shape_v4': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=15),
     'max_vmc_custom_shape_v5': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=4, xte_coef=1, xte_a=10),
     'max_vmc_custom_shape_v6': partial(MaxVMCCustomShape, rudder_coef=.2, vmc_coef=1, vmc_a=1, xte_coef=1, xte_a=15),
@@ -98,6 +100,7 @@ available_obs_wrappers = {
     'basic_2d_obs_v3': Basic2DObs_V3,
     'basic_2d_obs_v4': Basic2DObs_V4,
     'basic_2d_obs_v5': Basic2DObs_V5,
+    'basic_2d_obs_v6': Basic2DObs_V6,
     'raw_obs': RawObs,
 }
 
