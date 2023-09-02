@@ -31,6 +31,8 @@ def parse_args(overwrite_args={}):
                         help='number of environments')
     parser.add_argument('--episode-duration', type=int, default=200,
                         help='episode duration (in seconds)')
+    parser.add_argument('--disable-reward-normalization', action='store_true',
+                        help='disable reward normalization')
     args, unknown = parser.parse_known_args()
 
     print('unknown arguments:', unknown)

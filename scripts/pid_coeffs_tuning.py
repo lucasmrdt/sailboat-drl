@@ -1,3 +1,5 @@
+import allow_local_package_imports
+
 import optuna
 import numpy as np
 import time
@@ -6,6 +8,7 @@ from functools import partial
 from multiprocessing import Pool
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 
+from sailboat_drl.env import available_water_current_generators, available_wind_generators
 from pid_eval import eval_pid
 
 
@@ -21,6 +24,10 @@ def parse_args():
     parser.add_argument('--Ki', type=float, help='Ki')
     parser.add_argument('--Kd', type=float, help='Kd')
     parser.add_argument('--los-radius', type=float, help='los_radius')
+    parser.add_argument('--water-current', choices=list(available_water_current_generators.keys()),
+                        default='none', help='water current generator')
+    parser.add_argument('--wind', choices=list(available_wind_generators.keys()),
+                        default='constant', help='wind generator')
     parser.add_argument('--n-trials', type=int, default=100,
                         help='number of trials')
     args, unknown = parser.parse_known_args()

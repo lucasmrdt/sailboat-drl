@@ -326,3 +326,65 @@ class MaxVMCCustomShapeV2(AbcReward):
         rudder_penality = -delta_theta_rudder**2
 
         return self.vmc_coef * vmc_reward + self.xte_coef * xte_penaltiy + self.rudder_coef * rudder_penality
+
+
+class MaxVMCExpShape(AbcReward):
+    def __init__(self, xte_coef, vmc_coef, rudder_coef, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.xte_coef = xte_coef
+        self.vmc_coef = vmc_coef
+        self.rudder_coef = rudder_coef
+
+    def xte_reward(self, xte):
+        s = (np.exp(-(xte**2 - 1)) - 1) / (np.e - 1)
+        return s - 1
+
+    def vmc_reward(self, vmc):
+        s = (np.exp(vmc + 1) - 1) / (np.exp(2) - 1)
+        return 2 * s - 1
+
+    def reward_fn(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        xte = self._compute_xte(next_obs)
+        prev_theta_rudder = obs['theta_rudder'][0]
+        theta_rudder = next_obs['theta_rudder'][0]
+
+        vmc = vmc / .4
+        xte = xte / 10
+        delta_theta_rudder = (theta_rudder - prev_theta_rudder) / .2
+
+        vmc_reward = self.vmc_reward(vmc)
+        xte_penaltiy = self.xte_reward(xte)
+        rudder_penality = -delta_theta_rudder**2
+
+        return self.vmc_coef * vmc_reward + self.xte_coef * xte_penaltiy + self.rudder_coef * rudder_penality
+
+
+class MaxVMCLinearShape(AbcReward):
+    def __init__(self, xte_coef, vmc_coef, rudder_coef, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.xte_coef = xte_coef
+        self.vmc_coef = vmc_coef
+        self.rudder_coef = rudder_coef
+
+    def xte_reward(self, xte):
+        return -np.abs(xte)
+
+    def vmc_reward(self, vmc):
+        return vmc
+
+    def reward_fn(self, obs, act, next_obs):
+        vmc = self._compute_vmc(next_obs)
+        xte = self._compute_xte(next_obs)
+        prev_theta_rudder = obs['theta_rudder'][0]
+        theta_rudder = next_obs['theta_rudder'][0]
+
+        vmc = vmc / .4
+        xte = xte / 10
+        delta_theta_rudder = (theta_rudder - prev_theta_rudder) / .2
+
+        vmc_reward = self.vmc_reward(vmc)
+        xte_penaltiy = self.xte_reward(xte)
+        rudder_penality = -delta_theta_rudder**2
+
+        return self.vmc_coef * vmc_reward + self.xte_coef * xte_penaltiy + self.rudder_coef * rudder_penality

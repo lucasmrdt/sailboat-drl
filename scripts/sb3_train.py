@@ -51,6 +51,8 @@ def parse_args(overwrite_args={}):
                         help='container tag')
     parser.add_argument('--prefix-env-id', type=str, default='',
                         help='prefix environment id')
+    parser.add_argument('--disable-reward-normalization', action='store_true',
+                        help='disable reward normalization')
 
     # stable-baselines3 arguments
     parser.add_argument('--n-steps', type=int, default=1000,
@@ -132,7 +134,8 @@ def train_model(overwrite_args={}):
 
     env = SubprocVecEnv(
         [prepare_env(args, i) for i in range(args.n_envs)])
-    env = VecNormalize(env, norm_obs=True, norm_reward=True, gamma=args.gamma)
+    env = VecNormalize(
+        env, norm_obs=True, norm_reward=not args.disable_reward_normalization, gamma=args.gamma)
 
     model = PPO('MlpPolicy',
                 env,

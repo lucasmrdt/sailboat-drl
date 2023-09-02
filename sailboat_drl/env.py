@@ -7,7 +7,7 @@ from sailboat_gym import env_by_name
 from functools import partial
 
 from .weather_conditions import WindConstantGenerator, WindScenario1Generator, WaterCurrentNoneGenerator, WaterCurrentScenario1Generator, WindScenario2Generator, WaterCurrentScenario2Generator, WindScenario3Generator, WaterCurrentScenario3Generator
-from .rewards import EvalReward, RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta, MaxVMCWith2PenalityAndDelta, MaxVMCMinXTE, MaxVMCMinXTEPenalizeXTE, MaxVMCMinXTEMinDtRudder, MaxVMCPenalizeXTEMPenalizeDtRudder, MaxVMCPenalizeXTEMPenalizeDeltaRudder, MaxVMCCustomShape, MaxVMCCustomShapeV2
+from .rewards import EvalReward, RewardRenderer, MaxDistReward, MaxDistRewardWithPenalty, MaxDistRewardWithPenaltyOnDerivative, MaxVMCWithPenality, MaxVMCWithPenalityAndDelta, MaxVMCWith2PenalityAndDelta, MaxVMCMinXTE, MaxVMCMinXTEPenalizeXTE, MaxVMCMinXTEMinDtRudder, MaxVMCPenalizeXTEMPenalizeDtRudder, MaxVMCPenalizeXTEMPenalizeDeltaRudder, MaxVMCCustomShape, MaxVMCCustomShapeV2, MaxVMCExpShape, MaxVMCLinearShape
 from .wrappers import CustomRecordVideo, Basic2DObs, Basic2DObs_V2, Basic2DObs_V3, Basic2DObs_V4, Basic2DObs_V5, Basic2DObs_V6, RudderAngleAction, RudderForceAction, RawObs, CbWrapper
 from .logger import Logger, LoggerWrapper
 
@@ -85,6 +85,77 @@ available_rewards = {
         )
     ),
     'max_vmc_custom_shape_tuning': MaxVMCCustomShapeV2,
+
+    'max_vmc_custom_shape_s0_best_k5': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.75,
+        vmc_coef=1,
+        xte_coef=1,
+        xte_params=dict(
+            steepness=19,
+        ),
+        vmc_params=dict(
+            start_penality=.5,
+            steepness=15,
+        )
+    ),
+    'max_vmc_custom_shape_s1_best_k5': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.5,
+        vmc_coef=1,
+        xte_coef=1,
+        xte_params=dict(
+            steepness=5.5,
+        ),
+        vmc_params=dict(
+            start_penality=.5,
+            steepness=3.8,
+        )
+    ),
+    'max_vmc_custom_shape_s2_best_k5': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.1,
+        vmc_coef=1,
+        xte_coef=1,
+        xte_params=dict(
+            steepness=4.6,
+        ),
+        vmc_params=dict(
+            start_penality=.7,
+            steepness=1,
+        )
+    ),
+
+    'max_vmc_custom_shape_s1_best_k5_1': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.046,
+        vmc_coef=1,
+        xte_coef=1,
+        xte_params=dict(
+            steepness=5.48,
+        ),
+        vmc_params=dict(
+            start_penality=.87,
+            steepness=3.2,
+        )
+    ),
+    'max_vmc_custom_shape_s2_best_k5': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.1,
+        vmc_coef=1,
+        xte_coef=1,
+        xte_params=dict(
+            steepness=4.6,
+        ),
+        vmc_params=dict(
+            start_penality=.64,
+            steepness=1.49,
+        )
+    ),
+
+    'max_vmc_exp_shape_full_tuning': MaxVMCExpShape,
+    'max_vmc_linear_shape_full_tuning': MaxVMCLinearShape,
+    'max_vmc_custom_shape_full_tuning': MaxVMCCustomShapeV2,
 }
 
 available_act_wrappers = {
