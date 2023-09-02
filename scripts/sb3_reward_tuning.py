@@ -7,6 +7,7 @@ import torch.nn as nn
 from argparse import ArgumentParser, ArgumentDefaultsHelpFormatter
 from rl_zoo3.hyperparams_opt import sample_ppo_params
 
+from sailboat_drl.env import available_water_current_generators, available_wind_generators
 from sb3_train import train_model
 from sb3_eval import eval_model
 
@@ -17,6 +18,10 @@ def parse_args():
                         help='experiment name')
     parser.add_argument('--n-trials', type=int, default=100,
                         help='number of trials')
+    parser.add_argument('--water-current', choices=list(available_water_current_generators.keys()),
+                        default='none', help='water current generator')
+    parser.add_argument('--wind', choices=list(available_wind_generators.keys()),
+                        default='constant', help='wind generator')
     parser.add_argument('--index', type=int, required=True,
                         help='index of the job')
     args, unknown = parser.parse_known_args()
@@ -39,8 +44,6 @@ def prepare_objective(args, idx):
             'learning_rate': 3e-5,
             'vf_coef': 0.2,
             'n_epochs': 10,
-            'wind': 'constant',
-            'water_current': 'none',
             'wind_dirs': [45, 90, 135, 180, 225, 270, 315],
             'reward': 'max_vmc_custom_shape_tuning',
             'obs': 'basic_2d_obs_v5',
@@ -53,10 +56,12 @@ def prepare_objective(args, idx):
                 'vmc_coef': 1,
                 'xte_coef': 1,
                 'xte_params': dict(
-                    steepness=trial.suggest_float('steepness', 1, 20, log=True),
+                    steepness=trial.suggest_float(
+                        'xte_steepness', 1, 20, log=True),
                 ),
                 'vmc_params': dict(
-                    steepness=trial.suggest_float('steepness', 1, 20, log=True),
+                    steepness=trial.suggest_float(
+                        'vmc_steepness', 1, 20, log=True),
                     start_penality=trial.suggest_float('start_penality', 0, 1),
                 ),
             }
