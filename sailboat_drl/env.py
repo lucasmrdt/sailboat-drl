@@ -128,29 +128,68 @@ available_rewards = {
 
     'max_vmc_custom_shape_s1_best_k5_1': partial(
         MaxVMCCustomShapeV2,
-        rudder_coef=.046,
+        rudder_coef=.0595,
+        vmc_coef=.568,
+        xte_coef=.00254,
+        xte_params=dict(
+            steepness=2.56,
+        ),
+        vmc_params=dict(
+            start_penality=.384,
+            steepness=1.01,
+        )
+    ),
+    'max_vmc_custom_shape_s1_best_k5_2': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.1,
+        vmc_coef=1,
+        xte_coef=1,
+        xte_params=dict(
+            steepness=2.56,
+        ),
+        vmc_params=dict(
+            start_penality=.384,
+            steepness=1.01,
+        )
+    ),
+    'max_vmc_custom_shape_s1_best_k5_3': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.0514,
         vmc_coef=1,
         xte_coef=1,
         xte_params=dict(
             steepness=5.48,
         ),
         vmc_params=dict(
-            start_penality=.87,
-            steepness=3.2,
+            start_penality=.841,
+            steepness=3.82,
         )
     ),
-    'max_vmc_custom_shape_s2_best_k5': partial(
-        MaxVMCCustomShapeV2,
-        rudder_coef=.1,
-        vmc_coef=1,
-        xte_coef=1,
-        xte_params=dict(
-            steepness=4.6,
-        ),
-        vmc_params=dict(
-            start_penality=.64,
-            steepness=1.49,
-        )
+
+    'max_vmc_exp_shape_s1_best_k5_1': partial(
+        MaxVMCExpShape,
+        rudder_coef=.00769,
+        vmc_coef=.198,
+        xte_coef=.135,
+    ),
+    'max_vmc_exp_shape_s1_best_k5_2': partial(
+        MaxVMCExpShape,
+        rudder_coef=.00379,
+        vmc_coef=.0692,
+        xte_coef=.0015,
+    ),
+
+    'max_vmc_linear_shape_s1_best_k5_1': partial(
+        MaxVMCLinearShape,
+        rudder_coef=.00554,
+        vmc_coef=.0526,
+        xte_coef=.00234,
+    ),
+    'max_vmc_linear_shape_s1_best_k5_2': partial(
+        MaxVMCLinearShape,
+        rudder_coef=.00147,
+        vmc_coef=.0436,
+        xte_coef=.00141,
     ),
 
     'max_vmc_exp_shape_full_tuning': MaxVMCExpShape,

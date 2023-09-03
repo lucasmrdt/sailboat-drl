@@ -293,10 +293,14 @@ class MaxVMCCustomShapeV2(AbcReward):
 
     def xte_reward(self, xte):
         steepness = self.vmc_params['steepness']
+        if 'start_penality' in self.vmc_params:
+            start_penality = self.vmc_params['start_penality']
+        else:
+            start_penality = 1
         s = sig_norm(
             np.abs(xte),
             a=steepness,
-            center=1,
+            center=start_penality,
             bound=[0, 2]
         )
         return -s

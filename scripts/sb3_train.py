@@ -49,7 +49,7 @@ def parse_args(overwrite_args={}):
                         help='keep the simulator running after training')
     parser.add_argument('--container-tag', type=str, default='mss1-ode',
                         help='container tag')
-    parser.add_argument('--prefix-env-id', type=str, default='',
+    parser.add_argument('--prefix-env-id', type=str,
                         help='prefix environment id')
     parser.add_argument('--disable-reward-normalization', action='store_true',
                         help='disable reward normalization')

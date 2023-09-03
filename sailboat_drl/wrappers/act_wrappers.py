@@ -40,6 +40,28 @@ class RudderAngleAction(BestFixedSail, ActionWrapper):
         }
 
 
+class RudderAngleV2Action(BestFixedSail, ActionWrapper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.action_space = gym.spaces.Box(
+            low=np.array([-1], dtype=np.float32),
+            high=np.array([1], dtype=np.float32),
+            shape=(1,),
+            dtype=np.float32
+        )
+
+    def action(self, action: np.ndarray) -> Action:
+        assert self.theta_sail is not None, 'theta_sail must be set by reset'
+
+        theta_rudder = action[0] * np.pi / 15
+        theta_rudder = np.clip(theta_rudder, -np.pi / 2, np.pi / 2)
+        Logger.record({'act/mlp': action[0], 'act/theta_rudder': theta_rudder})
+        return {
+            'theta_rudder': theta_rudder,
+            'theta_sail': self.theta_sail
+        }
+
+
 class RudderForceAction(BestFixedSail, ActionWrapper):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

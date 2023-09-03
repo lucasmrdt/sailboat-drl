@@ -67,6 +67,7 @@ def eval_model(overwrite_args={}):
 
     if args.log_name is not None:
         train_args.__dict__['name'] = args.log_name
+        train_args.__dict__['prefix_env_id'] = args.log_name
 
     assert args.n_envs % len(train_args.wind_dirs) == 0, \
         'n_envs must be a multiple of len(wind_dirs)'

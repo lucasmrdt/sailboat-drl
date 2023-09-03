@@ -29,7 +29,7 @@ def _draw_trajectories_of_name(name, ax, color='C0'):
         name, label = name
     else:
         label = name
-    files = list(enumerate(glob(f'../runs/{name}/**/*.csv')))
+    files = list(enumerate(glob(f'../runs/{name}/*.csv', recursive=True)))
     nb_fails = 0
     ax.plot([], [], alpha=1, color=color, label=label)
     for i, file in tqdm(files, desc=name, leave=False):
@@ -46,7 +46,7 @@ def _draw_trajectories_of_name(name, ax, color='C0'):
 
 
 def draw_trajectories(names, xte_delta=10, hide_legend=False):
-    fig, ax = plt.subplots(figsize=(8, 3), dpi=200)
+    fig, ax = plt.subplots(figsize=(3, 3), dpi=200)
 
     ax.plot([0, 200], [0, 0], 'k--', label='Reference path')
     ax.plot([0, 200], [xte_delta, xte_delta], 'r:', label='XTE > 10m')
@@ -138,6 +138,19 @@ def plot_metric(names, metric, ax=None, x_label='Timesteps', y_label=None, plot_
                 name, metric, plot_type=plot_type)
             if not len(keys):
                 continue
+
+            # Combine the lists into tuples
+            combined_data = list(zip(keys, scores_mean, scores_std))
+
+            # Sort the tuples based on the keys
+            sorted_data = sorted(combined_data, key=lambda x: x[0])
+
+            # Unpack the sorted data back into separate lists
+            keys, scores_mean, scores_std = zip(*sorted_data)
+            keys = np.array(keys)
+            scores_mean = np.array(scores_mean)
+            scores_std = np.array(scores_std)
+
             ax.plot(keys, scores_mean,
                     label=label if not hide_legend else None, color=f'C{i}')
             ax.fill_between(keys, scores_mean - scores_std, scores_mean + scores_std,

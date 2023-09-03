@@ -44,6 +44,7 @@ def prepare_objective(args, idx):
             reward_kwargs['xte_params'] = dict(
                 steepness=trial.suggest_float(
                     'xte_steepness', 1, 10, log=True),
+                start_penality=trial.suggest_float('start_penality', 0, 1),
             )
             reward_kwargs['vmc_params'] = dict(
                 steepness=trial.suggest_float(
@@ -54,7 +55,7 @@ def prepare_objective(args, idx):
         overwrite_args = {
             'name': f'{args.name}-{trial.number}',
             'keep_sim_running': True,
-            'total_steps': 20_000,
+            'total_steps': 10_000,
             'prefix_env_id': idx,
             'policy_kwargs': {'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False},
             'batch_size': 16,
