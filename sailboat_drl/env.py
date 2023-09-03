@@ -192,6 +192,34 @@ available_rewards = {
         xte_coef=.00141,
     ),
 
+
+    'max_vmc_exp_shape_s1_best': partial(
+        MaxVMCExpShape,
+        rudder_coef=.0043,
+        vmc_coef=.54,
+        xte_coef=.0062,
+    ),
+    'max_vmc_linear_shape_s1_best': partial(
+        MaxVMCLinearShape,
+        rudder_coef=.0075,
+        vmc_coef=.03,
+        xte_coef=.0033,
+    ),
+    'max_vmc_custom_shape_s1_best': partial(
+        MaxVMCCustomShapeV2,
+        rudder_coef=.045,
+        vmc_coef=.326,
+        vmc_params=dict(
+            start_penality=.49,
+            steepness=1.7,
+        ),
+        xte_coef=.0244,
+        xte_params=dict(
+            start_penality=.356,
+            steepness=5.37,
+        )
+    ),
+
     'max_vmc_exp_shape_full_tuning': MaxVMCExpShape,
     'max_vmc_linear_shape_full_tuning': MaxVMCLinearShape,
     'max_vmc_custom_shape_full_tuning': MaxVMCCustomShapeV2,

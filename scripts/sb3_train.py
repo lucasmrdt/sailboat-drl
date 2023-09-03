@@ -156,7 +156,7 @@ def train_model(overwrite_args={}):
 
     pickle.dump(args, open(f'runs/{args.name}/model_args.pkl', 'wb'))
 
-    save_freq = args.total_steps // 10
+    save_freq = args.total_steps // 20
     checkpoint_callback = CheckpointCallback(
         save_freq=max(1, save_freq // args.n_envs),
         save_path=f'runs/{args.name}',
