@@ -44,12 +44,12 @@ def prepare_objective(args, idx):
             reward_kwargs['xte_params'] = dict(
                 steepness=trial.suggest_float(
                     'xte_steepness', 1, 10, log=True),
-                start_penality=trial.suggest_float('start_penality', 0, 1),
+                start_penality=trial.suggest_float('xte_start_penality', 0, 1),
             )
             reward_kwargs['vmc_params'] = dict(
                 steepness=trial.suggest_float(
                     'vmc_steepness', 1, 10, log=True),
-                start_penality=trial.suggest_float('start_penality', 0, 1),
+                start_penality=trial.suggest_float('vmc_start_penality', 0, 1),
             )
 
         overwrite_args = {

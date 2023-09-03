@@ -82,6 +82,7 @@ class AbcReward(ABC):
             'xte': spaces.Box(low=0, high=np.inf, shape=(1,)),
             'tae': spaces.Box(low=-np.pi, high=np.pi, shape=(1,)),
             'vmc': spaces.Box(low=-np.inf, high=np.inf, shape=(1,)),
+            'heading_error': spaces.Box(low=-np.pi, high=np.pi, shape=(1,)),
             'delta': spaces.Box(low=-np.inf, high=np.inf, shape=(1,)),
         })
 
@@ -90,6 +91,7 @@ class AbcReward(ABC):
             'xte': np.array([self._compute_xte(obs)]),
             'tae': np.array([self._compute_tae(obs)]),
             'vmc': np.array([self._compute_vmc(obs)]),
+            'heading_error': np.array([np.pi / 2 - abs(self._compute_heading_error(obs))]),
             'delta': np.array([self.xte_threshold - abs(self._compute_xte(obs))]),
         }
 
