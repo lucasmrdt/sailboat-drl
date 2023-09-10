@@ -1,6 +1,6 @@
-python3 scripts/sb3_reward_tuning.py --name="09-01-reward-tuning-scenario-1-B" --n-trials=100 --index=0 --wind=scenario_1 --water-current=scenario_1
-python3 scripts/sb3_reward_tuning.py --name="09-01-reward-tuning-scenario-1-B" --n-trials=100 --index=1 --wind=scenario_1 --water-current=scenario_1
-python3 scripts/sb3_reward_tuning.py --name="09-01-reward-tuning-scenario-1-B" --n-trials=100 --index=2 --wind=scenario_1 --water-current=scenario_1
+python3 scripts/sb3_reward_tuning.py --name="09-01-reward-tuning-scenario-1-B" --n-trials=100 --index=0 --wind=scenario_1 --water-current=scenario_1 --disable-reward-normalization
+python3 scripts/sb3_reward_tuning.py --name="09-01-reward-tuning-scenario-1-B" --n-trials=100 --index=1 --wind=scenario_1 --water-current=scenario_1 --disable-reward-normalization
+python3 scripts/sb3_reward_tuning.py --name="09-01-reward-tuning-scenario-1-B" --n-trials=100 --index=2 --wind=scenario_1 --water-current=scenario_1 --disable-reward-normalization
 
 
 python3 scripts/sb3_train_and_eval.py --policy-kwargs="{'net_arch': dict(pi=[64, 64], vf=[64, 64]), 'activation_fn': nn.ReLU, 'ortho_init': False}" --batch-size=16 --n-steps=1024 --gamma=0.999 --gae-lambda=.9 --max-grad-norm=0.6 --learning-rate=3e-05 --vf-coef=0.2 --n-epochs=10 --wind=constant --water-current=none --wind-dirs="[45, 90, 135, 180, 225, 270, 315]" --reward=max_vmc_custom_shape_s0_best_k5 --obs=basic_2d_obs_v6 --total=100000 --n-envs=7 --name="09-02-best-r-s0-12h00"
